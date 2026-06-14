@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LENS See Everything On-Chain</title>
+
+<!-- SEO -->
+<meta name="description" content="On-chain intelligence injected directly into Twitter/X profiles. See Bankrbot tokens, dev sold, fee claimed, holder stats, and smart followers.">
+
+<!-- Open Graph (Facebook, Telegram, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lnsx.io">
+<meta property="og:title" content="LENS — See Everything On-Chain">
+<meta property="og:description" content="On-chain intelligence injected directly into Twitter/X profiles. Bankrbot tokens, dev sold, fee claimed, holder stats.">
+<meta property="og:image" content="https://lnsx.io/og-banner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="LENS">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@lnsx_io">
+<meta name="twitter:title" content="LENS — See Everything On-Chain">
+<meta name="twitter:description" content="On-chain intelligence injected directly into Twitter/X profiles. Bankrbot tokens, dev sold, fee claimed, holder stats.">
+<meta name="twitter:image" content="https://lnsx.io/og-banner.png">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #161616;
+    --border: #1f1f1f;
+    --border2: #2a2a2a;
+    --text: #f0f0f0;
+    --text2: #888;
+    --text3: #555;
+    --accent: #2952e3;
+    --accent2: #1a3acc;
+    --accent-light: #4a72ff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+
+  /* LIGHT MODE */
+  body.light {
+    --bg: #f4f4f5;
+    --bg2: #ffffff;
+    --bg3: #e8e8ea;
+    --border: #e0e0e2;
+    --border2: #d0d0d4;
+    --text: #0a0a0a;
+    --text2: #333;
+    --text3: #666;
+  }
+
+  body.light .hero-title { color: #0a0a0a; }
+  body.light .hero-sub { color: #444; }
+  body.light .hero-title .blue { color: #2952e3; }
+  body.light .stat-num { color: #0a0a0a; }
+  body.light .stat-lbl { color: #666; }
+  body.light .section-title { color: #0a0a0a; }
+  body.light .section-body { color: #444; }
+  body.light .eyebrow { color: #2952e3; }
+  body.light .feat-title { color: #0a0a0a; }
+  body.light .feat-desc { color: #444; }
+  body.light .feat-num { color: #888; }
+  body.light .step-title { color: #0a0a0a; }
+  body.light .step-desc { color: #444; }
+  body.light .step-n { color: #2952e3; }
+  body.light .step-circle svg { color: #444; }
+  body.light .nav-logo-text { color: #0a0a0a; }
+  body.light .nav-links a { color: #444; }
+  body.light .nav-links a:hover { color: #0a0a0a; }
+  body.light .footer-brand { color: #0a0a0a; }
+  body.light .footer-copy { color: #666; }
+  body.light .footer-links a { color: #666; }
+  body.light .footer-links a:hover { color: #0a0a0a; }
+  body.light .hero-badge { color: #2952e3; background: rgba(41,82,227,0.08); border-color: rgba(41,82,227,0.2); }
+  body.light .btn-ghost { color: #333; border-color: #ccc; }
+  body.light .btn-ghost:hover { color: #0a0a0a; background: #e8e8ea; }
+  body.light .btn-outline { color: #444; border-color: #ccc; }
+  body.light .btn-outline:hover { color: #2952e3; border-color: #2952e3; }
+  body.light .preview-url { color: #666; }
+  body.light .li-brand { color: #2952e3; }
+  body.light .li-status { color: #16a34a; }
+  body.light .li-row { color: #555; }
+  body.light .li-row .v { color: #333; }
+  body.light .li-row .v.r { color: #dc2626; }
+  body.light .li-row .v.g { color: #16a34a; }
+  body.light .li-row .v.y { color: #d97706; }
+  body.light .li-footer { color: #2952e3; }
+  body.light .li-footer .expand { color: #999; }
+  body.light .fake-handle { color: #888; }
+  body.light .tag .votes { color: #888; }
+  body.light .tick { color: #888; }
+  body.light .tick .addr { color: #2952e3; }
+  body.light .tick .val { color: #444; }
+  body.light .cta-inner .section-title { color: #0a0a0a; }
+  body.light .feat-badge { color: #2952e3; background: rgba(41,82,227,0.07); border-color: rgba(41,82,227,0.2); }
+  body.light .nav-mobile-btn { color: #444; }
+  body.light .theme-toggle { color: #444; border-color: #ccc; }
+  body.light .theme-toggle:hover { background: #e8e8ea; color: #0a0a0a; }
+  body.light .preview-topbar { background: #e0e0e2; }
+  body.light .win-dot.r { background: #ff5f57; }
+  body.light .win-dot.y { background: #febc2e; }
+  body.light .win-dot.g { background: #28c840; }
+
+  body.light nav {
+    background: rgba(244,244,245,0.94);
+  }
+
+  body.light .hero-grid {
+    background-image:
+      linear-gradient(rgba(41,82,227,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(41,82,227,0.06) 1px, transparent 1px);
+  }
+
+  body.light .fake-profile { background: #f0f0f2; }
+  body.light .fake-name { color: #0a0a0a; }
+  body.light .fake-bio { color: #555; }
+  body.light .li { background: #e8eef8; }
+  body.light .li-top { border-color: #c8d4e8; }
+  body.light .li-labels { border-color: #c8d4e8; }
+  body.light .li-row { border-color: #d4dff0; color: #666; }
+  body.light .li-footer { background: #dde8f8; border-color: #c8d4e8; }
+  body.light .preview-body { background: #e8e8ea; }
+  body.light .preview-topbar { background: #e0e0e2; }
+  body.light .preview-url { background: #f4f4f5; color: #888; border-color: #ccc; }
+  body.light .feat { background: #fff; }
+  body.light .feat:hover { background: #f4f4f5; }
+  body.light .features-grid { background: #e0e0e2; border-color: #e0e0e2; }
+  body.light .cta-inner { background: #fff; border-color: #e0e0e2; }
+  body.light .step-circle { background: #f4f4f5; border-color: #ddd; }
+  body.light #heroCanvas { opacity: 0.3; }
+
+  /* TOGGLE BUTTON */
+  .theme-toggle {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle:hover {
+    background: var(--bg3);
+    color: var(--text);
+    border-color: var(--border2);
+  }
+
+  /* EXTRA BUTTONS */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: transparent;
+    color: var(--text2);
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border2);
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover {
+    border-color: #4a72ff;
+    color: #4a72ff;
+    background: rgba(41,82,227,0.05);
+  }
+
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #fff;
+    color: #0a0a0a;
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #fff;
+    transition: all 0.2s;
+  }
+
+  .btn-white:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+  }
+
+  body.light .btn-white {
+    background: #0a0a0a;
+    color: #fff;
+    border-color: #0a0a0a;
+  }
+
+  body.light .btn-white:hover { background: #222; }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    z-index: 1000;
+    background: rgba(10,10,10,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    z-index: 1000;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo svg { width: 28px; height: 28px; }
+
+  .nav-logo-text {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: #fff; }
+
+  .btn-chrome {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+
+  .btn-chrome:hover {
+    background: var(--accent-light);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(41,82,227,0.35);
+  }
+
+  .nav-mobile-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text2);
+    cursor: pointer;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .hero-grid { position: relative; z-index: 1;
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(41,82,227,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(41,82,227,0.035) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none;
+  }
+
+  .hero-glow { z-index: 1;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 500px;
+    background: radial-gradient(ellipse, rgba(41,82,227,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-badge { position: relative; z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(41,82,227,0.08);
+    border: 1px solid rgba(41,82,227,0.2);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6a8fff;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #4a72ff;
+    animation: blink 2s infinite;
+  }
+
+  @keyframes blink {
+    0%,100%{opacity:1} 50%{opacity:0.3}
+  }
+
+  .hero-title {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(44px, 9vw, 88px);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -3px;
+    color: #fff;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title .blue { color: var(--accent-light); }
+  #cycleText::after {
+    content: '|';
+    animation: blink 0.8s infinite;
+    margin-left: 2px;
+    color: var(--accent-light);
+  }
+
+  .hero-sub {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(15px, 2vw, 18px);
+    color: var(--text2);
+    max-width: 440px;
+    line-height: 1.75;
+    margin-bottom: 44px;
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 72px;
+  }
+
+  .btn-primary-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary-lg:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(41,82,227,0.35);
+    color: #fff;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: transparent;
+    color: var(--text2);
+    padding: 14px 26px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border2);
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: #3a3a3a;
+    color: var(--text);
+    background: var(--bg3);
+  }
+
+  .hero-stats {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 52px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-num {
+    font-size: 30px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+    display: block;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--bg2);
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 11px 0;
+    overflow: hidden;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 60px;
+    animation: scroll 35s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes scroll {
+    0%{transform:translateX(0)}
+    100%{transform:translateX(-50%)}
+  }
+
+  .tick {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text3);
+  }
+
+  .tick .addr { color: var(--accent-light); }
+  .tick .val { color: var(--text2); }
+  .tick .sep { color: var(--border2); }
+  .tick .flag-red { color: #ff4444; }
+  .tick .flag-green { color: #2ecc71; }
+  .tick .flag-yellow { color: #ffcc00; }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 90px 28px;
+    position: relative;
+    z-index: 2;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-body {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.75;
+    max-width: 460px;
+  }
+
+  .divider {
+    height: 1px;
+    position: relative;
+    z-index: 2;
+    background: var(--border);
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 52px;
+  }
+  .feat.soon { position: relative; }
+  .feat.soon .feat-title, .feat.soon .feat-desc, .feat.soon .feat-num { opacity: 0.55; }
+  .feat-soon-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    color: #e0843a; background: rgba(224,132,58,0.12);
+    border: 1px solid rgba(224,132,58,0.35); border-radius: 6px;
+    padding: 3px 9px; text-transform: uppercase;
+  }
+  .feat-soon-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #e0843a; }
+
+  .feat {
+    background: var(--bg);
+    padding: 34px 30px;
+    transition: background 0.2s;
+  }
+
+  .feat:hover { background: var(--bg3); }
+
+  .feat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  .feat-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+
+  .feat-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  .feat-badge {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent-light);
+    background: rgba(41,82,227,0.07);
+    border: 1px solid rgba(41,82,227,0.15);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 1.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    margin-top: 52px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-light);
+    letter-spacing: 1px;
+    width: 60px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .step-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--bg2);
+  }
+
+  .step-circle svg { width: 18px; height: 18px; color: var(--text2); }
+
+  .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ── TAGS ── */
+  .tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 40px;
+  }
+
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tags-category { margin-top: 28px; }
+  .tags-category:first-child { margin-top: 40px; }
+
+  .tags-category-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text2, #888);
+  }
+  .tags-category-title::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tags-category-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    min-width: 40px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+  .tags-category-title.red::before { background: #ff5a5a; box-shadow: 0 0 8px rgba(255,90,90,0.6); }
+  .tags-category-title.orange::before { background: #ff8c42; box-shadow: 0 0 8px rgba(255,140,66,0.6); }
+  .tags-category-title.green::before { background: #2ecc71; box-shadow: 0 0 8px rgba(46,204,113,0.6); }
+  .tags-category-title.blue::before { background: #5a8cff; box-shadow: 0 0 8px rgba(90,140,255,0.6); }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.15s;
+    cursor: default;
+    width: auto;
+  }
+  .tag .tag-left { display: inline-flex; align-items: center; gap: 7px; }
+
+  .tag:hover { transform: translateY(-1px); background: rgba(255,255,255,0.04); }
+
+  .tag .votes {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.5;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted, #888);
+    margin-left: 2px;
+  }
+
+  /* Only the name + dot carry the category color; cards stay neutral */
+  .tag.red .tag-name, .tag.red .tag-dot { color: #ff5a5a; }
+  .tag.orange .tag-name, .tag.orange .tag-dot { color: #ff8c42; }
+  .tag.yellow .tag-name, .tag.yellow .tag-dot { color: #e0b020; }
+  .tag.green .tag-name, .tag.green .tag-dot { color: #2ecc71; }
+  .tag.blue .tag-name, .tag.blue .tag-dot { color: #5a8cff; }
+
+  body.light .tag { border-color: #e6e6e8; background: #fafafa; }
+  body.light .tag:hover { background: #f2f2f4; }
+  body.light .tag.red .tag-name, body.light .tag.red .tag-dot { color: #dc2626; }
+  body.light .tag.orange .tag-name, body.light .tag.orange .tag-dot { color: #ea580c; }
+  body.light .tag.yellow .tag-name, body.light .tag.yellow .tag-dot { color: #d97706; }
+  body.light .tag.green .tag-name, body.light .tag.green .tag-dot { color: #16a34a; }
+  body.light .tag.blue .tag-name, body.light .tag.blue .tag-dot { color: #2952e3; }
+
+  .tag-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── PREVIEW ── */
+  .preview-shell {
+    margin-top: 52px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .preview-topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .win-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .win-dot.r { background: #ff5f57; }
+  .win-dot.y { background: #febc2e; }
+  .win-dot.g { background: #28c840; }
+
+  .preview-url {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text3);
+    background: var(--bg);
+    padding: 4px 12px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+
+  .preview-body { padding: 20px; background: var(--bg2); }
+
+  .fake-profile {
+    background: #000;
+    border-radius: 10px;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+  }
+
+  .fake-banner {
+    height: 56px;
+    background: linear-gradient(135deg, #12172e 0%, #0d2050 100%);
+  }
+
+  .fake-info {
+    padding: 28px 16px 12px;
+    border-bottom: 1px solid #111;
+  }
+
+  .fake-name { font-size: 14px; font-weight: 700; color: #fff; }
+  .fake-handle { font-size: 12px; color: #444; margin-top: 2px; }
+  .fake-bio { font-size: 11px; color: #666; margin-top: 8px; line-height: 1.5; font-family: 'JetBrains Mono', monospace; }
+
+  /* LENS INJECT MINI */
+  .li {
+    background: #070c12;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  .li-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    border-bottom: 1px solid #0d1520;
+  }
+
+  .li-brand { color: #4a72ff; font-weight: 700; letter-spacing: 2px; }
+  .li-status { color: #2ecc71; display: flex; align-items: center; gap: 4px; }
+  .li-dot { width: 4px; height: 4px; border-radius: 50%; background: #2ecc71; animation: blink 1.5s infinite; }
+
+  .li-labels {
+    display: flex;
+    gap: 4px;
+    padding: 6px 12px;
+    border-bottom: 1px solid #0d1520;
+    flex-wrap: wrap;
+  }
+
+  .li-label {
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    border: 1px solid;
+  }
+
+  .li-label.blue { border-color: rgba(74,114,255,0.3); color: #4a72ff; background: rgba(74,114,255,0.08); }
+  .li-label.orange { border-color: rgba(255,165,0,0.3); color: #ffa500; background: rgba(255,165,0,0.08); }
+  .li-label.red { border-color: rgba(255,68,68,0.3); color: #ff4444; background: rgba(255,68,68,0.08); }
+
+  .li-rows { padding: 4px 12px 6px; }
+
+  .li-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #0a1018;
+    color: #4a5568;
+  }
+
+  .li-row:last-child { border-bottom: none; }
+  .li-row .v { color: #8899aa; }
+  .li-row .v.r { color: #ff4444; }
+  .li-row .v.g { color: #2ecc71; }
+  .li-row .v.y { color: #ffcc00; }
+
+  .li-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 12px;
+    background: #050a10;
+    border-top: 1px solid #0a1018;
+    color: #4a72ff;
+    font-weight: 600;
+  }
+
+  .li-footer .expand { color: #2a3a4a; font-size: 9px; }
+
+  /* ── CTA BOX ── */
+  .cta-wrap {
+    padding: 80px 28px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cta-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-inner::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(41,82,227,0.09) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .cta-inner .section-title { margin-bottom: 12px; }
+  .cta-inner .section-body { max-width: 100%; margin: 0 auto 32px; }
+
+  .cta-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
+    padding: 32px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1080px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  .footer-links a:hover { color: var(--text2); }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-mobile-btn { display: block; }
+    .features-grid { grid-template-columns: 1fr; }
+    .hero-stats {
+    position: relative;
+    z-index: 2; gap: 28px; }
+    .step { flex-wrap: wrap; }
+    .step-n { width: auto; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .cta-inner { padding: 40px 24px; }
+  }
+
+  /* ── MOBILE MENU ── */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(10,10,12,0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-direction: column;
+    padding: 12px 24px 20px;
+    gap: 4px;
+    z-index: 90;
+  }
+  body.light .mobile-menu { background: rgba(255,255,255,0.98); border-bottom-color: rgba(0,0,0,0.08); }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: #cfd3dc; text-decoration: none; font-size: 15px; font-weight: 500;
+    padding: 12px 4px; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  body.light .mobile-menu a { color: #444; border-bottom-color: rgba(0,0,0,0.06); }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu .mm-cta {
+    margin-top: 10px; background: #2952e3; color: #fff; text-align: center;
+    border-radius: 10px; padding: 13px; font-weight: 600; border-bottom: none;
+  }
+
+  /* ── DOWNLOAD PAGE ── */
+  .download-section {
+    padding: 90px 28px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .browser-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .browser-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .browser-tab:hover {
+    border-color: var(--accent-light);
+    color: var(--text);
+  }
+
+  .browser-tab.active {
+    border-color: var(--accent);
+    background: rgba(41,82,227,0.1);
+    color: #fff;
+  }
+
+  .browser-tab svg { width: 18px; height: 18px; }
+
+  .download-card {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .download-preview {
+    background: #060a14;
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .download-preview-inner {
+    background: #0a0f1e;
+    border: 1px solid #1a2a3a;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+  }
+
+  .dp-bar {
+    background: #0d1520;
+    border-bottom: 1px solid #1a2332;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #3a4a5a;
+  }
+
+  .dp-ext-icon {
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+  }
+
+  .dp-body { padding: 16px; }
+
+  .dp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #0d1520;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  .dp-row:last-child { border-bottom: none; }
+  .dp-row .lbl { color: #3a4a5a; }
+  .dp-row .val { color: #8899aa; }
+  .dp-row .val.blue { color: #4a72ff; }
+  .dp-row .val.green { color: #2ecc71; }
+
+  .download-info {
+    padding: 28px 28px 32px;
+  }
+
+  .download-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .download-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  body.light .download-title { color: #0a0a0a; }
+
+  .download-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .download-btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(41,82,227,0.3);
+    color: #fff;
+  }
+
+  .download-btn-primary .btn-sub {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.75;
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .download-btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--bg3);
+    color: var(--text);
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+    border: 1px solid var(--border2);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .download-btn-secondary:hover {
+    border-color: #4a4a5a;
+    background: var(--bg2);
+    color: var(--text);
+  }
+
+  .download-btn-secondary .btn-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text3);
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .release-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: var(--accent-light);
+    margin-top: 16px;
+    transition: gap 0.2s;
+    text-decoration: none;
+  }
+
+  .release-link:hover { gap: 8px; }
+
+  /* checklist */
+  .check-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text2);
+  }
+
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .check-icon svg { width: 10px; height: 10px; color: var(--accent-light); }
+
+  body.light .download-preview { background: #e8edf8; }
+  body.light .download-preview-inner { background: #dde4f2; border-color: #c8d4e8; }
+  body.light .dp-bar { background: #ccd6e8; border-color: #bbc8dc; color: #6a7a8a; }
+  body.light .dp-row .lbl { color: #6a7a8a; }
+  body.light .download-btn-secondary { background: #f0f0f2; color: #0a0a0a; }
+  body.light .download-btn-secondary:hover { background: #e8e8ea; }
+  body.light .browser-tab { background: #f4f4f5; color: #444; }
+  body.light .browser-tab.active { background: rgba(41,82,227,0.08); color: #2952e3; }
+  body.light .download-card { background: #fff; }
+
+  /* Version badge */
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(46,204,113,0.08);
+    border: 1px solid rgba(46,204,113,0.2);
+    color: #2ecc71;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="7" fill="#2952e3"/>
+      <path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/>
+      <circle cx="14" cy="14" r="1.1" fill="white"/>
+    </svg>
+    <span class="nav-logo-text">LENS</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#tags">Community</a>
+    <a href="lens-docs.html">Docs</a>
+    <a href="#download">Download</a>
+    <a href="#download" class="btn-chrome">Add to Chrome</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="nav-mobile-btn" id="navMobileBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features">Features</a>
+  <a href="#how">How it works</a>
+  <a href="#tags">Community</a>
+  <a href="lens-docs.html">Docs</a>
+  <a href="#download">Download</a>
+  <a href="#download" class="mm-cta">Add to Chrome</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <h1 class="hero-title">See through<br>every <span class="blue" id="cycleText">wallet.</span></h1>
+
+  <p class="hero-sub">On-chain intelligence injected directly into Twitter/X profiles. Dev fees, deploy history, wallet labels all in one click.</p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary-lg">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Add to Chrome Free
+    </a>
+    <a href="#how" class="btn-ghost">
+      View Demo
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </a>
+
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <span class="stat-num">Bankrbot</span>
+      <span class="stat-lbl">Token Detection</span>
+    </div>
+    <div>
+      <span class="stat-num">Real-time</span>
+      <span class="stat-lbl">Live Indexer</span>
+    </div>
+    <div>
+      <span class="stat-num">Base</span>
+      <span class="stat-lbl">Chain Support</span>
+    </div>
+    <div>
+      <span class="stat-num">100%</span>
+      <span class="stat-lbl">On-chain Data</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="eyebrow">Features</div>
+  <h2 class="section-title">Everything you need<br>to stay ahead.</h2>
+  <p class="section-body">LENS injects intelligence directly into every Twitter/X profile you visit. No switching tabs. No copy-pasting addresses.</p>
+
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-num">01</div>
+      <div class="feat-title">Dev Claim Fee</div>
+      <p class="feat-desc">See every time a dev claims fees from their contract on Base. Know if funds went straight to an exchange the clearest sell signal on-chain.</p>
+      <span class="feat-badge">BASE CHAIN</span>
+    </div>
+    <div class="feat">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Deploy Count</div>
+      <p class="feat-desc">How many contracts has this address deployed before? Serial deployers get flagged automatically see the full contract history at a glance.</p>
+      <span class="feat-badge">ON-CHAIN</span>
+    </div>
+    <div class="feat">
+      <div class="feat-num">03</div>
+      <div class="feat-title">PleaseBro Detection</div>
+      <p class="feat-desc">Spot when someone collects fees from a token deployed by someone else. LENS confirms deployer vs fee recipient from Bankrbot data no false positives.</p>
+      <span class="feat-badge">BANKRBOT</span>
+    </div>
+    <div class="feat">
+      <div class="feat-num">04</div>
+      <div class="feat-title">CA Hunter</div>
+      <p class="feat-desc">Scans bio, pinned post, recent tweets and links for contract addresses then auto-resolves the token, deployer and fee structure behind it.</p>
+      <span class="feat-badge">BIO INTEL</span>
+    </div>
+    <div class="feat">
+      <div class="feat-num">05</div>
+      <div class="feat-title">GitHub Intel</div>
+      <p class="feat-desc">If they link a GitHub, see their repos, languages, last commit date, and cross-reference with contracts they deployed on-chain.</p>
+      <span class="feat-badge">FREE API</span>
+    </div>
+    <div class="feat">
+      <div class="feat-num">06</div>
+      <div class="feat-title">Username History</div>
+      <p class="feat-desc">Every name they have ever used on X. Scammers change handles now you will always know exactly who you are dealing with.</p>
+      <span class="feat-badge">X INTEL</span>
+    </div>
+    <div class="feat soon">
+      <div class="feat-num">07</div>
+      <div class="feat-title">Smart Wallet Buys</div>
+      <p class="feat-desc">Track which tokens a wallet has been buying, surfaced right on their profile. In active development.</p>
+      <span class="feat-soon-badge">Coming Soon</span>
+    </div>
+    <div class="feat soon">
+      <div class="feat-num">08</div>
+      <div class="feat-title">Smart Followers</div>
+      <p class="feat-desc">See the verified and high-signal accounts that follow a profile separate the real audience from the noise. In active development.</p>
+      <span class="feat-soon-badge">Coming Soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY TAGS -->
+<section class="section" id="tags">
+  <div class="eyebrow">Community</div>
+  <h2 class="section-title">Tag. Warn. Protect.</h2>
+  <p class="section-body">Community-powered labeling system. Tag anyone on X every LENS user sees the warning instantly on their profile.</p>
+
+  <div class="tags-outer">
+
+    <!-- Red Danger -->
+    <div class="tags-category">
+      <div class="tags-category-title red">Danger</div>
+      <div class="tags-row">
+        <div class="tag red"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Scammer</span></div><span class="votes">847 flags</span></div>
+        <div class="tag red"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Rugpull</span></div><span class="votes">312 flags</span></div>
+        <div class="tag red"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Serial Rugger</span></div><span class="votes">204 flags</span></div>
+      </div>
+    </div>
+
+    <!-- Orange Caution -->
+    <div class="tags-category">
+      <div class="tags-category-title orange">Caution</div>
+      <div class="tags-row">
+        <div class="tag orange"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Honeypot Dev</span></div><span class="votes">156 flags</span></div>
+        <div class="tag orange"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Fee Drainer</span></div><span class="votes">98 flags</span></div>
+        <div class="tag yellow"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Suspicious</span></div><span class="votes">73 flags</span></div>
+      </div>
+    </div>
+
+    <!-- Green Trusted -->
+    <div class="tags-category">
+      <div class="tags-category-title green">Trusted</div>
+      <div class="tags-row">
+        <div class="tag green"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Legit Dev</span></div><span class="votes">1.2K confirm</span></div>
+        <div class="tag green"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Based Dev</span></div><span class="votes">889 confirm</span></div>
+        <div class="tag green"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">KOL Trusted</span></div><span class="votes">654 confirm</span></div>
+      </div>
+    </div>
+
+    <!-- Blue Info -->
+    <div class="tags-category">
+      <div class="tags-category-title blue">Info</div>
+      <div class="tags-row">
+        <div class="tag blue"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">KOL</span></div><span class="votes">2.1K</span></div>
+        <div class="tag blue"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Whale</span></div><span class="votes">445</span></div>
+        <div class="tag blue"><div class="tag-left"><span class="tag-dot"></span><span class="tag-name">Builder</span></div><span class="votes">338</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="eyebrow">How it works</div>
+  <h2 class="section-title">Three steps.<br>Full intelligence.</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">01 / 03</div>
+      <div class="step-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div>
+        <div class="step-title">Add to your browser</div>
+        <p class="step-desc">Install the LENS extension in seconds. No account needed. No wallet connection. Just install and it works immediately.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">02 / 03</div>
+      <div class="step-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div>
+        <div class="step-title">Browse Twitter / X normally</div>
+        <p class="step-desc">Open any profile on X. LENS automatically detects wallet addresses, contract addresses, and GitHub links found in their bio.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">03 / 03</div>
+      <div class="step-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div>
+        <div class="step-title">See everything</div>
+        <p class="step-desc">Dev claim history, deploy count, PleaseBro detection, Trust score, fee structure, community tags all injected directly under their profile. No tab switching required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PREVIEW -->
+<section class="section">
+  <div class="eyebrow">Preview</div>
+  <h2 class="section-title">See it in action.</h2>
+  <p class="section-body">Exactly what you will see injected under every X profile when LENS is active.</p>
+
+  <div class="preview-shell">
+    <div class="preview-topbar">
+      <span class="win-dot r"></span>
+      <span class="win-dot y"></span>
+      <span class="win-dot g"></span>
+      <span class="preview-url">x.com / @cryptodevalex</span>
+    </div>
+    <div class="preview-body">
+      <div class="fake-profile">
+        <div class="fake-banner"></div>
+        <div class="fake-info">
+          <div class="fake-name">CryptoDevAlex</div>
+          <div class="fake-handle">@cryptodevalex</div>
+          <div class="fake-bio">building onchain | CA: 0x1a2b...3c4d | github.com/alexdev | Base</div>
+        </div>
+        <!-- LENS INJECT -->
+        <div class="li">
+          <div class="li-top">
+            <span class="li-brand">LENS</span>
+            <span class="li-status"><span class="li-dot"></span> SCAN COMPLETE</span>
+          </div>
+          <div class="li-labels">
+            <span class="li-label blue">KOL</span>
+            <span class="li-label orange">Dev</span>
+            <span class="li-label red">Scammer · 47 flags</span>
+          </div>
+          <div class="li-rows">
+            <div class="li-row"><span>Dev Claim Fee</span><span class="v r">7x claims · $28,400 total · To CEX</span></div>
+            <div class="li-row"><span>Last Claim</span><span class="v y">3d ago · sent to exchange</span></div>
+            <div class="li-row"><span>Contracts Deployed</span><span class="v r">23x on Base · Serial Dev</span></div>
+            <div class="li-row"><span>CA History</span><span class="v">12 tokens · 9 deleted</span></div>
+            <div class="li-row"><span>GitHub</span><span class="v g">47 repos · active 2d ago · Solidity</span></div>
+            <div class="li-row"><span>Username History</span><span class="v">4 changes · @dev_anon → @alexdev → current</span></div>
+          </div>
+          <div class="li-footer">
+            <span>903 Smart Followers</span>
+            <span class="expand">expand</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider"></div>
+
+<!-- DOWNLOAD -->
+<div class="download-section" id="download">
+  <div class="eyebrow">Download</div>
+  <h2 class="section-title">Install LENS.<br>Start seeing everything.</h2>
+  <p class="section-body" style="margin-bottom:40px;">Available as a browser extension. Pick your browser and install in seconds.</p>
+
+  <!-- Browser Tabs -->
+  <div class="browser-tabs">
+    <button class="browser-tab active" onclick="switchBrowser('chrome', this)">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.8"/><line x1="12" y1="2" x2="12" y2="8" stroke="currentColor" stroke-width="1.5"/><line x1="20.66" y1="17" x2="14.66" y2="14" stroke="currentColor" stroke-width="1.5"/><line x1="3.34" y1="17" x2="9.34" y2="14" stroke="currentColor" stroke-width="1.5"/></svg>
+      Chrome
+    </button>
+    <button class="browser-tab" onclick="switchBrowser('firefox', this)">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 6 C8 6 6 9 6 12 C6 15 8 18 12 18 C15 16 17 14 16 11 C15 9 13 8 12 6Z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+      Firefox
+      <span style="font-size:10px;color:var(--text3);font-weight:400;">Soon</span>
+    </button>
+    <button class="browser-tab" onclick="switchBrowser('edge', this)">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12" stroke="currentColor" stroke-width="1.5"/><path d="M20 12C20 16 17 19 13 19C10 19 8 17.5 7 15.5C9 15.5 14 15 15 11C16 8 14 5 12 4" stroke="currentColor" stroke-width="1.5"/></svg>
+      Edge
+      <span style="font-size:10px;color:var(--text3);font-weight:400;">Soon</span>
+    </button>
+  </div>
+
+  <!-- Chrome Download Card -->
+  <div class="download-card" id="card-chrome">
+    <div class="download-preview">
+      <div class="download-preview-inner">
+        <div class="dp-bar">
+          <div class="dp-ext-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
+          </div>
+          LENS On-chain Intelligence
+          <span style="margin-left:auto;color:#2ecc71;">Active</span>
+        </div>
+        <div class="dp-body">
+          <div class="dp-row"><span class="lbl">Version</span><span class="val blue">v2.12.0</span></div>
+          <div class="dp-row"><span class="lbl">Chain</span><span class="val">Base Mainnet</span></div>
+          <div class="dp-row"><span class="lbl">Permissions</span><span class="val">x.com only</span></div>
+          <div class="dp-row"><span class="lbl">Status</span><span class="val green">Running</span></div>
+          <div class="dp-row"><span class="lbl">Last update</span><span class="val">Jun 2026</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="download-info">
+      <div class="version-badge">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        v2.12.0 STABLE
+      </div>
+      <div class="download-title">LENS for Chrome</div>
+      <div class="download-sub">The full LENS experience. Injects on-chain intelligence directly into every Twitter/X profile you visit.</div>
+
+      <a href="#" class="download-btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Add to Chrome Free
+        <span class="btn-sub">Load unpacked / sideload</span>
+      </a>
+
+      <a href="#" class="download-btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View Source on GitHub
+        <span class="btn-sub">Open source</span>
+      </a>
+
+      <a href="lens-docs.html" class="download-btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Read the Docs
+        <span class="btn-sub">Setup guide</span>
+      </a>
+
+      <a href="#" class="release-link">
+        View release notes
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+
+      <div class="check-list">
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          Free forever no subscription
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          Only reads x.com no other permissions
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          No wallet connection required
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          Open source verify the code yourself
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firefox Card (hidden) -->
+  <div class="download-card" id="card-firefox" style="display:none;">
+    <div class="download-info" style="padding:40px 28px;">
+      <div class="download-title">LENS for Firefox</div>
+      <div class="download-sub">Firefox support is coming soon. Join the waitlist to get notified when it drops.</div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.2);color:#ffcc00;padding:8px 14px;border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:600;">
+        Coming Soon
+      </div>
+    </div>
+  </div>
+
+  <!-- Edge Card (hidden) -->
+  <div class="download-card" id="card-edge" style="display:none;">
+    <div class="download-info" style="padding:40px 28px;">
+      <div class="download-title">LENS for Edge</div>
+      <div class="download-sub">Edge support is in development. Check back soon.</div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.2);color:#ffcc00;padding:8px 14px;border-radius:8px;font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:600;">
+        Coming Soon
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-inner">
+    <div class="eyebrow" style="text-align:center;">Get started</div>
+    <h2 class="section-title">Nothing hides<br>from <span style="color:#4a72ff">LENS.</span></h2>
+    <p class="section-body" style="margin:0 auto 0;text-align:center;">Free Chrome extension. Real on-chain data. Install in 10 seconds.</p>
+    <div class="cta-btns" style="margin-top:32px;">
+      <a href="#" class="btn-primary-lg">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Add to Chrome Free
+      </a>
+      <a href="lens-docs.html" class="btn-white">View Docs</a>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="divider"></div>
+<footer>
+  <div class="footer-brand">LENS</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="lens-docs.html">Docs</a>
+    <a href="#">GitHub</a>
+    <a href="https://x.com/aevonsh" target="_blank" rel="noopener">Twitter</a>
+  </div>
+  <div class="footer-copy">2026 LENS · See everything on-chain</div>
+</footer>
+
+
+<!-- HERO PARTICLE CANVAS -->
+<canvas id="heroCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:1;"></canvas>
+
+<script>
+// ── CYCLING TEXT ──
+const words = ['wallet.', 'address.', 'dev.', 'scammer.', 'KOL.', 'rugger.', 'deployer.'];
+let wi = 0;
+const el = document.getElementById('cycleText');
+
+function typeWord(word, cb) {
+  el.textContent = '';
+  let i = 0;
+  const t = setInterval(() => {
+    el.textContent += word[i];
+    i++;
+    if (i >= word.length) { clearInterval(t); setTimeout(cb, 1600); }
+  }, 60);
+}
+
+function eraseWord(cb) {
+  let text = el.textContent;
+  const t = setInterval(() => {
+    text = text.slice(0, -1);
+    el.textContent = text;
+    if (text.length === 0) { clearInterval(t); cb(); }
+  }, 35);
+}
+
+function cycle() {
+  typeWord(words[wi], () => {
+    eraseWord(() => {
+      wi = (wi + 1) % words.length;
+      cycle();
+    });
+  });
+}
+
+if (el) cycle();
+
+// ── LONG LINES BACKGROUND ──
+const canvas = document.getElementById('heroCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  // Re-init beams with new dimensions
+}
+resize();
+window.addEventListener('resize', () => {
+  resize();
+});
+
+// Horizontal beams
+const beams = Array.from({length: 12}, (_, i) => ({
+  y: (window.innerHeight / 12) * i + Math.random() * 60,
+  speed: 0.15 + Math.random() * 0.25,
+  length: 180 + Math.random() * 320,
+  x: Math.random() * window.innerWidth,
+  a: 0.06 + Math.random() * 0.1,
+  width: 0.5 + Math.random() * 1,
+}));
+
+// Diagonal long lines (static, subtle)
+const diagLines = Array.from({length: 8}, (_, i) => ({
+  x1: -200 + i * 200,
+  speed: 0.08 + Math.random() * 0.12,
+  a: 0.03 + Math.random() * 0.05,
+  offset: Math.random() * 1000,
+}));
+
+let t = 0;
+
+function draw() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Diagonal lines long, slow, ultra subtle
+  diagLines.forEach((l, i) => {
+    const x = ((l.x1 + t * l.speed * 0.5) % (W + 400)) - 200;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + H * 0.7, H);
+    const grad = ctx.createLinearGradient(x, 0, x + H * 0.7, H);
+    grad.addColorStop(0, `rgba(41,82,227,0)`);
+    grad.addColorStop(0.3, `rgba(41,82,227,${l.a})`);
+    grad.addColorStop(0.7, `rgba(74,114,255,${l.a * 0.8})`);
+    grad.addColorStop(1, `rgba(41,82,227,0)`);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Horizontal beams glowing streaks
+  beams.forEach(b => {
+    b.x += b.speed;
+    if (b.x > W + b.length) b.x = -b.length;
+
+    const grad = ctx.createLinearGradient(b.x, b.y, b.x + b.length, b.y);
+    grad.addColorStop(0, `rgba(74,114,255,0)`);
+    grad.addColorStop(0.2, `rgba(74,114,255,${b.a})`);
+    grad.addColorStop(0.8, `rgba(100,140,255,${b.a * 0.6})`);
+    grad.addColorStop(1, `rgba(74,114,255,0)`);
+
+    ctx.beginPath();
+    ctx.moveTo(b.x, b.y);
+    ctx.lineTo(b.x + b.length, b.y);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = b.width;
+    ctx.stroke();
+
+    // Glow effect thicker soft line behind
+    const glowGrad = ctx.createLinearGradient(b.x, b.y, b.x + b.length, b.y);
+    glowGrad.addColorStop(0, `rgba(41,82,227,0)`);
+    glowGrad.addColorStop(0.5, `rgba(41,82,227,${b.a * 0.3})`);
+    glowGrad.addColorStop(1, `rgba(41,82,227,0)`);
+    ctx.beginPath();
+    ctx.moveTo(b.x, b.y);
+    ctx.lineTo(b.x + b.length, b.y);
+    ctx.strokeStyle = glowGrad;
+    ctx.lineWidth = b.width * 6;
+    ctx.stroke();
+  });
+
+  t++;
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+<script>
+// ── DARK/LIGHT TOGGLE ──
+const toggleBtn = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+
+const moonIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+const sunIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+
+let isLight = false;
+
+if (toggleBtn) {
+  toggleBtn.addEventListener('click', () => {
+    isLight = !isLight;
+    document.body.classList.toggle('light', isLight);
+    themeIcon.innerHTML = isLight ? moonIcon : sunIcon;
+  });
+}
+
+// ── MOBILE MENU TOGGLE ──
+const navMobileBtn = document.getElementById('navMobileBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if (navMobileBtn && mobileMenu) {
+  navMobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  // Close menu after tapping any link
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+}
+</script>
+
+<script>
+function switchBrowser(browser, el) {
+  // Update tabs
+  document.querySelectorAll('.browser-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // Show correct card
+  ['chrome','firefox','edge'].forEach(b => {
+    const card = document.getElementById('card-' + b);
+    if (card) card.style.display = b === browser ? 'block' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
