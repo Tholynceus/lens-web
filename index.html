@@ -868,13 +868,15 @@
   .li-row {
     display: flex;
     justify-content: space-between;
+    gap: 12px;
     padding: 4px 0;
     border-bottom: 1px solid #0a1018;
     color: #4a5568;
   }
 
   .li-row:last-child { border-bottom: none; }
-  .li-row .v { color: #8899aa; }
+  .li-row > span:first-child { flex-shrink: 0; }
+  .li-row .v { color: #8899aa; text-align: right; }
   .li-row .v.r { color: #ff4444; }
   .li-row .v.g { color: #2ecc71; }
   .li-row .v.y { color: #ffcc00; }
@@ -982,6 +984,27 @@
     .step-n { width: auto; }
     footer { flex-direction: column; align-items: flex-start; }
     .cta-inner { padding: 40px 24px; }
+
+    /* Preview panel rows: stack label over value so long values don't get cut off */
+    .li-rows { padding: 6px 12px 8px; }
+    .li-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 7px 0;
+    }
+    .li-row > span:first-child {
+      font-size: 10px;
+      letter-spacing: 0.3px;
+      opacity: 0.75;
+    }
+    .li-row .v {
+      text-align: left;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .li-labels { flex-wrap: wrap; gap: 5px; }
+    .li-footer { flex-wrap: wrap; gap: 4px; }
   }
 
   /* ── MOBILE MENU ── */
@@ -1295,7 +1318,7 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#tags">Community</a>
-    <a href="lens-docs.html">Docs</a>
+    <a href="/docs">Docs</a>
     <a href="#download">Download</a>
     <a href="#download" class="btn-chrome">Add to Chrome</a>
   </div>
@@ -1314,7 +1337,7 @@
   <a href="#features">Features</a>
   <a href="#how">How it works</a>
   <a href="#tags">Community</a>
-  <a href="lens-docs.html">Docs</a>
+  <a href="/docs">Docs</a>
   <a href="#download">Download</a>
   <a href="#download" class="mm-cta">Add to Chrome</a>
 </div>
@@ -1393,22 +1416,22 @@
       <p class="feat-desc">Scans bio, pinned post, recent tweets and links for contract addresses then auto-resolves the token, deployer and fee structure behind it.</p>
       <span class="feat-badge">BIO INTEL</span>
     </div>
-    <div class="feat">
+    <div class="feat soon">
       <div class="feat-num">05</div>
       <div class="feat-title">GitHub Intel</div>
-      <p class="feat-desc">If they link a GitHub, see their repos, languages, last commit date, and cross-reference with contracts they deployed on-chain.</p>
-      <span class="feat-badge">FREE API</span>
+      <p class="feat-desc">If they link a GitHub, see their repos, languages, last commit date, and cross-reference with contracts they deployed on-chain. In active development.</p>
+      <span class="feat-soon-badge">Coming Soon</span>
     </div>
-    <div class="feat">
+    <div class="feat soon">
       <div class="feat-num">06</div>
       <div class="feat-title">Username History</div>
-      <p class="feat-desc">Every name they have ever used on X. Scammers change handles now you will always know exactly who you are dealing with.</p>
-      <span class="feat-badge">X INTEL</span>
+      <p class="feat-desc">Every name they have ever used on X. Scammers change handles now you will always know exactly who you are dealing with. In active development.</p>
+      <span class="feat-soon-badge">Coming Soon</span>
     </div>
     <div class="feat soon">
       <div class="feat-num">07</div>
-      <div class="feat-title">Smart Wallet Buys</div>
-      <p class="feat-desc">Track which tokens a wallet has been buying, surfaced right on their profile. In active development.</p>
+      <div class="feat-title">Cabal Wallet</div>
+      <p class="feat-desc">Map the connected wallets behind a dev and expose the hidden cluster of accounts that move together. See the real group, not just one face. In active development.</p>
       <span class="feat-soon-badge">Coming Soon</span>
     </div>
     <div class="feat soon">
@@ -1633,7 +1656,7 @@
         <span class="btn-sub">Open source</span>
       </a>
 
-      <a href="lens-docs.html" class="download-btn-secondary">
+      <a href="/docs" class="download-btn-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Read the Docs
         <span class="btn-sub">Setup guide</span>
@@ -1700,7 +1723,7 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Add to Chrome Free
       </a>
-      <a href="lens-docs.html" class="btn-white">View Docs</a>
+      <a href="/docs" class="btn-white">View Docs</a>
 
     </div>
   </div>
@@ -1712,9 +1735,9 @@
   <div class="footer-brand">LENS</div>
   <div class="footer-links">
     <a href="#features">Features</a>
-    <a href="lens-docs.html">Docs</a>
-    <a href="#">GitHub</a>
-    <a href="https://x.com/aevonsh" target="_blank" rel="noopener">Twitter</a>
+    <a href="/docs">Docs</a>
+    <a href="/privacy">Privacy</a>
+    <a href="https://x.com/lnsx_io" target="_blank" rel="noopener">Twitter</a>
   </div>
   <div class="footer-copy">2026 LENS · See everything on-chain</div>
 </footer>
