@@ -6,598 +6,113 @@
 <title>LENS Docs Documentation</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
   :root {
-    --bg: #0a0a0a;
-    --bg2: #111111;
-    --bg3: #161616;
-    --border: #1f1f1f;
-    --border2: #2a2a2a;
-    --text: #e8e8e8;
-    --text2: #888;
-    --text3: #555;
-    --accent: #2952e3;
-    --accent-light: #4a72ff;
-    --sidebar-w: 260px;
+    --bg: #0a0a0a; --bg2: #111111; --bg3: #161616;
+    --border: #1f1f1f; --border2: #2a2a2a;
+    --text: #e8e8e8; --text2: #888; --text3: #555;
+    --accent: #2952e3; --accent-light: #4a72ff; --sidebar-w: 260px;
   }
-
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   a { text-decoration: none; color: inherit; }
-
-  /* ── TOP NAV ── */
-  .topnav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 56px;
-    background: rgba(10,10,10,0.97);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    z-index: 1000;
-  }
-
-  .topnav-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    color: #fff;
-  }
-
+  .topnav { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 1000; }
+  .topnav-left { display: flex; align-items: center; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; letter-spacing: 2px; color: #fff; }
   .logo svg { width: 26px; height: 26px; }
-
-  .docs-badge {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text3);
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    padding: 2px 8px;
-    border-radius: 4px;
-    letter-spacing: 1px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .topnav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .topnav-right a {
-    font-size: 12px;
-    color: var(--text3);
-    transition: color 0.2s;
-  }
-
+  .docs-badge { font-size: 10px; font-weight: 600; color: var(--text3); background: var(--bg3); border: 1px solid var(--border2); padding: 2px 8px; border-radius: 4px; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+  .topnav-right { display: flex; align-items: center; gap: 16px; }
+  .topnav-right a { font-size: 12px; color: var(--text3); transition: color 0.2s; }
   .topnav-right a:hover { color: var(--text2); }
-
-  .version-select {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    color: var(--text2);
-    font-size: 11px;
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    cursor: pointer;
-  }
-
-  /* ── LAYOUT ── */
-  .layout {
-    display: flex;
-    padding-top: 56px;
-    min-height: 100vh;
-  }
-
-  /* ── SIDEBAR ── */
-  .sidebar {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    width: var(--sidebar-w);
-    height: calc(100vh - 56px);
-    background: var(--bg);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    padding: 20px 0;
-    z-index: 100;
-  }
-
+  .version-select { background: var(--bg2); border: 1px solid var(--border2); color: var(--text2); font-size: 11px; padding: 5px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; cursor: pointer; }
+  .layout { display: flex; padding-top: 56px; min-height: 100vh; }
+  .sidebar { position: fixed; top: 56px; left: 0; width: var(--sidebar-w); height: calc(100vh - 56px); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px 0; z-index: 100; }
   .sidebar::-webkit-scrollbar { width: 3px; }
   .sidebar::-webkit-scrollbar-track { background: transparent; }
   .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-  .sidebar-group {
-    margin-bottom: 4px;
-  }
-
-  .sidebar-group-title {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--text3);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 10px 20px 6px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 20px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text2);
-    transition: all 0.15s;
-    border-left: 2px solid transparent;
-    cursor: pointer;
-  }
-
-  .sidebar-link:hover {
-    color: var(--text);
-    background: var(--bg2);
-  }
-
-  .sidebar-link.active {
-    color: #fff;
-    border-left-color: var(--accent-light);
-    background: rgba(41,82,227,0.07);
-  }
-
-  .sidebar-link .badge {
-    margin-left: auto;
-    font-size: 9px;
-    font-family: 'JetBrains Mono', monospace;
-    background: rgba(41,82,227,0.1);
-    color: var(--accent-light);
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-
-  .sidebar-link .new-badge {
-    margin-left: auto;
-    font-size: 9px;
-    font-family: 'JetBrains Mono', monospace;
-    background: rgba(46,204,113,0.1);
-    color: #2ecc71;
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-
-  /* ── MAIN CONTENT ── */
-  .content {
-    margin-left: var(--sidebar-w);
-    flex: 1;
-    max-width: 780px;
-    padding: 48px 52px;
-  }
-
-  /* ── DOCS SECTIONS ── */
-  .doc-section {
-    display: none;
-  }
-
-  .doc-section.active {
-    display: block;
-  }
-
-  /* Breadcrumb */
-  .breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--text3);
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 24px;
-  }
-
+  .sidebar-group { margin-bottom: 4px; }
+  .sidebar-group-title { font-size: 9px; font-weight: 700; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; padding: 10px 20px 6px; font-family: 'JetBrains Mono', monospace; }
+  .sidebar-link { display: flex; align-items: center; gap: 8px; padding: 7px 20px; font-size: 13px; font-weight: 500; color: var(--text2); transition: all 0.15s; border-left: 2px solid transparent; cursor: pointer; }
+  .sidebar-link:hover { color: var(--text); background: var(--bg2); }
+  .sidebar-link.active { color: #fff; border-left-color: var(--accent-light); background: rgba(41,82,227,0.07); }
+  .sidebar-link .badge { margin-left: auto; font-size: 9px; font-family: 'JetBrains Mono', monospace; background: rgba(41,82,227,0.1); color: var(--accent-light); padding: 1px 5px; border-radius: 3px; }
+  .sidebar-link .new-badge { margin-left: auto; font-size: 9px; font-family: 'JetBrains Mono', monospace; background: rgba(46,204,113,0.1); color: #2ecc71; padding: 1px 5px; border-radius: 3px; }
+  .sidebar-link .soon-badge { margin-left: auto; font-size: 9px; font-family: 'JetBrains Mono', monospace; background: rgba(136,136,136,0.12); color: #8899aa; padding: 1px 5px; border-radius: 3px; }
+  .content { margin-left: var(--sidebar-w); flex: 1; max-width: 780px; padding: 48px 52px; }
+  .doc-section { display: none; }
+  .doc-section.active { display: block; }
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-bottom: 24px; }
   .breadcrumb .sep { color: var(--border2); }
   .breadcrumb .current { color: var(--text2); }
-
-  /* Page title */
-  .page-title {
-    font-size: 32px;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -1px;
-    line-height: 1.1;
-    margin-bottom: 10px;
-  }
-
-  .page-desc {
-    font-size: 15px;
-    color: var(--text2);
-    line-height: 1.75;
-    margin-bottom: 36px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 28px;
-  }
-
-  /* Headings */
-  h2.doc-h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.5px;
-    margin: 40px 0 14px;
-  }
-
-  h3.doc-h3 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #e0e0e0;
-    margin: 28px 0 10px;
-  }
-
-  p.doc-p {
-    font-size: 14px;
-    color: var(--text2);
-    line-height: 1.8;
-    margin-bottom: 16px;
-  }
-
-  /* Code blocks */
-  .code-block {
-    background: #0d0d0d;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 18px 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: #c0d4e8;
-    line-height: 1.8;
-    margin: 16px 0;
-    overflow-x: auto;
-    position: relative;
-  }
-
+  .page-title { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 10px; }
+  .page-desc { font-size: 15px; color: var(--text2); line-height: 1.75; margin-bottom: 36px; border-bottom: 1px solid var(--border); padding-bottom: 28px; }
+  h2.doc-h2 { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px; margin: 40px 0 14px; }
+  h3.doc-h3 { font-size: 15px; font-weight: 700; color: #e0e0e0; margin: 28px 0 10px; }
+  p.doc-p { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 16px; }
+  .code-block { background: #0d0d0d; border: 1px solid var(--border2); border-radius: 8px; padding: 18px 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #c0d4e8; line-height: 1.8; margin: 16px 0; overflow-x: auto; position: relative; }
   .code-block .comment { color: #3a5a6a; }
   .code-block .key { color: #4a9eff; }
   .code-block .string { color: #2ecc71; }
   .code-block .num { color: #ffa500; }
   .code-block .method { color: #c792ea; }
-
-  .code-label {
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    font-size: 9px;
-    color: var(--text3);
-    letter-spacing: 1px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* Inline code */
-  code {
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: #4a9eff;
-  }
-
-  /* Info boxes */
-  .doc-box {
-    padding: 14px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.7;
-    margin: 20px 0;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
+  .code-label { position: absolute; top: 10px; right: 14px; font-size: 9px; color: var(--text3); letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+  code { background: var(--bg3); border: 1px solid var(--border2); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4a9eff; }
+  .doc-box { padding: 14px 18px; border-radius: 8px; font-size: 13px; line-height: 1.7; margin: 20px 0; display: flex; gap: 12px; align-items: flex-start; }
   .doc-box.info { background: rgba(41,82,227,0.07); border: 1px solid rgba(41,82,227,0.2); color: #8aabff; }
   .doc-box.warning { background: rgba(255,204,0,0.06); border: 1px solid rgba(255,204,0,0.2); color: #ffcc00; }
   .doc-box.tip { background: rgba(46,204,113,0.06); border: 1px solid rgba(46,204,113,0.2); color: #2ecc71; }
   .doc-box.danger { background: rgba(255,68,68,0.06); border: 1px solid rgba(255,68,68,0.2); color: #ff4444; }
-
   .doc-box-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-  /* Steps */
-  .doc-steps {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .doc-step {
-    display: flex;
-    gap: 16px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
+  .doc-steps { margin: 20px 0; display: flex; flex-direction: column; gap: 0; }
+  .doc-step { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
   .doc-step:last-child { border-bottom: none; }
-
-  .doc-step-num {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: rgba(41,82,227,0.12);
-    border: 1px solid rgba(41,82,227,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--accent-light);
-    flex-shrink: 0;
-    font-family: 'JetBrains Mono', monospace;
-    margin-top: 2px;
-  }
-
+  .doc-step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(41,82,227,0.12); border: 1px solid rgba(41,82,227,0.25); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--accent-light); flex-shrink: 0; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
   .doc-step-body { flex: 1; }
   .doc-step-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
   .doc-step-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
-
-  /* Table */
-  .doc-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 13px;
-  }
-
-  .doc-table th {
-    text-align: left;
-    padding: 10px 14px;
-    background: var(--bg3);
-    color: var(--text2);
-    font-weight: 600;
-    border: 1px solid var(--border);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
-  }
-
-  .doc-table td {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    color: var(--text2);
-    vertical-align: top;
-    line-height: 1.6;
-  }
-
+  .doc-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+  .doc-table th { text-align: left; padding: 10px 14px; background: var(--bg3); color: var(--text2); font-weight: 600; border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; }
+  .doc-table td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.6; }
   .doc-table td code { font-size: 11px; }
   .doc-table tr:hover td { background: var(--bg2); }
-
-  /* Feature grid in docs */
-  .doc-feature-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin: 20px 0;
-  }
-
-  .doc-feature-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px;
-    transition: border-color 0.2s;
-    cursor: pointer;
-  }
-
+  .doc-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+  .doc-feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; transition: border-color 0.2s; cursor: pointer; }
   .doc-feature-card:hover { border-color: var(--accent-light); }
-
-  .doc-feature-card .title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 5px;
-  }
-
-  .doc-feature-card .desc {
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.6;
-  }
-
-  .doc-feature-card .tag {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 9px;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--accent-light);
-    background: rgba(41,82,227,0.08);
-    border: 1px solid rgba(41,82,227,0.15);
-    padding: 2px 6px;
-    border-radius: 3px;
-    letter-spacing: 1px;
-  }
-
-  /* FAQ */
-  .faq-item {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-
-  .faq-q {
-    padding: 16px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
-    user-select: none;
-  }
-
+  .doc-feature-card .title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .doc-feature-card .desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .doc-feature-card .tag { display: inline-block; margin-top: 8px; font-size: 9px; font-family: 'JetBrains Mono', monospace; color: var(--accent-light); background: rgba(41,82,227,0.08); border: 1px solid rgba(41,82,227,0.15); padding: 2px 6px; border-radius: 3px; letter-spacing: 1px; }
+  .doc-feature-card .tag.soon { color: #8899aa; background: rgba(136,136,136,0.08); border-color: rgba(136,136,136,0.2); }
+  .faq-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .faq-q { padding: 16px 18px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; }
   .faq-q:hover { background: var(--bg2); }
-
   .faq-q.open { background: var(--bg2); color: var(--accent-light); }
-
-  .faq-arrow {
-    font-size: 12px;
-    color: var(--text3);
-    transition: transform 0.2s;
-  }
-
+  .faq-arrow { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
   .faq-q.open .faq-arrow { transform: rotate(180deg); color: var(--accent-light); }
-
-  .faq-a {
-    display: none;
-    padding: 0 18px 18px;
-    font-size: 13px;
-    color: var(--text2);
-    line-height: 1.75;
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-  }
-
+  .faq-a { display: none; padding: 0 18px 18px; font-size: 13px; color: var(--text2); line-height: 1.75; background: var(--bg2); border-top: 1px solid var(--border); }
   .faq-a.open { display: block; }
-
-  /* Endpoint card */
-  .endpoint {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin: 16px 0;
-    overflow: hidden;
-  }
-
-  .endpoint-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg3);
-  }
-
-  .method-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    letter-spacing: 1px;
-  }
-
+  .endpoint { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin: 16px 0; overflow: hidden; }
+  .endpoint-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg3); }
+  .method-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 1px; }
   .method-badge.get { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
   .method-badge.post { background: rgba(74,114,255,0.12); color: #4a72ff; border: 1px solid rgba(74,114,255,0.2); }
-
-  .endpoint-path {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: #fff;
-    font-weight: 500;
-  }
-
-  .endpoint-desc {
-    font-size: 12px;
-    color: var(--text3);
-    margin-left: auto;
-  }
-
+  .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #fff; font-weight: 500; }
+  .endpoint-desc { font-size: 12px; color: var(--text3); margin-left: auto; }
   .endpoint-body { padding: 16px; }
-
-  /* Page nav bottom */
-  .page-nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 60px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-    gap: 12px;
-  }
-
-  .page-nav-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 14px 18px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    transition: border-color 0.2s;
-    cursor: pointer;
-    min-width: 160px;
-    text-decoration: none;
-  }
-
+  .page-nav { display: flex; justify-content: space-between; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); gap: 12px; }
+  .page-nav-btn { display: flex; flex-direction: column; gap: 4px; padding: 14px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s; cursor: pointer; min-width: 160px; text-decoration: none; }
   .page-nav-btn:hover { border-color: var(--accent-light); }
   .page-nav-btn.next { text-align: right; }
   .page-nav-btn .nav-label { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
   .page-nav-btn .nav-title { font-size: 13px; font-weight: 600; color: #fff; }
-
-  /* Right TOC */
-  .toc {
-    position: fixed;
-    top: 56px;
-    right: 0;
-    width: 200px;
-    padding: 28px 20px;
-    font-size: 11px;
-    color: var(--text3);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .toc-title {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 10px;
-    font-weight: 700;
-  }
-
-  .toc-item {
-    display: block;
-    padding: 4px 0;
-    color: var(--text3);
-    transition: color 0.15s;
-    cursor: pointer;
-    font-size: 11px;
-  }
-
+  .toc { position: fixed; top: 56px; right: 0; width: 200px; padding: 28px 20px; font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+  .toc-title { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; font-weight: 700; }
+  .toc-item { display: block; padding: 4px 0; color: var(--text3); transition: color 0.15s; cursor: pointer; font-size: 11px; }
   .toc-item:hover { color: var(--text2); }
-
-  @media (max-width: 900px) {
-    .toc { display: none; }
-  }
-
-  @media (max-width: 640px) {
-    .sidebar { display: none; }
-    .content { margin-left: 0; padding: 32px 20px; }
-    .doc-feature-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 900px) { .toc { display: none; } }
+  @media (max-width: 640px) { .sidebar { display: none; } .content { margin-left: 0; padding: 32px 20px; } .doc-feature-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-
-<!-- TOP NAV -->
 <div class="topnav">
   <div class="topnav-left">
     <a href="index.html" class="logo">
@@ -613,38 +128,30 @@
   </div>
   <div class="topnav-right">
     <a href="index.html">Home</a>
-    <a href="#">GitHub</a>
-    <select class="version-select">
-      <option>v1.0.0</option>
-    </select>
+    <a href="/privacy">Privacy</a>
+    <select class="version-select"><option>v1.0.0</option></select>
   </div>
 </div>
-
 <div class="layout">
-
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-group">
       <div class="sidebar-group-title">Getting Started</div>
       <div class="sidebar-link active" onclick="showSection('intro', this)">Introduction</div>
-      <div class="sidebar-link" onclick="showSection('install', this)">
-        Installation
-        <span class="new-badge">NEW</span>
-      </div>
+      <div class="sidebar-link" onclick="showSection('install', this)">Installation <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('quickstart', this)">Quick Start</div>
     </div>
-
     <div class="sidebar-group">
       <div class="sidebar-group-title">Features Guide</div>
       <div class="sidebar-link" onclick="showSection('dev-claim', this)">Dev Claim Fee</div>
       <div class="sidebar-link" onclick="showSection('deploy-count', this)">Deploy Count</div>
-      <div class="sidebar-link" onclick="showSection('smart-wallet', this)">Smart Wallet Buys</div>
+      <div class="sidebar-link" onclick="showSection('pleasebro', this)">PleaseBro Detection</div>
       <div class="sidebar-link" onclick="showSection('ca-history', this)">CA History</div>
-      <div class="sidebar-link" onclick="showSection('github-intel', this)">GitHub Intel</div>
-      <div class="sidebar-link" onclick="showSection('username-history', this)">Username History</div>
+      <div class="sidebar-link" onclick="showSection('cabal-wallet', this)">Cabal Wallet <span class="soon-badge">SOON</span></div>
+      <div class="sidebar-link" onclick="showSection('smart-follower', this)">Smart Follower <span class="soon-badge">SOON</span></div>
+      <div class="sidebar-link" onclick="showSection('github-intel', this)">GitHub Intel <span class="soon-badge">SOON</span></div>
+      <div class="sidebar-link" onclick="showSection('username-history', this)">Username History <span class="soon-badge">SOON</span></div>
       <div class="sidebar-link" onclick="showSection('community-tags', this)">Community Tags</div>
     </div>
-
     <div class="sidebar-group">
       <div class="sidebar-group-title">API Reference</div>
       <div class="sidebar-link" onclick="showSection('api-overview', this)">Overview</div>
@@ -652,34 +159,22 @@
       <div class="sidebar-link" onclick="showSection('api-contract', this)">Contract Endpoints</div>
       <div class="sidebar-link" onclick="showSection('api-tags', this)">Tags Endpoints</div>
     </div>
-
     <div class="sidebar-group">
       <div class="sidebar-group-title">Support</div>
       <div class="sidebar-link" onclick="showSection('faq', this)">FAQ</div>
       <div class="sidebar-link" onclick="showSection('changelog', this)">Changelog</div>
     </div>
   </div>
-
-  <!-- MAIN CONTENT -->
   <div class="content">
-
-    <!-- ── INTRODUCTION ── -->
+    <!-- INTRO -->
     <div class="doc-section active" id="sec-intro">
-      <div class="breadcrumb">
-        <span>Docs</span><span class="sep">/</span><span class="current">Introduction</span>
-      </div>
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Introduction</span></div>
       <h1 class="page-title">Welcome to LENS</h1>
-      <p class="page-desc">LENS is a Chrome extension that injects on-chain intelligence directly into Twitter/X profiles. See wallet data, dev activity, and community tags without leaving the page.</p>
-
-      <div class="doc-box info">
-        <span class="doc-box-icon">i</span>
-        <span>LENS currently supports <strong>Base chain only</strong>. Multi-chain support is on the roadmap.</span>
-      </div>
-
+      <p class="page-desc">LENS is a Chrome extension that injects on-chain intelligence directly into Twitter/X profiles. See a dev's trust score, Bankrbot tokens, fee activity, and community tags without ever leaving the page.</p>
+      <div class="doc-box info"><span class="doc-box-icon">i</span><span>LENS currently supports <strong>Base chain only</strong>. Multi-chain support is on the roadmap.</span></div>
       <h2 class="doc-h2">What is LENS?</h2>
       <p class="doc-p">When you open any Twitter/X profile, LENS automatically scans the bio for wallet addresses, contract addresses, and GitHub links then pulls real on-chain data and displays it directly under the profile.</p>
-      <p class="doc-p">No tab switching. No copy-pasting addresses into block explorers. Everything you need to evaluate a wallet or dev is shown instantly.</p>
-
+      <p class="doc-p">No tab switching. No copy-pasting addresses into block explorers. Everything you need to evaluate a token dev is shown instantly, including a 0-100 trust score based on real on-chain behaviour.</p>
       <h2 class="doc-h2">Core Features</h2>
       <div class="doc-feature-grid">
         <div class="doc-feature-card" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))">
@@ -692,10 +187,10 @@
           <div class="desc">See how many contracts this address has deployed. Serial deployers get flagged automatically.</div>
           <span class="tag">ON-CHAIN</span>
         </div>
-        <div class="doc-feature-card" onclick="showSection('smart-wallet', document.querySelector('[onclick*=smart-wallet]'))">
-          <div class="title">Smart Wallet Buys</div>
-          <div class="desc">Every token a wallet has bought. Copy trade KOLs directly from their profile.</div>
-          <span class="tag">COPY TRADE</span>
+        <div class="doc-feature-card" onclick="showSection('pleasebro', document.querySelector('[onclick*=pleasebro]'))">
+          <div class="title">PleaseBro Detection</div>
+          <div class="desc">Detect Bankrbot fee-share relationships and see which tokens a dev is receiving fees from.</div>
+          <span class="tag">BANKRBOT</span>
         </div>
         <div class="doc-feature-card" onclick="showSection('ca-history', document.querySelector('[onclick*=ca-history]'))">
           <div class="title">CA History</div>
@@ -703,741 +198,332 @@
           <span class="tag">BIO INTEL</span>
         </div>
       </div>
-
-      <div class="page-nav">
-        <div></div>
-        <a class="page-nav-btn next" onclick="showSection('install', document.querySelector('[onclick*=install]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Installation →</span>
-        </a>
-      </div>
+      <div class="page-nav"><div></div><a class="page-nav-btn next" onclick="showSection('install', document.querySelector('[onclick*=install]'))"><span class="nav-label">Next</span><span class="nav-title">Installation &rarr;</span></a></div>
     </div>
 
-    <!-- ── INSTALLATION ── -->
+    <!-- INSTALL -->
     <div class="doc-section" id="sec-install">
-      <div class="breadcrumb">
-        <span>Docs</span><span class="sep">/</span><span class="current">Installation</span>
-      </div>
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Installation</span></div>
       <h1 class="page-title">Installation</h1>
       <p class="page-desc">Install LENS in under 30 seconds from the Chrome Web Store. No account required, no wallet connection needed.</p>
-
       <h2 class="doc-h2">Chrome Web Store (Recommended)</h2>
       <div class="doc-steps">
-        <div class="doc-step">
-          <div class="doc-step-num">1</div>
-          <div class="doc-step-body">
-            <div class="doc-step-title">Open Chrome Web Store</div>
-            <div class="doc-step-desc">Visit the LENS page on Chrome Web Store. Search for "LENS on-chain" or use the direct link from the homepage.</div>
-          </div>
-        </div>
-        <div class="doc-step">
-          <div class="doc-step-num">2</div>
-          <div class="doc-step-body">
-            <div class="doc-step-title">Click "Add to Chrome"</div>
-            <div class="doc-step-desc">Click the blue "Add to Chrome" button. A permissions dialog will appear LENS only requests access to <code>x.com</code>.</div>
-          </div>
-        </div>
-        <div class="doc-step">
-          <div class="doc-step-num">3</div>
-          <div class="doc-step-body">
-            <div class="doc-step-title">Confirm permissions</div>
-            <div class="doc-step-desc">LENS requires access to <code>x.com</code> only. No other sites are accessed. Click "Add extension" to confirm.</div>
-          </div>
-        </div>
-        <div class="doc-step">
-          <div class="doc-step-num">4</div>
-          <div class="doc-step-body">
-            <div class="doc-step-title">Open any Twitter/X profile</div>
-            <div class="doc-step-desc">Navigate to any profile on Twitter/X. LENS will automatically activate and display the intel panel under their profile info.</div>
-          </div>
-        </div>
+        <div class="doc-step"><div class="doc-step-num">1</div><div class="doc-step-body"><div class="doc-step-title">Open Chrome Web Store</div><div class="doc-step-desc">Visit the LENS page on Chrome Web Store. Search for "LENS on-chain" or use the direct link from the homepage.</div></div></div>
+        <div class="doc-step"><div class="doc-step-num">2</div><div class="doc-step-body"><div class="doc-step-title">Click "Add to Chrome"</div><div class="doc-step-desc">Click the blue "Add to Chrome" button. A permissions dialog will appear LENS only requests access to <code>x.com</code>.</div></div></div>
+        <div class="doc-step"><div class="doc-step-num">3</div><div class="doc-step-body"><div class="doc-step-title">Confirm permissions</div><div class="doc-step-desc">LENS requires access to <code>x.com</code> only. No other sites are accessed. Click "Add extension" to confirm.</div></div></div>
+        <div class="doc-step"><div class="doc-step-num">4</div><div class="doc-step-body"><div class="doc-step-title">Open any Twitter/X profile</div><div class="doc-step-desc">Navigate to any profile on Twitter/X. LENS will automatically activate and display the intel panel under their profile info.</div></div></div>
       </div>
-
-      <h2 class="doc-h2">Manual Install (Developer Mode)</h2>
-      <div class="doc-box warning">
-        <span class="doc-box-icon">!</span>
-        <span>Manual installation is for developers only. Use the Chrome Web Store for the most secure experience.</span>
-      </div>
-
-      <div class="code-block">
-        <span class="comment"># Clone the repository</span>
-        git clone https://github.com/lens-extension/lens
-
-        <span class="comment"># Install dependencies</span>
-        cd lens && npm install
-
-        <span class="comment"># Build the extension</span>
-        npm run build
-        <span class="code-label">BASH</span>
-      </div>
-
-      <p class="doc-p">Then open <code>chrome://extensions</code>, enable Developer Mode, click "Load unpacked" and select the <code>/dist</code> folder.</p>
-
       <h2 class="doc-h2">Permissions Explained</h2>
-      <table class="doc-table">
-        <thead>
-          <tr>
-            <th>Permission</th>
-            <th>Why it is needed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>x.com</code></td>
-            <td>Read profile bios to detect wallet addresses and CAs</td>
-          </tr>
-          <tr>
-            <td><code>storage</code></td>
-            <td>Cache community tags locally for faster load</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="doc-box tip">
-        <span class="doc-box-icon">+</span>
-        <span>LENS never reads your DMs, posts, or any private data. It only reads public profile information.</span>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('intro', document.querySelector('[onclick*=intro]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Introduction</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Dev Claim Fee →</span>
-        </a>
-      </div>
+      <table class="doc-table"><thead><tr><th>Permission</th><th>Why it is needed</th></tr></thead><tbody>
+        <tr><td><code>x.com</code></td><td>Read profile bios to detect wallet addresses and CAs</td></tr>
+        <tr><td><code>storage</code></td><td>Save your settings and watchlist locally for faster load</td></tr>
+      </tbody></table>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>LENS never reads your DMs, posts, or any private data. It only reads public profile information.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('intro', document.querySelector('[onclick*=intro]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Introduction</span></a><a class="page-nav-btn next" onclick="showSection('quickstart', document.querySelector('[onclick*=quickstart]'))"><span class="nav-label">Next</span><span class="nav-title">Quick Start &rarr;</span></a></div>
     </div>
 
-    <!-- ── QUICK START ── -->
+    <!-- QUICKSTART -->
     <div class="doc-section" id="sec-quickstart">
-      <div class="breadcrumb">
-        <span>Docs</span><span class="sep">/</span><span class="current">Quick Start</span>
-      </div>
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Quick Start</span></div>
       <h1 class="page-title">Quick Start</h1>
       <p class="page-desc">Get LENS running and understand the UI in under 2 minutes.</p>
-
       <h2 class="doc-h2">Reading the Panel</h2>
-      <p class="doc-p">Once installed, open any Twitter/X profile. Under the profile bio, LENS injects a dark panel with several sections:</p>
-
-      <div class="code-block">
-┌─ LENS ─────────────────── SCAN COMPLETE ─┐
-│ Labels: [KOL] [Dev] [Scammer · 47 flags] │
-│ Wallets: Linked 3 | Mentioned 8          │
-│ History: CA 12 | Bio 29 | Profile 4      │
-├──────────────────────────────────────────┤
-│ Dev Claim Fee 7x · $28,400 · To CEX │
-│ Contracts 23x on Base · Serial Dev │
-│ CA History 12 tokens · 9 deleted │
-│ GitHub 47 repos · active 2d ago │
-│ Username 4 changes │
-├──────────────────────────────────────────┤
-│ 903 Smart Followers expand │
-└──────────────────────────────────────────┘
-        <span class="code-label">UI LAYOUT</span>
-      </div>
-
+      <p class="doc-p">Once installed, open any Twitter/X profile. Under the profile bio, LENS injects a dark panel with several sections: a trust score, Bankrbot tokens, dev activity, and community labels.</p>
+      <h2 class="doc-h2">Understanding the Trust Score</h2>
+      <table class="doc-table"><thead><tr><th>Score</th><th>Verdict</th><th>Meaning</th></tr></thead><tbody>
+        <tr><td><code>70 - 100</code></td><td>Clean</td><td>Healthy on-chain behaviour, low risk signals</td></tr>
+        <tr><td><code>40 - 69</code></td><td>Caution</td><td>Some signals worth checking before you trade</td></tr>
+        <tr><td><code>0 - 39</code></td><td>Risky</td><td>Multiple red flags such as heavy sells or fee draining</td></tr>
+      </tbody></table>
       <h2 class="doc-h2">Understanding Labels</h2>
-      <table class="doc-table">
-        <thead><tr><th>Label</th><th>Meaning</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td><code>KOL</code></td><td>Key Opinion Leader high follower count with on-chain activity</td><td>Automated</td></tr>
-          <tr><td><code>Dev</code></td><td>Has deployed contracts on Base</td><td>On-chain</td></tr>
-          <tr><td><code>Whale</code></td><td>Wallet net worth over $100K</td><td>On-chain</td></tr>
-          <tr><td><code>Scammer</code></td><td>Flagged by community members</td><td>Community</td></tr>
-          <tr><td><code>DNF</code></td><td>Do Not Follow manually tagged</td><td>Community</td></tr>
-        </tbody>
-      </table>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('install', document.querySelector('[onclick*=install]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Installation</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Dev Claim Fee →</span>
-        </a>
-      </div>
+      <table class="doc-table"><thead><tr><th>Label</th><th>Meaning</th><th>Source</th></tr></thead><tbody>
+        <tr><td><code>KOL</code></td><td>Key Opinion Leader high follower count with on-chain activity</td><td>Automated</td></tr>
+        <tr><td><code>Bankrbot Dev</code></td><td>Has launched a token through Bankrbot</td><td>On-chain</td></tr>
+        <tr><td><code>PleaseBro</code></td><td>Receives fee share from a Bankrbot token</td><td>On-chain</td></tr>
+        <tr><td><code>Dev Sold</code></td><td>Has sold their own token into the market</td><td>On-chain</td></tr>
+        <tr><td><code>Fee Claimed</code></td><td>Has claimed fees from their contract</td><td>On-chain</td></tr>
+      </tbody></table>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('install', document.querySelector('[onclick*=install]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Installation</span></a><a class="page-nav-btn next" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))"><span class="nav-label">Next</span><span class="nav-title">Dev Claim Fee &rarr;</span></a></div>
     </div>
 
-    <!-- ── DEV CLAIM FEE ── -->
+    <!-- DEV CLAIM -->
     <div class="doc-section" id="sec-dev-claim">
-      <div class="breadcrumb">
-        <span>Docs</span><span class="sep">/</span><span class="current">Dev Claim Fee</span>
-      </div>
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Dev Claim Fee</span></div>
       <h1 class="page-title">Dev Claim Fee</h1>
       <p class="page-desc">Track every time a developer claims fees from their token contract on Base chain. One of the most powerful sell signals in crypto.</p>
-
-      <div class="doc-box warning">
-        <span class="doc-box-icon">!</span>
-        <span>Dev claim fee tracking is available for <strong>Base chain only</strong> in v1.0.0.</span>
-      </div>
-
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>Dev claim fee tracking is available for <strong>Base chain only</strong> in v1.0.0.</span></div>
       <h2 class="doc-h2">How it works</h2>
       <p class="doc-p">Most ERC-20 tokens on Base include a fee mechanism. When trades happen, a small percentage goes to the developer's contract. The dev can then call a <code>claimFees()</code> or similar function to withdraw accumulated fees to their wallet.</p>
       <p class="doc-p">LENS monitors all such transactions on Base. When a wallet in someone's bio has claimed fees, LENS displays the full history inline.</p>
-
       <h2 class="doc-h2">What LENS shows</h2>
-      <table class="doc-table">
-        <thead><tr><th>Field</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>Total Claims</td><td>How many times fees have been claimed across all contracts</td></tr>
-          <tr><td>Total Amount</td><td>USD value of all fees claimed</td></tr>
-          <tr><td>Last Claim</td><td>When the most recent claim occurred</td></tr>
-          <tr><td>Destination</td><td>Where claimed funds were sent wallet or CEX</td></tr>
-          <tr><td>CEX Flag</td><td>Red flag if funds went directly to a centralized exchange</td></tr>
-        </tbody>
-      </table>
-
-      <h2 class="doc-h2">Red flags to watch for</h2>
-      <div class="doc-box danger">
-        <span class="doc-box-icon">!</span>
-        <span>If claimed funds go directly to a known CEX address, this is a strong sell signal. The dev is likely converting fees to fiat.</span>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('quickstart', document.querySelector('[onclick*=quickstart]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Quick Start</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('deploy-count', document.querySelector('[onclick*=deploy-count]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Deploy Count →</span>
-        </a>
-      </div>
+      <table class="doc-table"><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+        <tr><td>Total Claims</td><td>How many times fees have been claimed across all contracts</td></tr>
+        <tr><td>Total Amount</td><td>Value of all fees claimed</td></tr>
+        <tr><td>Last Claim</td><td>When the most recent claim occurred</td></tr>
+        <tr><td>Destination</td><td>Where claimed funds were sent wallet or CEX</td></tr>
+      </tbody></table>
+      <div class="doc-box danger"><span class="doc-box-icon">!</span><span>If claimed funds go directly to a known CEX address, this is a strong sell signal. The dev is likely converting fees to fiat.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('quickstart', document.querySelector('[onclick*=quickstart]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Quick Start</span></a><a class="page-nav-btn next" onclick="showSection('deploy-count', document.querySelector('[onclick*=deploy-count]'))"><span class="nav-label">Next</span><span class="nav-title">Deploy Count &rarr;</span></a></div>
     </div>
 
-    <!-- ── DEPLOY COUNT ── -->
+    <!-- DEPLOY COUNT -->
     <div class="doc-section" id="sec-deploy-count">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Deploy Count</span></div>
       <h1 class="page-title">Deploy Count</h1>
       <p class="page-desc">See how many smart contracts a wallet address has deployed on Base chain and get automatic risk flags for serial deployers.</p>
-
       <h2 class="doc-h2">Serial Deployer Detection</h2>
       <p class="doc-p">LENS automatically labels wallets that have deployed more than 5 contracts as <code>Serial Dev</code>. This does not mean they are malicious but it is a signal worth investigating.</p>
-
-      <table class="doc-table">
-        <thead><tr><th>Deploy Count</th><th>Label</th><th>Risk Level</th></tr></thead>
-        <tbody>
-          <tr><td>1 - 2</td><td>New Dev</td><td>Low</td></tr>
-          <tr><td>3 - 5</td><td>Active Dev</td><td>Moderate</td></tr>
-          <tr><td>6 - 15</td><td>Serial Dev</td><td>Watch</td></tr>
-          <tr><td>15+</td><td>High Volume Dev</td><td>High</td></tr>
-        </tbody>
-      </table>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Dev Claim Fee</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('smart-wallet', document.querySelector('[onclick*=smart-wallet]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Smart Wallet Buys →</span>
-        </a>
-      </div>
+      <table class="doc-table"><thead><tr><th>Deploy Count</th><th>Label</th><th>Risk Level</th></tr></thead><tbody>
+        <tr><td>1 - 2</td><td>New Dev</td><td>Low</td></tr>
+        <tr><td>3 - 5</td><td>Active Dev</td><td>Moderate</td></tr>
+        <tr><td>6 - 15</td><td>Serial Dev</td><td>Watch</td></tr>
+        <tr><td>15+</td><td>High Volume Dev</td><td>High</td></tr>
+      </tbody></table>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('dev-claim', document.querySelector('[onclick*=dev-claim]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Dev Claim Fee</span></a><a class="page-nav-btn next" onclick="showSection('pleasebro', document.querySelector('[onclick*=pleasebro]'))"><span class="nav-label">Next</span><span class="nav-title">PleaseBro Detection &rarr;</span></a></div>
     </div>
 
-    <!-- ── SMART WALLET ── -->
-    <div class="doc-section" id="sec-smart-wallet">
-      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Smart Wallet Buys</span></div>
-      <h1 class="page-title">Smart Wallet Buys</h1>
-      <p class="page-desc">See every token a wallet has purchased, sorted by profit. Copy trade KOLs and smart money directly from their X profile.</p>
-
-      <h2 class="doc-h2">What counts as a buy</h2>
-      <p class="doc-p">LENS tracks all ERC-20 swap transactions on Base where the wallet received tokens. Each token shows:</p>
-
-      <table class="doc-table">
-        <thead><tr><th>Field</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>Token Name</td><td>Symbol and contract address</td></tr>
-          <tr><td>P&L</td><td>Estimated profit or loss in USD</td></tr>
-          <tr><td>Buy Date</td><td>First purchase timestamp</td></tr>
-          <tr><td>Top 10</td><td>Badge if wallet was in top 10 early buyers</td></tr>
-        </tbody>
-      </table>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('deploy-count', document.querySelector('[onclick*=deploy-count]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Deploy Count</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('ca-history', document.querySelector('[onclick*=ca-history]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">CA History →</span>
-        </a>
-      </div>
+    <!-- PLEASEBRO -->
+    <div class="doc-section" id="sec-pleasebro">
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">PleaseBro Detection</span></div>
+      <h1 class="page-title">PleaseBro Detection</h1>
+      <p class="page-desc">Detect Bankrbot fee-share relationships. See whether a dev is sharing fees with partners and which tokens they are receiving fees from.</p>
+      <h2 class="doc-h2">How it works</h2>
+      <p class="doc-p">On Bankrbot, a token can route a portion of its fees to another party, often a partner or collaborator. This is known as a PleaseBro relationship. LENS detects these relationships on-chain and shows them directly on the profile.</p>
+      <h2 class="doc-h2">What LENS shows</h2>
+      <table class="doc-table"><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+        <tr><td>Token</td><td>The token sharing fees with this profile</td></tr>
+        <tr><td>Share</td><td>Percentage of fees routed to this recipient</td></tr>
+        <tr><td>Status</td><td>Whether fees are currently accruing</td></tr>
+      </tbody></table>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('deploy-count', document.querySelector('[onclick*=deploy-count]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Deploy Count</span></a><a class="page-nav-btn next" onclick="showSection('ca-history', document.querySelector('[onclick*=ca-history]'))"><span class="nav-label">Next</span><span class="nav-title">CA History &rarr;</span></a></div>
     </div>
 
-    <!-- ── CA HISTORY ── -->
+    <!-- CA HISTORY -->
     <div class="doc-section" id="sec-ca-history">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">CA History</span></div>
       <h1 class="page-title">CA History</h1>
       <p class="page-desc">Track every contract address ever posted in a Twitter/X bio including ones that have been deleted.</p>
-
       <h2 class="doc-h2">How bio tracking works</h2>
       <p class="doc-p">LENS indexes Twitter/X bios daily. Every time a CA appears in a bio, it is logged with a timestamp. When the CA disappears from the bio, it is marked as "Deleted" but never removed from LENS records.</p>
-
-      <div class="doc-box info">
-        <span class="doc-box-icon">i</span>
-        <span>Bio snapshots are taken every 24 hours. There may be up to a 24-hour delay before a new CA appears in LENS history.</span>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('smart-wallet', document.querySelector('[onclick*=smart-wallet]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Smart Wallet Buys</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">GitHub Intel →</span>
-        </a>
-      </div>
+      <div class="doc-box info"><span class="doc-box-icon">i</span><span>Bio snapshots are taken every 24 hours. There may be up to a 24-hour delay before a new CA appears in LENS history.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('pleasebro', document.querySelector('[onclick*=pleasebro]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; PleaseBro Detection</span></a><a class="page-nav-btn next" onclick="showSection('cabal-wallet', document.querySelector('[onclick*=cabal-wallet]'))"><span class="nav-label">Next</span><span class="nav-title">Cabal Wallet &rarr;</span></a></div>
     </div>
 
-    <!-- ── GITHUB INTEL ── -->
+    <!-- CABAL WALLET -->
+    <div class="doc-section" id="sec-cabal-wallet">
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Cabal Wallet</span></div>
+      <h1 class="page-title">Cabal Wallet</h1>
+      <p class="page-desc">Map the connected wallets behind a dev and expose the hidden cluster of accounts that move together. See the real group, not just one face.</p>
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>Cabal Wallet is currently <strong>in active development</strong> and not yet live.</span></div>
+      <h2 class="doc-h2">Why it matters</h2>
+      <p class="doc-p">A single dev rarely operates from a single wallet. Teams and cabals often spread activity across many wallets that quietly fund each other, buy the same tokens, and receive fees from the same contracts. Looking at one address tells you almost nothing about the real operation behind it.</p>
+      <p class="doc-p">Cabal Wallet analyzes funding paths, shared counterparties, and coordinated transactions on Base to cluster wallets that are likely controlled by the same group. Instead of seeing one face, you see the whole network.</p>
+      <h2 class="doc-h2">What it will show</h2>
+      <table class="doc-table"><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+        <tr><td>Connected Wallets</td><td>Addresses likely controlled by the same entity</td></tr>
+        <tr><td>Funding Links</td><td>Which wallets funded which, and when</td></tr>
+        <tr><td>Shared Holdings</td><td>Tokens the cluster holds or accumulates together</td></tr>
+        <tr><td>Coordination Signals</td><td>Buys or sells that move in sync across the cluster</td></tr>
+      </tbody></table>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Cabal Wallet helps surface insiders, coordinated pumps, and hidden teams before you trust a single profile.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('ca-history', document.querySelector('[onclick*=ca-history]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; CA History</span></a><a class="page-nav-btn next" onclick="showSection('smart-follower', document.querySelector('[onclick*=smart-follower]'))"><span class="nav-label">Next</span><span class="nav-title">Smart Follower &rarr;</span></a></div>
+    </div>
+
+    <!-- SMART FOLLOWER -->
+    <div class="doc-section" id="sec-smart-follower">
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Smart Follower</span></div>
+      <h1 class="page-title">Smart Follower</h1>
+      <p class="page-desc">See which notable on-chain players and KOLs actually follow a profile, so you can tell genuine traction from bought hype at a glance.</p>
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>Smart Follower is currently <strong>in active development</strong> and not yet live.</span></div>
+      <h2 class="doc-h2">Why it matters</h2>
+      <p class="doc-p">Follower counts are easy to fake. What is far harder to fake is who follows a profile. When real builders, known traders, and respected KOLs follow an account, that is a strong signal of genuine traction.</p>
+      <p class="doc-p">Smart Follower cross-references a profile's followers against a curated set of high-signal on-chain accounts and surfaces the notable ones, so you can instantly separate a real audience from bots and bought engagement.</p>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('cabal-wallet', document.querySelector('[onclick*=cabal-wallet]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Cabal Wallet</span></a><a class="page-nav-btn next" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))"><span class="nav-label">Next</span><span class="nav-title">GitHub Intel &rarr;</span></a></div>
+    </div>
+
+    <!-- GITHUB INTEL -->
     <div class="doc-section" id="sec-github-intel">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">GitHub Intel</span></div>
       <h1 class="page-title">GitHub Intel</h1>
-      <p class="page-desc">If a Twitter/X profile links to a GitHub account, LENS automatically fetches and displays repository intelligence.</p>
-
-      <h2 class="doc-h2">What is fetched</h2>
-      <table class="doc-table">
-        <thead><tr><th>Field</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td>Repository count</td><td>GitHub public API</td></tr>
-          <tr><td>Primary languages</td><td>GitHub public API</td></tr>
-          <tr><td>Last commit date</td><td>GitHub public API</td></tr>
-          <tr><td>Total stars</td><td>GitHub public API</td></tr>
-          <tr><td>Contract cross-reference</td><td>LENS on-chain matching</td></tr>
-        </tbody>
-      </table>
-
-      <div class="doc-box tip">
-        <span class="doc-box-icon">+</span>
-        <span>GitHub Intel uses the free public API. No authentication is required and no rate limits apply for basic profile data.</span>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('ca-history', document.querySelector('[onclick*=ca-history]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← CA History</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('community-tags', document.querySelector('[onclick*=community-tags]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Community Tags →</span>
-        </a>
-      </div>
+      <p class="page-desc">If a Twitter/X profile links to a GitHub account, LENS fetches and displays repository intelligence to help verify a dev is a real builder.</p>
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>GitHub Intel is currently <strong>in active development</strong> and not yet live.</span></div>
+      <h2 class="doc-h2">What will be fetched</h2>
+      <table class="doc-table"><thead><tr><th>Field</th><th>Source</th></tr></thead><tbody>
+        <tr><td>Repository count</td><td>GitHub public API</td></tr>
+        <tr><td>Primary languages</td><td>GitHub public API</td></tr>
+        <tr><td>Last commit date</td><td>GitHub public API</td></tr>
+        <tr><td>Total stars</td><td>GitHub public API</td></tr>
+        <tr><td>Contract cross-reference</td><td>LENS on-chain matching</td></tr>
+      </tbody></table>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('smart-follower', document.querySelector('[onclick*=smart-follower]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Smart Follower</span></a><a class="page-nav-btn next" onclick="showSection('username-history', document.querySelector('[onclick*=username-history]'))"><span class="nav-label">Next</span><span class="nav-title">Username History &rarr;</span></a></div>
     </div>
 
-    <!-- ── USERNAME HISTORY ── -->
+    <!-- USERNAME HISTORY -->
     <div class="doc-section" id="sec-username-history">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Username History</span></div>
       <h1 class="page-title">Username History</h1>
       <p class="page-desc">See every username a Twitter/X account has ever used. Scammers frequently change handles to escape their reputation.</p>
-
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>Username History is currently <strong>in active development</strong> and not yet live.</span></div>
       <h2 class="doc-h2">How username tracking works</h2>
-      <p class="doc-p">LENS maintains a historical index of Twitter/X usernames mapped to account IDs. When a username changes, the old username is preserved in LENS records permanently.</p>
-      <p class="doc-p">This means even if someone changes their handle, anyone viewing their profile through LENS will see their full name history.</p>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← GitHub Intel</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('community-tags', document.querySelector('[onclick*=community-tags]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Community Tags →</span>
-        </a>
-      </div>
+      <p class="doc-p">LENS maintains a historical index of Twitter/X usernames mapped to account IDs. When a username changes, the old username is preserved in LENS records permanently and chained to the current handle.</p>
+      <p class="doc-p">This means even if someone changes their handle, anyone viewing their profile through LENS will see their full name history, so a fresh rebrand can never hide a shady past.</p>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; GitHub Intel</span></a><a class="page-nav-btn next" onclick="showSection('community-tags', document.querySelector('[onclick*=community-tags]'))"><span class="nav-label">Next</span><span class="nav-title">Community Tags &rarr;</span></a></div>
     </div>
 
-    <!-- ── COMMUNITY TAGS ── -->
+    <!-- COMMUNITY TAGS -->
     <div class="doc-section" id="sec-community-tags">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Community Tags</span></div>
       <h1 class="page-title">Community Tags</h1>
       <p class="page-desc">A crowdsourced reputation system. Any LENS user can tag any Twitter/X account and every other LENS user sees the warning instantly.</p>
-
       <h2 class="doc-h2">Available Tags</h2>
-      <table class="doc-table">
-        <thead><tr><th>Tag</th><th>Category</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>Scammer</code></td><td>Red</td><td>Known scammer verified by multiple users</td></tr>
-          <tr><td><code>Rugpull</code></td><td>Red</td><td>Has rugged a token previously</td></tr>
-          <tr><td><code>Serial Rugger</code></td><td>Red</td><td>Multiple confirmed rugpulls</td></tr>
-          <tr><td><code>Honeypot Dev</code></td><td>Orange</td><td>Deployed honeypot contracts</td></tr>
-          <tr><td><code>Fee Drainer</code></td><td>Orange</td><td>Excessively claims fees</td></tr>
-          <tr><td><code>Suspicious</code></td><td>Yellow</td><td>Unverified suspicious behavior</td></tr>
-          <tr><td><code>Legit Dev</code></td><td>Green</td><td>Verified legitimate developer</td></tr>
-          <tr><td><code>Based Dev</code></td><td>Green</td><td>Community-trusted developer</td></tr>
-          <tr><td><code>KOL</code></td><td>Blue</td><td>Key Opinion Leader</td></tr>
-          <tr><td><code>Whale</code></td><td>Blue</td><td>High net worth wallet</td></tr>
-          <tr><td><code>Builder</code></td><td>Blue</td><td>Active builder in the ecosystem</td></tr>
-        </tbody>
-      </table>
-
+      <table class="doc-table"><thead><tr><th>Tag</th><th>Category</th><th>Description</th></tr></thead><tbody>
+        <tr><td><code>Scammer</code></td><td>Red</td><td>Known scammer verified by multiple users</td></tr>
+        <tr><td><code>Rugpull</code></td><td>Red</td><td>Has rugged a token previously</td></tr>
+        <tr><td><code>Serial Rugger</code></td><td>Red</td><td>Multiple confirmed rugpulls</td></tr>
+        <tr><td><code>Honeypot Dev</code></td><td>Orange</td><td>Deployed honeypot contracts</td></tr>
+        <tr><td><code>Fee Drainer</code></td><td>Orange</td><td>Excessively claims fees</td></tr>
+        <tr><td><code>Legit Dev</code></td><td>Green</td><td>Verified legitimate developer</td></tr>
+        <tr><td><code>KOL</code></td><td>Blue</td><td>Key Opinion Leader</td></tr>
+        <tr><td><code>Builder</code></td><td>Blue</td><td>Active builder in the ecosystem</td></tr>
+      </tbody></table>
       <h2 class="doc-h2">Tag voting</h2>
       <p class="doc-p">Tags require a minimum of 3 user confirmations before being displayed publicly. This prevents spam tagging. Tags with more votes are shown more prominently.</p>
-
-      <div class="doc-box warning">
-        <span class="doc-box-icon">!</span>
-        <span>False or malicious tagging will result in your LENS account being banned from the community tagging system.</span>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('username-history', document.querySelector('[onclick*=username-history]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Username History</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('api-overview', document.querySelector('[onclick*=api-overview]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">API Overview →</span>
-        </a>
-      </div>
+      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>False or malicious tagging will result in your LENS account being banned from the community tagging system.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('username-history', document.querySelector('[onclick*=username-history]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Username History</span></a><a class="page-nav-btn next" onclick="showSection('api-overview', document.querySelector('[onclick*=api-overview]'))"><span class="nav-label">Next</span><span class="nav-title">API Overview &rarr;</span></a></div>
     </div>
-
-    <!-- ── API OVERVIEW ── -->
+    <!-- API OVERVIEW -->
     <div class="doc-section" id="sec-api-overview">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">API Overview</span></div>
       <h1 class="page-title">API Overview</h1>
       <p class="page-desc">The LENS API provides programmatic access to wallet intelligence, contract data, and community tags.</p>
-
-      <div class="doc-box info">
-        <span class="doc-box-icon">i</span>
-        <span>The LENS API is currently in <strong>beta</strong>. Endpoints may change. All requests require an API key.</span>
-      </div>
-
+      <div class="doc-box info"><span class="doc-box-icon">i</span><span>The LENS API is currently in <strong>beta</strong>. Endpoints may change. All requests require an API key.</span></div>
       <h2 class="doc-h2">Base URL</h2>
-      <div class="code-block">
-https://api.lens.so/v1
-        <span class="code-label">BASE URL</span>
-      </div>
-
+      <div class="code-block">https://api.lnsx.io/v1<span class="code-label">BASE URL</span></div>
       <h2 class="doc-h2">Authentication</h2>
       <p class="doc-p">All API requests require an <code>Authorization</code> header with your API key:</p>
-      <div class="code-block">
-<span class="key">Authorization</span>: Bearer <span class="string">lens_sk_xxxxxxxxxxxxxxxx</span>
-        <span class="code-label">HEADER</span>
-      </div>
-
+      <div class="code-block"><span class="key">Authorization</span>: Bearer <span class="string">lens_sk_xxxxxxxxxxxxxxxx</span><span class="code-label">HEADER</span></div>
       <h2 class="doc-h2">Rate Limits</h2>
-      <table class="doc-table">
-        <thead><tr><th>Plan</th><th>Requests/min</th><th>Requests/day</th></tr></thead>
-        <tbody>
-          <tr><td>Free</td><td>10</td><td>1,000</td></tr>
-          <tr><td>Pro</td><td>100</td><td>50,000</td></tr>
-          <tr><td>Enterprise</td><td>Custom</td><td>Unlimited</td></tr>
-        </tbody>
-      </table>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('community-tags', document.querySelector('[onclick*=community-tags]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Community Tags</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('api-wallet', document.querySelector('[onclick*=api-wallet]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Wallet Endpoints →</span>
-        </a>
-      </div>
+      <table class="doc-table"><thead><tr><th>Plan</th><th>Requests/min</th><th>Requests/day</th></tr></thead><tbody>
+        <tr><td>Free</td><td>10</td><td>1,000</td></tr>
+        <tr><td>Pro</td><td>100</td><td>50,000</td></tr>
+        <tr><td>Enterprise</td><td>Custom</td><td>Unlimited</td></tr>
+      </tbody></table>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('community-tags', document.querySelector('[onclick*=community-tags]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Community Tags</span></a><a class="page-nav-btn next" onclick="showSection('api-wallet', document.querySelector('[onclick*=api-wallet]'))"><span class="nav-label">Next</span><span class="nav-title">Wallet Endpoints &rarr;</span></a></div>
     </div>
 
-    <!-- ── API WALLET ── -->
+    <!-- API WALLET -->
     <div class="doc-section" id="sec-api-wallet">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Wallet Endpoints</span></div>
       <h1 class="page-title">Wallet Endpoints</h1>
       <p class="page-desc">Query wallet intelligence data including holdings, history, and on-chain activity.</p>
-
       <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge get">GET</span>
-          <span class="endpoint-path">/wallet/{address}</span>
-          <span class="endpoint-desc">Get full wallet profile</span>
-        </div>
-        <div class="endpoint-body">
-          <p class="doc-p">Returns complete wallet data including token holdings, net worth, chain activity, and labels.</p>
-          <div class="code-block">
-<span class="method">GET</span> /wallet/0x1a2b3c4d5e6f...
+        <div class="endpoint-header"><span class="method-badge get">GET</span><span class="endpoint-path">/wallet/{address}</span><span class="endpoint-desc">Get full wallet profile</span></div>
+        <div class="endpoint-body"><p class="doc-p">Returns complete wallet data including token holdings, net worth, chain activity, and labels.</p>
+          <div class="code-block"><span class="method">GET</span> /wallet/0x1a2b3c4d5e6f...
 
 <span class="comment">// Response</span>
 {
   <span class="key">"address"</span>: <span class="string">"0x1a2b3c4d..."</span>,
-  <span class="key">"net_worth_usd"</span>: <span class="num">284000</span>,
-  <span class="key">"labels"</span>: [<span class="string">"KOL"</span>, <span class="string">"Dev"</span>],
-  <span class="key">"chain_activity"</span>: [<span class="string">"base"</span>, <span class="string">"ethereum"</span>],
+  <span class="key">"trust_score"</span>: <span class="num">90</span>,
+  <span class="key">"labels"</span>: [<span class="string">"KOL"</span>, <span class="string">"Bankrbot Dev"</span>],
+  <span class="key">"chain_activity"</span>: [<span class="string">"base"</span>],
   <span class="key">"wallet_age_days"</span>: <span class="num">847</span>
-}
-            <span class="code-label">JSON</span>
-          </div>
+}<span class="code-label">JSON</span></div>
         </div>
       </div>
-
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge get">GET</span>
-          <span class="endpoint-path">/wallet/{address}/buys</span>
-          <span class="endpoint-desc">Get token purchase history</span>
-        </div>
-        <div class="endpoint-body">
-          <p class="doc-p">Returns all token purchases sorted by profit/loss.</p>
-          <div class="code-block">
-<span class="comment">// Query params</span>
-chain=base <span class="comment">// Filter by chain</span>
-limit=50 <span class="comment">// Max results (default 20)</span>
-sort=pnl_desc <span class="comment">// Sort by P&L descending</span>
-            <span class="code-label">PARAMS</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('api-overview', document.querySelector('[onclick*=api-overview]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← API Overview</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('api-contract', document.querySelector('[onclick*=api-contract]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Contract Endpoints →</span>
-        </a>
-      </div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('api-overview', document.querySelector('[onclick*=api-overview]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; API Overview</span></a><a class="page-nav-btn next" onclick="showSection('api-contract', document.querySelector('[onclick*=api-contract]'))"><span class="nav-label">Next</span><span class="nav-title">Contract Endpoints &rarr;</span></a></div>
     </div>
 
-    <!-- ── API CONTRACT ── -->
+    <!-- API CONTRACT -->
     <div class="doc-section" id="sec-api-contract">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Contract Endpoints</span></div>
       <h1 class="page-title">Contract Endpoints</h1>
       <p class="page-desc">Query contract deployment history and fee claim activity on Base chain.</p>
-
       <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge get">GET</span>
-          <span class="endpoint-path">/contract/{address}/claims</span>
-          <span class="endpoint-desc">Get fee claim history</span>
-        </div>
-        <div class="endpoint-body">
-          <div class="code-block">
-<span class="comment">// Response</span>
+        <div class="endpoint-header"><span class="method-badge get">GET</span><span class="endpoint-path">/contract/{address}/claims</span><span class="endpoint-desc">Get fee claim history</span></div>
+        <div class="endpoint-body"><div class="code-block"><span class="comment">// Response</span>
 {
   <span class="key">"contract"</span>: <span class="string">"0xabc..."</span>,
   <span class="key">"total_claims"</span>: <span class="num">7</span>,
-  <span class="key">"total_usd"</span>: <span class="num">28400</span>,
-  <span class="key">"last_claim"</span>: <span class="string">"2026-06-10T08:22:00Z"</span>,
-  <span class="key">"claims"</span>: [
-    {
-      <span class="key">"date"</span>: <span class="string">"2026-06-10"</span>,
-      <span class="key">"amount_usd"</span>: <span class="num">8200</span>,
-      <span class="key">"destination"</span>: <span class="string">"0x9f2a...CEX"</span>,
-      <span class="key">"cex_flag"</span>: <span class="num">true</span>
-    }
-  ]
-}
-            <span class="code-label">JSON</span>
-          </div>
-        </div>
+  <span class="key">"last_claim"</span>: <span class="string">"2026-06-10T08:22:00Z"</span>
+}<span class="code-label">JSON</span></div></div>
       </div>
-
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge get">GET</span>
-          <span class="endpoint-path">/deployer/{address}</span>
-          <span class="endpoint-desc">Get all contracts deployed by address</span>
-        </div>
-        <div class="endpoint-body">
-          <div class="code-block">
-<span class="comment">// Response</span>
-{
-  <span class="key">"deployer"</span>: <span class="string">"0x1a2b..."</span>,
-  <span class="key">"total_contracts"</span>: <span class="num">23</span>,
-  <span class="key">"risk_label"</span>: <span class="string">"Serial Dev"</span>,
-  <span class="key">"contracts"</span>: [...]
-}
-            <span class="code-label">JSON</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('api-wallet', document.querySelector('[onclick*=api-wallet]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Wallet Endpoints</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('api-tags', document.querySelector('[onclick*=api-tags]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Tags Endpoints →</span>
-        </a>
-      </div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('api-wallet', document.querySelector('[onclick*=api-wallet]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Wallet Endpoints</span></a><a class="page-nav-btn next" onclick="showSection('api-tags', document.querySelector('[onclick*=api-tags]'))"><span class="nav-label">Next</span><span class="nav-title">Tags Endpoints &rarr;</span></a></div>
     </div>
 
-    <!-- ── API TAGS ── -->
+    <!-- API TAGS -->
     <div class="doc-section" id="sec-api-tags">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Tags Endpoints</span></div>
       <h1 class="page-title">Tags Endpoints</h1>
       <p class="page-desc">Read and write community tags programmatically.</p>
-
       <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge get">GET</span>
-          <span class="endpoint-path">/tags/{twitter_username}</span>
-          <span class="endpoint-desc">Get tags for a Twitter username</span>
-        </div>
-        <div class="endpoint-body">
-          <div class="code-block">
-<span class="comment">// Response</span>
+        <div class="endpoint-header"><span class="method-badge get">GET</span><span class="endpoint-path">/tags/{twitter_username}</span><span class="endpoint-desc">Get tags for a Twitter username</span></div>
+        <div class="endpoint-body"><div class="code-block"><span class="comment">// Response</span>
 {
-  <span class="key">"username"</span>: <span class="string">"cryptodevalex"</span>,
+  <span class="key">"username"</span>: <span class="string">"example"</span>,
   <span class="key">"tags"</span>: [
-    { <span class="key">"tag"</span>: <span class="string">"Scammer"</span>, <span class="key">"votes"</span>: <span class="num">47</span>, <span class="key">"category"</span>: <span class="string">"red"</span> },
-    { <span class="key">"tag"</span>: <span class="string">"Serial Rugger"</span>, <span class="key">"votes"</span>: <span class="num">23</span>, <span class="key">"category"</span>: <span class="string">"red"</span> }
+    { <span class="key">"tag"</span>: <span class="string">"Scammer"</span>, <span class="key">"votes"</span>: <span class="num">47</span> }
   ]
-}
-            <span class="code-label">JSON</span>
-          </div>
-        </div>
+}<span class="code-label">JSON</span></div></div>
       </div>
-
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <span class="method-badge post">POST</span>
-          <span class="endpoint-path">/tags</span>
-          <span class="endpoint-desc">Submit a new tag</span>
-        </div>
-        <div class="endpoint-body">
-          <div class="code-block">
-<span class="comment">// Request body</span>
-{
-  <span class="key">"twitter_username"</span>: <span class="string">"cryptodevalex"</span>,
-  <span class="key">"tag"</span>: <span class="string">"Scammer"</span>,
-  <span class="key">"evidence_url"</span>: <span class="string">"https://..."</span>
-}
-            <span class="code-label">JSON</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('api-contract', document.querySelector('[onclick*=api-contract]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Contract Endpoints</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('faq', document.querySelector('[onclick*=faq]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">FAQ →</span>
-        </a>
-      </div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('api-contract', document.querySelector('[onclick*=api-contract]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Contract Endpoints</span></a><a class="page-nav-btn next" onclick="showSection('faq', document.querySelector('[onclick*=faq]'))"><span class="nav-label">Next</span><span class="nav-title">FAQ &rarr;</span></a></div>
     </div>
 
-    <!-- ── FAQ ── -->
+    <!-- FAQ -->
     <div class="doc-section" id="sec-faq">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">FAQ</span></div>
       <h1 class="page-title">FAQ</h1>
       <p class="page-desc">Frequently asked questions about LENS.</p>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Is LENS free?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">Yes. The Chrome extension is completely free. An API tier will be available for developers who want programmatic access to LENS data.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Which chains does LENS support?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">LENS currently supports Base chain for all on-chain features (dev claim fee, deploy count). Ethereum, BSC, and Arbitrum are on the roadmap for future releases.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Does LENS access my wallet or private keys?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">No. LENS never asks for wallet access or private keys. It is a read-only tool that only reads public on-chain data and public Twitter/X profile information.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Can I tag someone incorrectly or as a joke?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">Tags require a minimum vote threshold before going public, and abusive tagging will result in your account being banned from the community tag system. All tags are moderated by the LENS team.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">How often is data updated?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">On-chain data (claims, deploys) is updated in near real-time via blockchain indexing. Bio and CA history snapshots are taken every 24 hours. Community tags are updated instantly.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">How do I report a false tag?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">Anyone can dispute a tag from the LENS extension UI. Click on the tag, select "Dispute", and submit evidence. Disputed tags are reviewed by the LENS moderation team within 48 hours.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Is LENS open source?<span class="faq-arrow">v</span></div>
-        <div class="faq-a">Yes. The extension source code is fully open source on GitHub. You can verify exactly what data is read and how it is used.</div>
-      </div>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('api-tags', document.querySelector('[onclick*=api-tags]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← Tags Endpoints</span>
-        </a>
-        <a class="page-nav-btn next" onclick="showSection('changelog', document.querySelector('[onclick*=changelog]'))">
-          <span class="nav-label">Next</span>
-          <span class="nav-title">Changelog →</span>
-        </a>
-      </div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is LENS free?<span class="faq-arrow">v</span></div><div class="faq-a">Yes. The Chrome extension is completely free. An API tier will be available for developers who want programmatic access to LENS data.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Which chains does LENS support?<span class="faq-arrow">v</span></div><div class="faq-a">LENS currently supports Base chain for all on-chain features. Ethereum, BSC, and Arbitrum are on the roadmap for future releases.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does LENS access my wallet or private keys?<span class="faq-arrow">v</span></div><div class="faq-a">No. LENS never asks for wallet access or private keys. It is a read-only tool that only reads public on-chain data and public Twitter/X profile information.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What features are coming soon?<span class="faq-arrow">v</span></div><div class="faq-a">Cabal Wallet (mapping connected wallets behind a dev), Smart Follower (notable accounts that follow a profile), GitHub Intel (repo verification), and Username History (handle change tracking) are all in active development.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How often is data updated?<span class="faq-arrow">v</span></div><div class="faq-a">On-chain data is updated in near real-time via blockchain indexing. Bio and CA history snapshots are taken every 24 hours. Community tags are updated instantly.</div></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('api-tags', document.querySelector('[onclick*=api-tags]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Tags Endpoints</span></a><a class="page-nav-btn next" onclick="showSection('changelog', document.querySelector('[onclick*=changelog]'))"><span class="nav-label">Next</span><span class="nav-title">Changelog &rarr;</span></a></div>
     </div>
 
-    <!-- ── CHANGELOG ── -->
+    <!-- CHANGELOG -->
     <div class="doc-section" id="sec-changelog">
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Changelog</span></div>
       <h1 class="page-title">Changelog</h1>
       <p class="page-desc">Release history and updates for LENS.</p>
-
       <h2 class="doc-h2">v1.0.0 June 2026</h2>
-      <div class="doc-box tip">
-        <span class="doc-box-icon">+</span>
-        <span>Initial public release.</span>
-      </div>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Initial public release.</span></div>
       <p class="doc-p">First public release of LENS Chrome Extension.</p>
       <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text2);">Trust score (0-100) based on on-chain behaviour</li>
         <li style="font-size:13px;color:var(--text2);">Dev Claim Fee tracking on Base chain</li>
         <li style="font-size:13px;color:var(--text2);">Contract deploy count with serial dev detection</li>
-        <li style="font-size:13px;color:var(--text2);">Smart wallet buys and P&L display</li>
+        <li style="font-size:13px;color:var(--text2);">PleaseBro fee-share detection</li>
         <li style="font-size:13px;color:var(--text2);">CA History with deleted CA tracking</li>
-        <li style="font-size:13px;color:var(--text2);">GitHub intel integration</li>
-        <li style="font-size:13px;color:var(--text2);">Username history tracking</li>
         <li style="font-size:13px;color:var(--text2);">Community tags system with voting</li>
-        <li style="font-size:13px;color:var(--text2);">Smart Followers count</li>
       </ul>
-
-      <div class="page-nav">
-        <a class="page-nav-btn" onclick="showSection('faq', document.querySelector('[onclick*=faq]'))">
-          <span class="nav-label">Previous</span>
-          <span class="nav-title">← FAQ</span>
-        </a>
-        <div></div>
-      </div>
+      <h2 class="doc-h2">In Development</h2>
+      <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text2);">Cabal Wallet connected-wallet mapping</li>
+        <li style="font-size:13px;color:var(--text2);">Smart Follower notable-follower detection</li>
+        <li style="font-size:13px;color:var(--text2);">GitHub Intel integration</li>
+        <li style="font-size:13px;color:var(--text2);">Username history tracking</li>
+      </ul>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('faq', document.querySelector('[onclick*=faq]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; FAQ</span></a><div></div></div>
     </div>
 
   </div><!-- end content -->
 </div><!-- end layout -->
-
 <script>
 function showSection(id, linkEl) {
-  // Hide all sections
   document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
-  // Show target
   const target = document.getElementById('sec-' + id);
   if (target) { target.classList.add('active'); window.scrollTo(0,0); }
-  // Update sidebar
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
   if (linkEl) linkEl.classList.add('active');
 }
-
 function toggleFaq(el) {
   const ans = el.nextElementSibling;
   const isOpen = ans.classList.contains('open');
-  // Close all
   document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
   document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
-  if (!isOpen) {
-    el.classList.add('open');
-    ans.classList.add('open');
-  }
+  if (!isOpen) { el.classList.add('open'); ans.classList.add('open'); }
 }
 </script>
 </body>
