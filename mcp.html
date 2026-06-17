@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LENS for Agents</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%232952e3'/%3E%3Cpath d='M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z' fill='none' stroke='white' stroke-width='1.8' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='14' r='3.2' fill='none' stroke='white' stroke-width='1.8'/%3E%3Ccircle cx='14' cy='14' r='1.1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:title" content="LENS for Agents">
+<meta property="og:description" content="Give your AI agent the same on-chain verdict LENS shows you, a token or dev check it can run mid conversation">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root {
+    --bg: #0a0a0a; --bg2: #111111; --bg3: #161616;
+    --border: #1f1f1f; --border2: #2a2a2a;
+    --text: #f0f0f0; --text2: #888; --text3: #555;
+    --accent: #2952e3; --accent2: #1a3acc; --accent-light: #4a72ff;
+    --green: #2ecc71;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; overflow-x:clip; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden; }
+  a { color:inherit; text-decoration:none; }
+  body::before {
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(620px circle at 12% -5%, rgba(41,82,227,0.16), transparent 60%),
+      radial-gradient(520px circle at 95% 110%, rgba(74,114,255,0.10), transparent 55%);
+  }
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:1180px; margin:0 auto;
+    position:sticky; top:0; backdrop-filter:blur(10px); z-index:10;
+    background:rgba(10,10,10,0.6); border-bottom:1px solid var(--border);
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; }
+  .nav-logo svg { width:28px; height:28px; }
+  .nav-logo-text { font-weight:800; font-size:18px; letter-spacing:0.5px; }
+  .nav-links { display:flex; align-items:center; gap:24px; }
+  .nav-links a { color:var(--text2); font-size:14px; font-weight:500; transition:color .15s; }
+  .nav-links a:hover { color:var(--text); }
+  .btn-chrome { background:var(--accent); border:1px solid var(--accent); color:#fff; padding:9px 16px; border-radius:9px; font-size:13px; font-weight:600; transition:background .15s; }
+  .btn-chrome:hover { background:var(--accent2); }
+
+  .hero { max-width:880px; margin:0 auto; padding:70px 28px 24px; text-align:center; }
+  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--accent-light); margin-bottom:16px; }
+  .hero h1 { font-size:clamp(34px,6vw,56px); font-weight:800; line-height:1.05; letter-spacing:-1px; }
+  .hero h1 .accent { color:var(--accent-light); }
+  .hero p { color:var(--text2); font-size:17px; margin:18px auto 0; max-width:580px; line-height:1.55; }
+
+  .sec { max-width:880px; margin:0 auto; padding:30px 28px; }
+  .sec-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .sec-h { font-size:13px; font-family:'JetBrains Mono',monospace; letter-spacing:1.5px; text-transform:uppercase; color:var(--text); }
+  .badge { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 9px; border-radius:999px; }
+  .badge.live { color:var(--green); background:rgba(46,204,113,0.1); border:1px solid rgba(46,204,113,0.35); }
+  .badge.next { color:var(--accent-light); background:rgba(74,114,255,0.1); border:1px solid rgba(74,114,255,0.3); }
+  .sec p.lead { color:var(--text2); font-size:14.5px; line-height:1.6; margin-top:12px; }
+
+  pre.code {
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.65;
+    background:var(--bg3); border:1px solid var(--border2); border-radius:12px;
+    padding:16px 18px; margin-top:16px; color:var(--text);
+    overflow-x:auto; white-space:pre;
+  }
+  pre.code .k { color:var(--accent-light); }
+  pre.code .c { color:var(--text3); }
+
+  .btn-ghost {
+    display:inline-flex; align-items:center; gap:8px; margin-top:16px;
+    background:var(--bg3); border:1px solid var(--border2); color:var(--text);
+    padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600;
+    font-family:'JetBrains Mono',monospace; transition:border-color .15s;
+  }
+  .btn-ghost:hover { border-color:var(--accent); }
+
+  .tool-row { display:flex; gap:12px; align-items:flex-start; padding:14px 0; border-bottom:1px solid var(--border); }
+  .tool-row:last-child { border-bottom:none; }
+  .tool-name { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--accent-light); flex:0 0 150px; }
+  .tool-desc { color:var(--text2); font-size:13.5px; line-height:1.5; }
+
+  footer { max-width:880px; margin:40px auto 0; padding:30px 28px 50px; border-top:1px solid var(--border); color:var(--text2); font-size:13px; text-align:center; line-height:1.7; }
+  footer a { color:var(--accent-light); }
+
+  @media (max-width:600px) {
+    .nav-links { gap:14px; }
+    .nav-links a { display:none; }
+    .nav-links .btn-chrome { display:inline-block; }
+    .hero { padding:48px 22px 20px; }
+    .tool-row { flex-direction:column; gap:4px; }
+    .tool-name { flex:none; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } * { transition:none !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <svg viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="7" fill="#2952e3"/>
+      <path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/>
+      <circle cx="14" cy="14" r="1.1" fill="white"/>
+    </svg>
+    <span class="nav-logo-text">LENS</span>
+  </a>
+  <div class="nav-links">
+    <a href="/lens-docs">Docs</a>
+    <a href="/community">Community</a>
+    <a href="/architecture">How it works</a>
+    <a href="/#download" class="btn-chrome">Add to Chrome</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">LENS for Agents</div>
+  <h1>Call LENS from any <span class="accent">agent</span></h1>
+  <p>Give your AI agent the same on-chain verdict LENS shows you, a token or dev check it can run in the middle of a conversation</p>
+</header>
+
+<section class="sec">
+  <div class="sec-head"><h2 class="sec-h">The Skill</h2><span class="badge live">live</span></div>
+  <p class="lead">A Skill is a short note an agent reads to learn how and when to use a tool. The LENS Skill tells an agent to reach for LENS the moment a user pastes a Base contract address, names a ticker, or asks if a token or dev is safe, then how to call it and how to read the verdict.</p>
+  <pre class="code"><span class="c"># lens-onchain-intel · SKILL.md</span>
+
+<span class="k">when to use</span>
+  user pastes a Base contract address and asks if it is safe
+  user names a Base token ticker and wants a risk read
+  user asks about a crypto X account, has the dev sold, is it a rug
+
+<span class="k">how to call</span>
+  POST https://lens-liard.vercel.app/api/agent
+  { "q": "&lt;contract address, $ticker, or @handle&gt;" }
+
+<span class="k">read the verdict</span>
+  CLEAR    no hard red flags
+  CAUTION  one or two red lines triggered
+  STOP     three or more red lines triggered</pre>
+  <a class="btn-ghost" href="/lens-skill/SKILL.md" target="_blank">open SKILL.md &rarr;</a>
+</section>
+
+<section class="sec">
+  <div class="sec-head"><h2 class="sec-h">Use it today</h2><span class="badge live">live</span></div>
+  <p class="lead">No connector needed to start. Any agent can POST a contract address, a ticker, or a handle to the LENS endpoint and get a full breakdown back, verdict included.</p>
+  <pre class="code"><span class="c">// one call, one answer</span>
+POST https://lens-liard.vercel.app/api/agent
+Content-Type: application/json
+
+{ "q": "0xb233BDFFD437E60fA451F62c6c09D3804d285Ba3" }
+
+<span class="c">// response</span>
+{
+  "ok": true,
+  "type": "ca",
+  "answer": "...breakdown, ends with Verdict: STOP and the red lines...",
+  "data": { ...raw fields... }
+}</pre>
+  <p class="lead">Show the user the <code>answer</code> field as given. For a token it ends with the verdict and the exact red lines that triggered, never invent or soften them.</p>
+</section>
+
+<section class="sec">
+  <div class="sec-head"><h2 class="sec-h">Native MCP</h2><span class="badge next">shipping next</span></div>
+  <p class="lead">A native MCP endpoint so an agent can discover LENS tools, quote a call, and run it without any custom glue. Same data and the same verdict, exposed as proper agent tools.</p>
+  <div style="margin-top:18px;">
+    <div class="tool-row"><div class="tool-name">lens_check_token</div><div class="tool-desc">Full intel and verdict for a Base contract address or ticker, liquidity, age, dev signals, and the red lines</div></div>
+    <div class="tool-row"><div class="tool-name">lens_check_handle</div><div class="tool-desc">Dev intel for a crypto X account, tokens launched, sells, PleaseBro, and notable followers</div></div>
+    <div class="tool-row"><div class="tool-name">lens_verdict</div><div class="tool-desc">Just the verdict for a contract address, CLEAR, CAUTION, or STOP, with the triggered red lines</div></div>
+  </div>
+  <pre class="code"><span class="c"># once it ships</span>
+claude mcp add --transport http \
+  lens https://api.lnsx.io/mcp</pre>
+</section>
+
+<footer>
+  read from public data on Base and X · this is information not financial advice<br>
+  <a href="/">back to lnsx.io</a>
+</footer>
+
+</body>
+</html>
