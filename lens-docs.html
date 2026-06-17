@@ -154,7 +154,7 @@
       <div class="sidebar-link" onclick="showSection('token-health', this)">Token Health <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('linked-accounts', this)">Linked Accounts <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('funding-trail', this)">Funding Trail <span class="new-badge">NEW</span></div>
-      <div class="sidebar-link" onclick="showSection('smart-follower', this)">Smart Follower <span class="soon-badge">SOON</span></div>
+      <div class="sidebar-link" onclick="showSection('smart-follower', this)">Smart Follower <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('github-intel', this)">GitHub Intel <span class="soon-badge">SOON</span></div>
       <div class="sidebar-link" onclick="showSection('username-history', this)">Username History <span class="soon-badge">SOON</span></div>
       <div class="sidebar-link" onclick="showSection('community-tags', this)">Community Tags</div>
@@ -430,10 +430,15 @@
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Smart Follower</span></div>
       <h1 class="page-title">Smart Follower</h1>
       <p class="page-desc">See which notable on-chain players and KOLs actually follow a profile, so you can tell genuine traction from bought hype at a glance.</p>
-      <div class="doc-box warning"><span class="doc-box-icon">!</span><span>Smart Follower is currently <strong>in active development</strong> and not yet live.</span></div>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Smart Follower is <strong>live</strong> as of v2.7, powered by the LENS backend.</span></div>
       <h2 class="doc-h2">Why it matters</h2>
       <p class="doc-p">Follower counts are easy to fake. What is far harder to fake is who follows a profile. When real builders, known traders, and respected KOLs follow an account, that is a strong signal of genuine traction.</p>
       <p class="doc-p">Smart Follower cross-references a profile's followers against a curated set of high-signal on-chain accounts and surfaces the notable ones, so you can instantly separate a real audience from bots and bought engagement.</p>
+      <h2 class="doc-h2">How it works</h2>
+      <p class="doc-p">LENS maintains a curated set of high-signal accounts, including respected builders, traders, funds, and protocol accounts. In the background it periodically indexes who each of those accounts follows on X and stores the result.</p>
+      <p class="doc-p">When you open a profile, LENS checks that index and surfaces any curated accounts that follow the profile. They appear as SMART chips directly under the display name and inside the Followers section of the panel.</p>
+      <p class="doc-p">Because the lookup runs against the LENS backend, Smart Follower works on its own with no other extension required, and the same signal is available to every user.</p>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>The curated set grows over time, so coverage keeps improving as more accounts are indexed.</span></div>
       <div class="page-nav"><a class="page-nav-btn" onclick="showSection('funding-trail', document.querySelector('[onclick*=funding-trail]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Funding Trail</span></a><a class="page-nav-btn next" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))"><span class="nav-label">Next</span><span class="nav-title">GitHub Intel &rarr;</span></a></div>
     </div>
 
@@ -573,7 +578,7 @@
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is LENS free?<span class="faq-arrow">v</span></div><div class="faq-a">Yes. The Chrome extension is completely free. An API tier will be available for developers who want programmatic access to LENS data.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Which chains does LENS support?<span class="faq-arrow">v</span></div><div class="faq-a">LENS currently supports Base chain for all on-chain features. Ethereum, BSC, and Arbitrum are on the roadmap for future releases.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does LENS access my wallet or private keys?<span class="faq-arrow">v</span></div><div class="faq-a">No. LENS never asks for wallet access or private keys. It is a read-only tool that only reads public on-chain data and public Twitter/X profile information.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What features are coming soon?<span class="faq-arrow">v</span></div><div class="faq-a">Smart Follower (notable accounts that follow a profile), GitHub Intel (repo verification), and Username History (handle change tracking) are all in active development.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What features are coming soon?<span class="faq-arrow">v</span></div><div class="faq-a">GitHub Intel (repo verification) and Username History (handle change tracking) are in active development. Smart Follower is already live.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How often is data updated?<span class="faq-arrow">v</span></div><div class="faq-a">On-chain data is updated in near real-time via blockchain indexing. Bio and CA history snapshots are taken every 24 hours. Community tags are updated instantly.</div></div>
       <div class="page-nav"><a class="page-nav-btn" onclick="showSection('api-tags', document.querySelector('[onclick*=api-tags]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Tags Endpoints</span></a><a class="page-nav-btn next" onclick="showSection('changelog', document.querySelector('[onclick*=changelog]'))"><span class="nav-label">Next</span><span class="nav-title">Changelog &rarr;</span></a></div>
     </div>
@@ -583,6 +588,11 @@
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Changelog</span></div>
       <h1 class="page-title">Changelog</h1>
       <p class="page-desc">Release history and updates for LENS.</p>
+      <h2 class="doc-h2">v2.7 June 2026</h2>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Smart Follower is now live.</span></div>
+      <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text2);">Smart Follower notable-follower detection, powered by the LENS backend</li>
+      </ul>
       <h2 class="doc-h2">v2.5 June 2026</h2>
       <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Five new intelligence features added.</span></div>
       <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
@@ -606,7 +616,6 @@
       </ul>
       <h2 class="doc-h2">In Development</h2>
       <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
-        <li style="font-size:13px;color:var(--text2);">Smart Follower notable-follower detection</li>
         <li style="font-size:13px;color:var(--text2);">GitHub Intel integration</li>
         <li style="font-size:13px;color:var(--text2);">Username history tracking</li>
       </ul>
