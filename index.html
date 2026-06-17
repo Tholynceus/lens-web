@@ -1958,7 +1958,7 @@ function switchBrowser(browser, el) {
 </div>
 
 <script>
-  // GANTI 'VIDEO_ID' dengan ID video YouTube lo (bagian setelah watch?v= atau youtu.be/)
+  // Replace 'VIDEO_ID' with your YouTube video ID (the part after watch?v= or youtu.be/)
   const LENS_DEMO_VIDEO_ID = 'o2dsrMPARK4';
   function openDemo(e) {
     if (e) e.preventDefault();
@@ -1980,17 +1980,17 @@ function switchBrowser(browser, el) {
 </script>
 
 <script>
-  // Smooth scroll untuk link /#anchor tanpa ninggalin # di URL
+  // Smooth scroll for /#anchor links without leaving # in the URL
   document.querySelectorAll('a[href^="/#"], a[href^="#"]').forEach(function(link) {
     link.addEventListener('click', function(e) {
       var href = this.getAttribute('href');
       var id = href.split('#')[1];
-      if (!id) return; // href="#" kosong, biarin
+      if (!id) return; // empty href="#", ignore
       var target = document.getElementById(id);
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // bersihin # dari URL setelah scroll
+        // clean # from the URL after scroll
         history.replaceState(null, '', window.location.pathname);
       }
     });
