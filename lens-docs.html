@@ -155,6 +155,7 @@
       <div class="sidebar-link" onclick="showSection('linked-accounts', this)">Linked Accounts <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('funding-trail', this)">Funding Trail <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('smart-follower', this)">Smart Follower <span class="new-badge">NEW</span></div>
+      <div class="sidebar-link" onclick="showSection('red-lines', this)">Red Lines <span class="new-badge">NEW</span></div>
       <div class="sidebar-link" onclick="showSection('github-intel', this)">GitHub Intel <span class="soon-badge">SOON</span></div>
       <div class="sidebar-link" onclick="showSection('username-history', this)">Username History <span class="soon-badge">SOON</span></div>
       <div class="sidebar-link" onclick="showSection('community-tags', this)">Community Tags</div>
@@ -223,6 +224,11 @@
           <div class="title">Funding Trail</div>
           <div class="desc">Who funded the deployer, and which other wallets that same funder seeded. Catches serial devs.</div>
           <span class="tag">SERIAL DEV</span>
+        </div>
+        <div class="doc-feature-card" onclick="showSection('red-lines', document.querySelector('[onclick*=red-lines]'))">
+          <div class="title">Verdict &amp; Red Lines</div>
+          <div class="desc">Ask LENS ends every token check with a clear verdict, CLEAR, CAUTION or STOP, and the exact red lines that triggered it.</div>
+          <span class="tag">ASK LENS</span>
         </div>
       </div>
       <div class="page-nav"><div></div><a class="page-nav-btn next" onclick="showSection('install', document.querySelector('[onclick*=install]'))"><span class="nav-label">Next</span><span class="nav-title">Installation &rarr;</span></a></div>
@@ -439,7 +445,35 @@
       <p class="doc-p">When you open a profile, LENS checks that index and surfaces any curated accounts that follow the profile. They appear as SMART chips directly under the display name and inside the Followers section of the panel.</p>
       <p class="doc-p">Because the lookup runs against the LENS backend, Smart Follower works on its own with no other extension required, and the same signal is available to every user.</p>
       <div class="doc-box tip"><span class="doc-box-icon">+</span><span>The curated set grows over time, so coverage keeps improving as more accounts are indexed.</span></div>
-      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('funding-trail', document.querySelector('[onclick*=funding-trail]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Funding Trail</span></a><a class="page-nav-btn next" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))"><span class="nav-label">Next</span><span class="nav-title">GitHub Intel &rarr;</span></a></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('funding-trail', document.querySelector('[onclick*=funding-trail]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Funding Trail</span></a><a class="page-nav-btn next" onclick="showSection('red-lines', document.querySelector('[onclick*=red-lines]'))"><span class="nav-label">Next</span><span class="nav-title">Red Lines &rarr;</span></a></div>
+    </div>
+
+    <!-- RED LINES -->
+    <div class="doc-section" id="sec-red-lines">
+      <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Verdict &amp; Red Lines</span></div>
+      <h1 class="page-title">Verdict &amp; Red Lines</h1>
+      <p class="page-desc">Ask LENS now ends every token analysis with one clear verdict, CLEAR, CAUTION or STOP, plus the exact red lines that triggered it. It is a rule based gate you run before you ape, not a vibe.</p>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Try it from the homepage. Open Ask LENS, paste any contract address or ticker, and the verdict appears at the end of the breakdown.</span></div>
+      <h2 class="doc-h2">How it works</h2>
+      <p class="doc-p">Ask LENS evaluates each token against a fixed set of red lines using live on-chain and market data. Every red line either passes or triggers. The number of triggered lines decides the verdict, so the call stays consistent and explainable instead of being a guess.</p>
+      <h2 class="doc-h2">The verdict</h2>
+      <table class="doc-table"><thead><tr><th>Red lines triggered</th><th>Verdict</th><th>Meaning</th></tr></thead><tbody>
+        <tr><td>0</td><td>CLEAR</td><td>No hard red flags in the checks LENS runs</td></tr>
+        <tr><td>1 to 2</td><td>CAUTION</td><td>Some risk present, read the triggered lines before acting</td></tr>
+        <tr><td>3 or more</td><td>STOP</td><td>Multiple red flags stacked, treat with high suspicion</td></tr>
+      </tbody></table>
+      <h2 class="doc-h2">Red lines evaluated</h2>
+      <table class="doc-table"><thead><tr><th>Red line</th><th>Triggers when</th></tr></thead><tbody>
+        <tr><td>Liquidity</td><td>Pool liquidity is below 20k, hard to exit</td></tr>
+        <tr><td>Pair age</td><td>The pair is younger than 1 day, unproven</td></tr>
+        <tr><td>Sell pressure</td><td>24h sells are more than double the buys, distribution</td></tr>
+        <tr><td>Presence</td><td>No socials and no website are listed</td></tr>
+        <tr><td>Float</td><td>Liquidity is under 4% of FDV, thin float vs valuation</td></tr>
+        <tr><td>PleaseBro</td><td>The fee recipient differs from the deployer</td></tr>
+        <tr><td>Dev claims</td><td>The dev has claimed fees five or more times</td></tr>
+      </tbody></table>
+      <div class="doc-box info"><span class="doc-box-icon">i</span><span>The verdict is built from public on-chain and market data and is information only, not financial advice. Always do your own research before you buy.</span></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('smart-follower', document.querySelector('[onclick*=smart-follower]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Smart Follower</span></a><a class="page-nav-btn next" onclick="showSection('github-intel', document.querySelector('[onclick*=github-intel]'))"><span class="nav-label">Next</span><span class="nav-title">GitHub Intel &rarr;</span></a></div>
     </div>
 
     <!-- GITHUB INTEL -->
@@ -456,7 +490,7 @@
         <tr><td>Total stars</td><td>GitHub public API</td></tr>
         <tr><td>Contract cross-reference</td><td>LENS on-chain matching</td></tr>
       </tbody></table>
-      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('smart-follower', document.querySelector('[onclick*=smart-follower]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Smart Follower</span></a><a class="page-nav-btn next" onclick="showSection('username-history', document.querySelector('[onclick*=username-history]'))"><span class="nav-label">Next</span><span class="nav-title">Username History &rarr;</span></a></div>
+      <div class="page-nav"><a class="page-nav-btn" onclick="showSection('red-lines', document.querySelector('[onclick*=red-lines]'))"><span class="nav-label">Previous</span><span class="nav-title">&larr; Red Lines</span></a><a class="page-nav-btn next" onclick="showSection('username-history', document.querySelector('[onclick*=username-history]'))"><span class="nav-label">Next</span><span class="nav-title">Username History &rarr;</span></a></div>
     </div>
 
     <!-- USERNAME HISTORY -->
@@ -588,6 +622,11 @@
       <div class="breadcrumb"><span>Docs</span><span class="sep">/</span><span class="current">Changelog</span></div>
       <h1 class="page-title">Changelog</h1>
       <p class="page-desc">Release history and updates for LENS.</p>
+      <h2 class="doc-h2">v2.8 June 2026</h2>
+      <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Ask LENS now returns a rule-based verdict.</span></div>
+      <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text2);">Verdict and Red Lines, Ask LENS ends every token analysis with CLEAR, CAUTION or STOP plus the red lines that triggered</li>
+      </ul>
       <h2 class="doc-h2">v2.7 June 2026</h2>
       <div class="doc-box tip"><span class="doc-box-icon">+</span><span>Smart Follower is now live.</span></div>
       <ul style="margin-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
