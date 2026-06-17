@@ -118,7 +118,7 @@
 </header>
 
 <section class="sec">
-  <div class="sec-head"><h2 class="sec-h">The Skill</h2><span class="badge live">live</span></div>
+  <div class="sec-head"><h2 class="sec-h">The Skill</h2></div>
   <p class="lead">A Skill is a short note an agent reads to learn how and when to use a tool. The LENS Skill tells an agent to reach for LENS the moment a user pastes a Base contract address, names a ticker, or asks if a token or dev is safe, then how to call it and how to read the verdict.</p>
   <pre class="code"><span class="c"># lens-onchain-intel · SKILL.md</span>
 
@@ -139,7 +139,7 @@
 </section>
 
 <section class="sec">
-  <div class="sec-head"><h2 class="sec-h">Use it today</h2><span class="badge live">live</span></div>
+  <div class="sec-head"><h2 class="sec-h">Use it today</h2></div>
   <p class="lead">No connector needed to start. Any agent can POST a contract address, a ticker, or a handle to the LENS endpoint and get a full breakdown back, verdict included.</p>
   <pre class="code"><span class="c">// one call, one answer</span>
 POST https://lens-liard.vercel.app/api/agent
@@ -158,16 +158,16 @@ Content-Type: application/json
 </section>
 
 <section class="sec">
-  <div class="sec-head"><h2 class="sec-h">Native MCP</h2><span class="badge next">shipping next</span></div>
+  <div class="sec-head"><h2 class="sec-h">Native MCP</h2></div>
   <p class="lead">A native MCP endpoint so an agent can discover LENS tools, quote a call, and run it without any custom glue. Same data and the same verdict, exposed as proper agent tools.</p>
   <div style="margin-top:18px;">
     <div class="tool-row"><div class="tool-name">lens_check_token</div><div class="tool-desc">Full intel and verdict for a Base contract address or ticker, liquidity, age, dev signals, and the red lines</div></div>
     <div class="tool-row"><div class="tool-name">lens_check_handle</div><div class="tool-desc">Dev intel for a crypto X account, tokens launched, sells, PleaseBro, and notable followers</div></div>
     <div class="tool-row"><div class="tool-name">lens_verdict</div><div class="tool-desc">Just the verdict for a contract address, CLEAR, CAUTION, or STOP, with the triggered red lines</div></div>
   </div>
-  <pre class="code"><span class="c"># once it ships</span>
+  <pre class="code"><span class="c"># add LENS to your agent</span>
 claude mcp add --transport http \
-  lens https://api.lnsx.io/mcp</pre>
+  lens https://lens-liard.vercel.app/api/mcp</pre>
 </section>
 
 <footer>
