@@ -3,157 +3,261 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LENS Community</title>
-<meta name="description" content="The LENS community labeling system. Tag any X account and every LENS user sees the warning instantly. Crowdsourced on-chain reputation.">
-<meta property="og:title" content="LENS Community Tag. Warn. Protect.">
-<meta property="og:description" content="Community-powered labeling. Tag anyone on X and every LENS user sees it instantly.">
-<meta property="og:image" content="https://lnsx.io/og-banner.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@lnsx_io">
+<title>LENS Community · tag, warn, protect</title>
+<meta name="description" content="A crowdsourced labeling layer built into LENS. Tag any account on X and every LENS user sees the warning the moment they open that profile.">
+<meta name="theme-color" content="#0a0a0a">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
   :root {
     --bg: #0a0a0a; --bg2: #111111; --bg3: #161616;
     --border: #1f1f1f; --border2: #2a2a2a;
-    --text: #e8e8e8; --text2: #888; --text3: #555;
-    --accent: #2952e3; --accent-light: #4a72ff;
-    --red: #ff4444; --orange: #e0843a; --green: #2ecc71; --blue: #4a9eff;
-    --mono: 'JetBrains Mono', monospace;
+    --text: #f0f0f0; --text2: #888; --text3: #555;
+    --accent: #2952e3; --accent2: #1a3acc; --accent-light: #4a72ff;
+    --green: #2ecc71; --amber: #e0843a; --red: #ff5a5a; --blue: #4a72ff;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  a { text-decoration: none; color: inherit; }
+  html.light {
+    --bg: #f4f4f5; --bg2: #ffffff; --bg3: #fafafa;
+    --border: #e0e0e2; --border2: #d4d4d6;
+    --text: #0a0a0a; --text2: #666; --text3: #999;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { overflow-x: clip; scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; }
 
   /* NAV */
-  nav { position: fixed; top:0; left:0; right:0; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 1000; }
-  .nav-logo { display: flex; align-items: center; gap: 9px; }
+  nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
   .nav-logo svg { width: 28px; height: 28px; }
-  .nav-logo-text { font-size: 16px; font-weight: 800; letter-spacing: 2px; color: #fff; }
-  .nav-links { display: flex; align-items: center; gap: 28px; }
-  .nav-links a { font-size: 14px; color: var(--text2); transition: color .2s; }
-  .nav-links a:hover { color: #fff; }
-  .nav-cta { background: var(--accent); color: #fff !important; padding: 9px 18px; border-radius: 9px; font-weight: 600; font-size: 14px; }
-  .nav-mobile-btn { display: none; background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+  .nav-logo-text { font-weight: 800; letter-spacing: .14em; font-size: 15px; color: var(--text); }
+  .nav-links { display: flex; align-items: center; gap: 26px; }
+  .nav-links a { color: var(--text2); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .15s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-links a.active { color: var(--accent-light); }
+  .btn-chrome { background: var(--accent); color: #fff !important; padding: 8px 16px; border-radius: 9px; font-size: 13px; font-weight: 600; }
+  .btn-chrome:hover { background: var(--accent2); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .theme-toggle, .nav-mobile-btn { background: none; border: 1px solid var(--border2); color: var(--text2); width: 36px; height: 36px; border-radius: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .theme-toggle:hover, .nav-mobile-btn:hover { color: var(--text); border-color: var(--text3); }
+  .nav-mobile-btn { display: none; }
+  .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 20px; border-bottom: 1px solid var(--border); background: var(--bg2); }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--text2); text-decoration: none; padding: 10px 0; font-weight: 500; border-bottom: 1px solid var(--border); }
+  .mobile-menu a:last-child { border-bottom: none; }
 
   /* HERO */
-  .hero { max-width: 1100px; margin: 0 auto; padding: 150px 32px 70px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 4px; color: var(--accent-light); text-transform: uppercase; margin-bottom: 22px; }
-  .hero h1 { font-size: clamp(44px, 8vw, 88px); font-weight: 900; line-height: 0.98; letter-spacing: -3px; margin-bottom: 26px; }
-  .hero h1 .red { color: var(--red); } .hero h1 .org { color: var(--orange); } .hero h1 .grn { color: var(--green); }
-  .hero p { font-size: 18px; color: var(--text2); line-height: 1.7; max-width: 560px; }
+  .hero { position: relative; overflow: hidden; padding: 92px 28px 40px; max-width: 1080px; margin: 0 auto; }
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(420px 360px at 8% -10%, rgba(41,82,227,.32), transparent 60%), radial-gradient(300px 300px at -4% 120%, rgba(224,132,58,.10), transparent 60%); }
+  .hero-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(rgba(120,150,255,.16) 1.4px, transparent 1.4px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(360px 320px at 4% 0%, #000 0%, transparent 70%); mask-image: radial-gradient(360px 320px at 4% 0%, #000 0%, transparent 70%); }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; letter-spacing: .22em; color: var(--text2); margin-bottom: 18px; display: flex; align-items: center; gap: 9px; }
+  .eyebrow b { color: var(--text); font-weight: 600; }
+  .eyebrow .tag { color: var(--amber); }
+  h1 { font-size: clamp(40px, 8vw, 68px); font-weight: 800; letter-spacing: -.02em; line-height: 1.02; margin-bottom: 20px; }
+  h1 .red { color: var(--red); } h1 .grn { color: var(--green); }
+  .hero-sub { color: var(--text2); font-size: 17px; max-width: 560px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border2); background: var(--bg2); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--text2); }
+  .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(46,204,113,.15); }
 
-  /* STATS STRIP */
-  .stats { max-width: 1100px; margin: 0 auto; padding: 0 32px 70px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 26px 24px; }
-  .stat-num { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -1px; }
-  .stat-label { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+  .top-layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: start; padding-bottom: 10px; }
 
-  /* SECTION SHELL */
-  .section { max-width: 1100px; margin: 0 auto; padding: 50px 32px; }
-  .section-head { margin-bottom: 34px; }
-  .section-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; color: var(--accent-light); text-transform: uppercase; margin-bottom: 12px; }
-  .section-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; color: #fff; }
-  .section-sub { font-size: 15px; color: var(--text2); line-height: 1.7; margin-top: 10px; max-width: 600px; }
+  /* LIVE LABEL CARD (signature) */
+  .scard { position: relative; overflow: hidden; background: var(--bg2); border: 1px solid var(--border2); border-radius: 18px; box-shadow: 0 0 60px rgba(41,82,227,.06); }
+  .scard-head { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .scard-head::after { content: ""; position: absolute; top: 0; bottom: 0; width: 90px; left: -90px; background: linear-gradient(90deg, transparent, rgba(74,114,255,.16), transparent); animation: sweep 4.2s linear infinite; }
+  @keyframes sweep { to { left: 110%; } }
+  @media (prefers-reduced-motion: reduce) { .scard-head::after { display: none; } }
+  .scard-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: .1em; font-size: 12.5px; }
+  .scard-brand svg { width: 17px; height: 17px; }
+  .scard-net { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text3); }
+  .scard-body { padding: 20px; }
+  .profile-row { display: flex; align-items: center; gap: 13px; }
+  .pf-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(from 210deg, #2952e3, #4a72ff, #1a3acc, #2952e3); box-shadow: 0 0 0 1px var(--border2); }
+  .pf-name { font-weight: 700; font-size: 16px; }
+  .pf-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .pf-tag { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 9px 14px; border-radius: 10px; background: rgba(255,90,90,.10); border: 1px solid rgba(255,90,90,.3); }
+  .pf-tag .cdot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+  .pf-tag .nm { font-weight: 700; font-size: 14px; color: var(--red); }
+  .pf-tag .ct { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text2); }
+  .pf-caption { font-size: 12.5px; color: var(--text2); margin-top: 14px; }
+
+  /* STATS */
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .stat-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: 16px; padding: 18px 20px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; }
+  .stat .k { font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .stat .v { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 600; }
+  .stat .v.accent { color: var(--accent-light); }
+
+  /* SECTIONS */
+  .section { max-width: 1080px; margin: 0 auto; padding: 50px 28px; }
+  .section-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .2em; color: var(--accent-light); margin-bottom: 12px; }
+  .section h2 { font-size: clamp(26px, 5vw, 36px); font-weight: 800; letter-spacing: -.01em; margin-bottom: 8px; }
+  .section .lead { color: var(--text2); max-width: 580px; margin-bottom: 30px; }
 
   /* TAG GROUPS */
-  .tag-group { margin-bottom: 30px; }
-  .tag-group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .tag-dot { width: 9px; height: 9px; border-radius: 50%; }
-  .tag-group-title { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+  .tag-group { margin-bottom: 18px; }
+  .tag-group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+  .tag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .tag-group-title { font-weight: 700; font-size: 13px; letter-spacing: .02em; }
   .tag-group-line { flex: 1; height: 1px; background: var(--border); }
-  .tag-row { display: flex; flex-wrap: wrap; gap: 10px; }
-  .tag-chip { display: flex; align-items: center; gap: 9px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 30px; padding: 10px 16px; transition: transform .15s, border-color .15s; }
-  .tag-chip:hover { transform: translateY(-2px); }
-  .tag-chip .cdot { width: 7px; height: 7px; border-radius: 50%; }
-  .tag-chip .cname { font-size: 14px; font-weight: 600; }
-  .tag-chip .ccount { font-family: var(--mono); font-size: 11px; color: var(--text3); }
-  .g-red .cname { color: #ff6b6b; } .g-red { border-color: rgba(255,68,68,0.25); } .g-red .cdot { background: var(--red); }
-  .g-red:hover { border-color: var(--red); }
-  .g-org .cname { color: #f0a05a; } .g-org { border-color: rgba(224,132,58,0.25); } .g-org .cdot { background: var(--orange); }
-  .g-org:hover { border-color: var(--orange); }
-  .g-grn .cname { color: #4ade80; } .g-grn { border-color: rgba(46,204,113,0.25); } .g-grn .cdot { background: var(--green); }
-  .g-grn:hover { border-color: var(--green); }
-  .g-blu .cname { color: #6fb3ff; } .g-blu { border-color: rgba(74,158,255,0.25); } .g-blu .cdot { background: var(--blue); }
-  .g-blu:hover { border-color: var(--blue); }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 9px; background: var(--bg2); border: 1px solid var(--border2); }
+  .tag-chip .cdot { width: 6px; height: 6px; border-radius: 50%; }
+  .tag-chip .cname { font-weight: 600; font-size: 12.5px; }
+  .tag-chip .ccount { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text3); }
+  .g-red .cdot { background: var(--red); } .g-red { border-color: rgba(255,90,90,.22); }
+  .g-org .cdot { background: var(--amber); } .g-org { border-color: rgba(224,132,58,.22); }
+  .g-grn .cdot { background: var(--green); } .g-grn { border-color: rgba(46,204,113,.22); }
+  .g-blu .cdot { background: var(--blue); } .g-blu { border-color: rgba(74,114,255,.22); }
 
-  /* HOW IT WORKS */
-  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .how-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; }
-  .how-num { font-family: var(--mono); font-size: 13px; color: var(--accent-light); margin-bottom: 14px; }
-  .how-card h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-  .how-card p { font-size: 14px; color: var(--text2); line-height: 1.65; }
+  /* STEPS */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .step { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .step .n { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-light); margin-bottom: 12px; }
+  .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 7px; }
+  .step p { font-size: 14px; color: var(--text2); }
 
   /* RULES */
-  .rules { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 8px 28px; }
-  .rule { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); }
-  .rule:last-child { border-bottom: none; }
-  .rule-icon { width: 30px; height: 30px; border-radius: 8px; background: rgba(41,82,227,0.12); border: 1px solid rgba(41,82,227,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--accent-light); font-weight: 700; font-size: 13px; font-family: var(--mono); }
-  .rule-body h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .rule-body p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .rule { display: flex; gap: 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .rule-icon { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 16px; color: var(--accent-light); background: rgba(41,82,227,.12); border: 1px solid rgba(41,82,227,.25); }
+  .rule h4 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+  .rule p { font-size: 13.5px; color: var(--text2); }
 
-  /* SOCIAL / CTA */
-  .join { text-align: center; padding: 70px 32px 30px; max-width: 1100px; margin: 0 auto; }
-  .join h2 { font-size: 36px; font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 12px; }
-  .join p { font-size: 16px; color: var(--text2); margin-bottom: 32px; }
-  .social-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .social-btn { display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; padding: 16px 26px; font-weight: 600; font-size: 15px; color: #fff; transition: border-color .2s, transform .15s; }
-  .social-btn:hover { border-color: var(--accent-light); transform: translateY(-2px); }
-  .social-btn .sicon { font-family: var(--mono); }
+  /* JOIN */
+  .join { max-width: 1080px; margin: 0 auto; padding: 60px 28px 20px; text-align: center; }
+  .join h2 { font-size: clamp(28px, 6vw, 40px); font-weight: 800; letter-spacing: -.01em; margin-bottom: 10px; }
+  .join p { color: var(--text2); margin-bottom: 26px; }
+  .social-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--border2); color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px; transition: .15s; }
+  .social-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+  .social-btn .sicon { font-family: 'JetBrains Mono', monospace; color: var(--text2); }
 
   /* FOOTER */
-  footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 36px 32px; display: flex; align-items: center; justify-content: space-between; max-width: 1100px; margin-left: auto; margin-right: auto; flex-wrap: wrap; gap: 16px; }
-  .footer-brand { font-weight: 800; letter-spacing: 2px; color: #fff; }
-  .footer-links { display: flex; gap: 22px; }
-  .footer-links a { font-size: 14px; color: var(--text2); }
-  .footer-links a:hover { color: #fff; }
-  .footer-copy { font-size: 13px; color: var(--text3); width: 100%; }
+  footer { border-top: 1px solid var(--border); padding: 40px 28px; max-width: 1080px; margin: 60px auto 0; }
+  .footer-brand { font-weight: 800; letter-spacing: .14em; margin-bottom: 16px; }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 20px; }
+  .footer-links a { color: var(--text2); text-decoration: none; font-size: 14px; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy { color: var(--text3); font-size: 13px; font-family: 'JetBrains Mono', monospace; }
 
-  @media (max-width: 860px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .how-grid { grid-template-columns: 1fr; }
+  @media (max-width: 820px) {
     .nav-links { display: none; }
+    .nav-mobile-btn { display: flex; }
+    .top-layout { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .rules { grid-template-columns: 1fr; }
+    .hero { padding-top: 64px; }
+  }
+  @media (max-width: 560px) {
+    .section { padding: 38px 22px; }
+    .tag-group { margin-bottom: 15px; }
+    .tag-chip { padding: 6px 10px; gap: 6px; }
+    .tag-chip .cname { font-size: 11.5px; }
+    .tag-chip .ccount { font-size: 10px; }
+    .tag-row { gap: 7px; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="/" class="nav-logo">
+  <a class="nav-logo" href="/">
     <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#2952e3"/><path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/><circle cx="14" cy="14" r="1.1" fill="white"/></svg>
     <span class="nav-logo-text">LENS</span>
   </a>
   <div class="nav-links">
     <a href="/#features">Features</a>
+    <a href="/developers">API</a>
+    <a href="/payments">Payments</a>
+    <a href="/staking">Staking</a>
+    <a href="/mcp">Agents</a>
+    <a href="/community" class="active">Community</a>
     <a href="/lens-docs">Docs</a>
-    <a href="/community">Community</a>
-    <a href="https://x.com/lnsx_io" target="_blank" rel="noopener">Twitter</a>
-    <a href="/#download" class="nav-cta">Add to Chrome</a>
+    <a href="/#download" class="btn-chrome">Add to Chrome</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="nav-mobile-btn" id="navMobileBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="eyebrow">Community</div>
-  <h1>Tag, <span class="red">warn</span>, <span class="grn">protect</span></h1>
-  <p>A crowdsourced labeling system built into LENS. Tag any account on X and every other LENS user sees the warning the instant they open that profile. Reputation that follows a dev, not the other way around.</p>
-</section>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Tags Submitted</div></div>
-  <div class="stat"><div class="stat-num">3.8K</div><div class="stat-label">Profiles Flagged</div></div>
-  <div class="stat"><div class="stat-num">890</div><div class="stat-label">Devs Verified</div></div>
-  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live Updates</div></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/#features">Features</a>
+  <a href="/developers">API</a>
+  <a href="/payments">Payments</a>
+  <a href="/staking">Staking</a>
+  <a href="/mcp">Agents</a>
+  <a href="/community">Community</a>
+  <a href="/lens-docs">Docs</a>
+  <a href="/#download">Add to Chrome</a>
 </div>
 
-<!-- TAG SYSTEM -->
-<section class="section">
-  <div class="section-head">
-    <div class="section-eyebrow">The Labels</div>
-    <div class="section-title">Every tag, color-coded by risk</div>
-    <p class="section-sub">Labels are grouped so you can read a profile at a glance. Red means stay away, green means trusted, blue is context. Counts show how many users have confirmed each label.</p>
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="eyebrow"><b>LENS</b> // <span class="tag">COMMUNITY</span></div>
+    <h1>tag <span class="red">warn</span> <span class="grn">protect</span></h1>
+    <p class="hero-sub">a crowdsourced labeling layer built into lens, tag any account on x and every lens user sees the warning the moment they open that profile, reputation that follows the dev not the other way around</p>
+    <div class="status-pill"><span class="dot"></span> live in the extension panel</div>
   </div>
+</header>
+
+<main class="wrap">
+  <div class="top-layout">
+
+    <!-- LIVE LABEL CARD (signature) -->
+    <div class="scard">
+      <div class="scard-head">
+        <div class="scard-brand">
+          <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#2952e3"/><path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/><circle cx="14" cy="14" r="1.1" fill="white"/></svg>
+          LIVE LABEL
+        </div>
+        <div class="scard-net">on any x profile</div>
+      </div>
+      <div class="scard-body">
+        <div class="profile-row">
+          <div class="pf-avatar"></div>
+          <div>
+            <div class="pf-name">@degenmars</div>
+            <div class="pf-meta">deployer 0x4c43...eba3</div>
+          </div>
+        </div>
+        <div class="pf-tag"><span class="cdot"></span><span class="nm">Serial Rugger</span><span class="ct">· 204 flags</span></div>
+        <p class="pf-caption">what every lens user sees the second they open this profile, no one gets fooled twice</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="side">
+      <div class="stat-card">
+        <div class="stat-grid">
+          <div class="stat"><div class="k">tags submitted</div><div class="v accent">12K+</div></div>
+          <div class="stat"><div class="k">profiles flagged</div><div class="v">3.8K</div></div>
+          <div class="stat"><div class="k">devs verified</div><div class="v">890</div></div>
+          <div class="stat"><div class="k">updates</div><div class="v">24/7</div></div>
+        </div>
+      </div>
+      <div class="stat-card" style="font-size:13px;color:var(--text2)">
+        labels are crowdsourced and confirmation gated, the crowd decides, not one account
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- THE LABELS -->
+<section class="section">
+  <div class="section-eyebrow">THE LABELS</div>
+  <h2>every tag, color coded by risk</h2>
+  <p class="lead">read a profile at a glance, red means stay away, green means trusted, blue is context, counts show how many users confirmed each label</p>
 
   <div class="tag-group">
     <div class="tag-group-head"><span class="tag-dot" style="background:var(--red)"></span><span class="tag-group-title">Danger</span><span class="tag-group-line"></span></div>
@@ -165,7 +269,7 @@
   </div>
 
   <div class="tag-group">
-    <div class="tag-group-head"><span class="tag-dot" style="background:var(--orange)"></span><span class="tag-group-title">Caution</span><span class="tag-group-line"></span></div>
+    <div class="tag-group-head"><span class="tag-dot" style="background:var(--amber)"></span><span class="tag-group-title">Caution</span><span class="tag-group-line"></span></div>
     <div class="tag-row">
       <div class="tag-chip g-org"><span class="cdot"></span><span class="cname">Honeypot Dev</span><span class="ccount">156 flags</span></div>
       <div class="tag-chip g-org"><span class="cdot"></span><span class="cname">Fee Drainer</span><span class="ccount">98 flags</span></div>
@@ -194,40 +298,36 @@
 
 <!-- HOW IT WORKS -->
 <section class="section">
-  <div class="section-head">
-    <div class="section-eyebrow">How it works</div>
-    <div class="section-title">From one tag to everyone's screen</div>
-  </div>
-  <div class="how-grid">
-    <div class="how-card"><div class="how-num">01</div><h3>Spot something</h3><p>You find a dev who rugged, a clean builder worth trusting, or a wallet worth flagging. Open their X profile with LENS active.</p></div>
-    <div class="how-card"><div class="how-num">02</div><h3>Add a label</h3><p>Hit the "+ Label" button in the panel, pick a tag, and add evidence. Your submission joins the community pool for that account.</p></div>
-    <div class="how-card"><div class="how-num">03</div><h3>Everyone sees it</h3><p>Once a label passes the confirmation threshold, every LENS user sees it the moment they open that profile. No one gets fooled twice.</p></div>
+  <div class="section-eyebrow">HOW IT WORKS</div>
+  <h2>from one tag to everyone's screen</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h3>spot something</h3><p>you find a dev who rugged, a clean builder worth trusting, or a wallet worth flagging, open their x profile with lens active</p></div>
+    <div class="step"><div class="n">02</div><h3>add a label</h3><p>hit the + label button in the panel, pick a tag and add evidence, your submission joins the community pool for that account</p></div>
+    <div class="step"><div class="n">03</div><h3>everyone sees it</h3><p>once a label passes the confirmation threshold, every lens user sees it the moment they open that profile</p></div>
   </div>
 </section>
 
 <!-- RULES -->
 <section class="section">
-  <div class="section-head">
-    <div class="section-eyebrow">Keeping it honest</div>
-    <div class="section-title">How we stop abuse</div>
-    <p class="section-sub">A reputation system only works if the reputation is real. These rules keep tags trustworthy.</p>
-  </div>
+  <div class="section-eyebrow">KEEPING IT HONEST</div>
+  <h2>how we stop abuse</h2>
+  <p class="lead">a reputation system only works if the reputation is real, these rules keep tags trustworthy</p>
   <div class="rules">
-    <div class="rule"><div class="rule-icon">3+</div><div class="rule-body"><h4>Confirmation threshold</h4><p>A tag needs at least three independent confirmations before it shows publicly. One person can't brand someone alone.</p></div></div>
-    <div class="rule"><div class="rule-icon">!</div><div class="rule-body"><h4>Evidence encouraged</h4><p>Tags backed by a link or transaction carry more weight and surface higher than unsupported ones.</p></div></div>
-    <div class="rule"><div class="rule-icon">x</div><div class="rule-body"><h4>Abuse gets banned</h4><p>False or malicious tagging removes your ability to tag. The system protects people, it isn't a weapon.</p></div></div>
-    <div class="rule"><div class="rule-icon">~</div><div class="rule-body"><h4>Disputes are reviewed</h4><p>Anyone can dispute a tag from the panel. Disputed labels are reviewed and removed if they don't hold up.</p></div></div>
+    <div class="rule"><div class="rule-icon">3+</div><div><h4>confirmation threshold</h4><p>a tag needs at least three independent confirmations before it shows publicly, one person can't brand someone alone</p></div></div>
+    <div class="rule"><div class="rule-icon">!</div><div><h4>evidence encouraged</h4><p>tags backed by a link or transaction carry more weight and surface higher than unsupported ones</p></div></div>
+    <div class="rule"><div class="rule-icon">x</div><div><h4>abuse gets banned</h4><p>false or malicious tagging removes your ability to tag, the system protects people, it isn't a weapon</p></div></div>
+    <div class="rule"><div class="rule-icon">~</div><div><h4>disputes are reviewed</h4><p>anyone can dispute a tag from the panel, disputed labels are reviewed and removed if they don't hold up</p></div></div>
   </div>
 </section>
 
 <!-- JOIN -->
 <section class="join">
-  <h2>Join the community</h2>
-  <p>Follow along, share flags, and help make on-chain safer for everyone.</p>
+  <h2>join the community</h2>
+  <p>follow along, share flags, and help make on-chain safer for everyone</p>
   <div class="social-row">
-    <a href="https://x.com/lnsx_io" target="_blank" rel="noopener" class="social-btn"><span class="sicon">X</span> Follow on X</a>
-    <a href="/lens-docs" class="social-btn"><span class="sicon">&gt;_</span> Read the Docs</a>
-    <a href="/#download" class="social-btn"><span class="sicon">+</span> Add to Chrome</a>
+    <a href="https://x.com/lnsx_io" target="_blank" rel="noopener" class="social-btn"><span class="sicon">X</span> follow on x</a>
+    <a href="/lens-docs" class="social-btn"><span class="sicon">&gt;_</span> read the docs</a>
+    <a href="/#download" class="social-btn"><span class="sicon">+</span> add to chrome</a>
   </div>
 </section>
 
@@ -235,13 +335,29 @@
   <div class="footer-brand">LENS</div>
   <div class="footer-links">
     <a href="/#features">Features</a>
+    <a href="/developers">API</a>
+    <a href="/payments">Payments</a>
+    <a href="/staking">Staking</a>
+    <a href="/mcp">Agents</a>
     <a href="/lens-docs">Docs</a>
     <a href="/community">Community</a>
     <a href="/privacy">Privacy</a>
     <a href="https://x.com/lnsx_io" target="_blank" rel="noopener">Twitter</a>
   </div>
-  <div class="footer-copy">2026 LENS See everything on-chain</div>
+  <div class="footer-copy">2026 LENS · bios lie, chains don't</div>
 </footer>
 
+<script>
+  const root = document.documentElement;
+  const saved = (function(){ try { return localStorage.getItem('lens-theme'); } catch(e){ return null; } })();
+  if (saved === 'light') root.classList.add('light');
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    root.classList.toggle('light');
+    try { localStorage.setItem('lens-theme', root.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
+  });
+  document.getElementById('navMobileBtn').addEventListener('click', function(){
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+</script>
 </body>
 </html>
