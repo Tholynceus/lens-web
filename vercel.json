@@ -3,8 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/docs", "destination": "/lens-docs.html" },
-    { "source": "/lens-docs/:path*", "destination": "/lens-docs.html" },
-    { "source": "/api/:path*", "destination": "https://lens-liard.vercel.app/api/:path*" }
+    { "source": "/lens-docs/(.*)", "destination": "/lens-docs.html" },
+    { "source": "/api/(.*)", "destination": "https://lens-liard.vercel.app/api/$1" }
   ]
 }
-
