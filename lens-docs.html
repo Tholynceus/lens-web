@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LENS Docs — read the dev behind any token</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root{
+    --bg:#0a0a0a; --bg2:#111; --bg3:#161616; --border:#1f1f1f; --border2:#2a2a2a;
+    --text:#f0f0f0; --text2:#8a8a8a; --text3:#5a5a5a;
+    --accent:#2952e3; --accent2:#1a3acc; --accent-light:#5a78ff;
+    --green:#2ecc71; --amber:#e0843a; --red:#ff5a5a;
+    --sb:268px; --toc:212px; --top:58px; --maxc:760px;
+    --code:#0d0e12;
+  }
+  html.light{
+    --bg:#ffffff; --bg2:#f7f7f8; --bg3:#f0f1f3; --border:#e6e7ea; --border2:#d8dade;
+    --text:#16181d; --text2:#5b606b; --text3:#9aa0ad;
+    --accent-light:#2952e3; --code:#f6f7f9;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  ::selection{background:rgba(89,120,255,.28)}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{position:sticky;top:0;height:var(--top);z-index:50;display:flex;align-items:center;gap:14px;
+    padding:0 18px;background:rgba(10,10,10,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  html.light .topbar{background:rgba(255,255,255,.85)}
+  .tb-logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;text-decoration:none;color:var(--text)}
+  .tb-logo svg{width:24px;height:24px;flex:none}
+  .tb-logo .v{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--text3);
+    border:1px solid var(--border2);border-radius:5px;padding:1px 5px;margin-left:2px}
+  .tb-search{flex:1;max-width:380px;display:flex;align-items:center;gap:8px;background:var(--bg3);
+    border:1px solid var(--border);border-radius:9px;padding:7px 11px;color:var(--text3);
+    font-size:13px;cursor:text;user-select:none}
+  .tb-search .k{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;border:1px solid var(--border2);border-radius:4px;padding:1px 5px}
+  .tb-search input{flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13px}
+  .tb-search input::placeholder{color:var(--text3)}
+  .tb-right{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .tb-link{display:flex;align-items:center;height:34px;padding:0 11px;border-radius:8px;color:var(--text2);
+    font-size:13.5px;font-weight:500;text-decoration:none}
+  .tb-link:hover{color:var(--text);background:var(--bg2)}
+  .theme-toggle{border:none;background:transparent;color:var(--text2);cursor:pointer;display:grid;place-items:center;
+    width:34px;height:34px;padding:0}
+  .theme-toggle:hover{color:var(--text)}
+  .theme-toggle svg{width:20px;height:20px}
+  .tb-burger{display:none;border:none;background:transparent;color:var(--text);cursor:pointer;width:34px;height:34px;place-items:center}
+
+  /* ---------- LAYOUT ---------- */
+  .layout{max-width:1380px;margin:0 auto;display:grid;grid-template-columns:var(--sb) minmax(0,1fr) var(--toc)}
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{position:sticky;top:var(--top);align-self:start;height:calc(100vh - var(--top));overflow-y:auto;
+    border-right:1px solid var(--border);padding:22px 14px 60px}
+  .sidebar::-webkit-scrollbar{width:7px} .sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+  .sb-group{margin-bottom:20px}
+  .sb-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--text3);padding:0 10px;margin-bottom:7px}
+  .sb-link{display:block;padding:6px 11px;margin:1px 0;border-radius:7px;color:var(--text2);font-size:13.5px;
+    font-weight:450;text-decoration:none;border-left:2px solid transparent;line-height:1.4}
+  .sb-link:hover{color:var(--text);background:var(--bg2)}
+  .sb-link.active{color:var(--accent-light);background:rgba(89,120,255,.10);font-weight:600}
+
+  /* ---------- CONTENT ---------- */
+  .content{min-width:0;padding:38px 52px 140px;max-width:calc(var(--maxc) + 104px);margin:0 auto;width:100%}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-light);margin-bottom:13px}
+  .content h1{font-size:36px;font-weight:800;letter-spacing:-.025em;margin:0 0 10px;line-height:1.1}
+  .lead{font-size:18px;color:var(--text2);margin:0 0 18px;line-height:1.6}
+  .ds{scroll-margin-top:78px}
+  .content h2{font-size:25px;font-weight:700;letter-spacing:-.01em;margin:54px 0 4px;padding-top:8px;scroll-margin-top:78px}
+  .content h2::before{content:"";display:block;height:1px;background:var(--border);margin:0 0 26px}
+  .content h2:first-of-type::before{display:none}
+  .content h3{font-size:17px;font-weight:650;margin:30px 0 8px;scroll-margin-top:78px;color:var(--text)}
+  .content p{margin:0 0 15px;color:#c7c7c7}
+  html.light .content p{color:#33373f}
+  .content a.ln{color:var(--accent-light);text-decoration:none;border-bottom:1px solid rgba(89,120,255,.35)}
+  .content a.ln:hover{border-bottom-color:var(--accent-light)}
+  .content ul,.content ol{margin:0 0 16px;padding-left:22px;color:#c7c7c7}
+  html.light .content ul,html.light .content ol{color:#33373f}
+  .content li{margin:5px 0}
+  .content li::marker{color:var(--text3)}
+  code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--bg3);border:1px solid var(--border);
+    border-radius:5px;padding:1.5px 6px;color:var(--accent-light)}
+  html.light code{color:var(--accent)}
+  strong{color:var(--text);font-weight:650}
+
+  /* ---------- VERDICT CHIPS ---------- */
+  .vchip{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.05em;
+    padding:3px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
+  .v-clear{background:rgba(46,204,113,.13);color:var(--green);border:1px solid rgba(46,204,113,.3)}
+  .v-caution{background:rgba(224,132,58,.14);color:var(--amber);border:1px solid rgba(224,132,58,.32)}
+  .v-stop{background:rgba(255,90,90,.13);color:var(--red);border:1px solid rgba(255,90,90,.32)}
+
+  /* ---------- CALLOUTS ---------- */
+  .callout{display:flex;gap:12px;padding:13px 15px;border-radius:11px;border:1px solid;margin:20px 0;font-size:14.5px;line-height:1.6}
+  .callout .ico{flex:none;width:20px;height:20px;margin-top:1px}
+  .callout p{margin:0;color:inherit!important}
+  .callout.note{border-color:rgba(89,120,255,.34);background:rgba(89,120,255,.07);color:#c9d3ff}
+  .callout.tip{border-color:rgba(46,204,113,.32);background:rgba(46,204,113,.06);color:#bff0d4}
+  .callout.warn{border-color:rgba(224,132,58,.34);background:rgba(224,132,58,.06);color:#f2d6bb}
+  .callout.stop{border-color:rgba(255,90,90,.34);background:rgba(255,90,90,.06);color:#f3c9c9}
+  html.light .callout.note{color:#2a3a8a} html.light .callout.tip{color:#1d7a45}
+  html.light .callout.warn{color:#9a5a1e} html.light .callout.stop{color:#a33}
+
+  /* ---------- CODE BLOCK ---------- */
+  .code{margin:22px 0;border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:var(--code)}
+  .code-head{display:flex;align-items:center;gap:8px;padding:8px 13px;background:var(--bg2);border-bottom:1px solid var(--border)}
+  .code-dot{width:9px;height:9px;border-radius:50%;background:var(--border2)}
+  .code-lang{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text3);margin-left:4px}
+  .code-copy{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);
+    background:transparent;border:1px solid var(--border2);border-radius:6px;padding:3px 9px;cursor:pointer}
+  .code-copy:hover{color:var(--text);border-color:var(--text3)}
+  .code pre{margin:0;padding:15px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:#d7dae3}
+  html.light .code pre{color:#2a2e38}
+  .code pre::-webkit-scrollbar{height:8px} .code pre::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+  .t-c{color:var(--text3)}      /* comment */
+  .t-s{color:#7fd99b}           /* string */
+  .t-k{color:var(--accent-light)} /* keyword */
+  .t-n{color:var(--amber)}      /* number */
+  .t-p{color:#8a8a8a}           /* punctuation/dim */
+  .t-f{color:#e0e0e0}           /* function/prop */
+
+  /* ---------- FIGURE / SVG ---------- */
+  .figure{margin:24px 0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg2)}
+  .figure svg{display:block;width:100%;height:auto}
+  .figcap{padding:9px 14px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;color:var(--text3);background:var(--bg)}
+
+  /* ---------- TABLE ---------- */
+  .tw{overflow-x:auto;margin:20px 0}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:420px}
+  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);padding:9px 13px}
+  td{border-bottom:1px solid var(--border);padding:10px 13px;vertical-align:top;color:#c7c7c7}
+  html.light td{color:#33373f}
+  td:first-child{white-space:nowrap}
+
+  /* ---------- STEPS ---------- */
+  .steps{counter-reset:s;margin:20px 0;padding:0;list-style:none}
+  .steps>li{counter-increment:s;position:relative;padding:0 0 18px 42px;margin:0}
+  .steps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:28px;height:28px;border-radius:8px;
+    background:var(--bg3);border:1px solid var(--border2);color:var(--accent-light);
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;display:grid;place-items:center}
+  .steps>li:not(:last-child)::after{content:"";position:absolute;left:13px;top:30px;bottom:0;width:1px;background:var(--border)}
+
+  /* ---------- TOC ---------- */
+  .toc{position:sticky;top:var(--top);align-self:start;height:calc(100vh - var(--top));overflow-y:auto;
+    padding:38px 14px;border-left:1px solid var(--border)}
+  .toc-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text3);margin-bottom:11px;padding-left:11px}
+  .toc a{display:block;padding:4px 0 4px 11px;color:var(--text3);font-size:12.5px;text-decoration:none;
+    border-left:2px solid transparent;line-height:1.45}
+  .toc a.sub{padding-left:22px;font-size:12px}
+  .toc a:hover{color:var(--text2)}
+  .toc a.active{color:var(--accent-light);border-left-color:var(--accent-light)}
+
+  /* footer */
+  .docfoot{margin-top:70px;padding-top:24px;border-top:1px solid var(--border);display:flex;
+    justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--text3)}
+  .docfoot a{color:var(--text2);text-decoration:none} .docfoot a:hover{color:var(--accent-light)}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
+  .overlay.show{opacity:1;pointer-events:auto}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:1080px){
+    .layout{grid-template-columns:var(--sb) minmax(0,1fr)}
+    .toc{display:none}
+  }
+  @media(max-width:820px){
+    .layout{grid-template-columns:1fr}
+    .tb-burger{display:grid} .tb-search{display:none}
+    .sidebar{position:fixed;top:0;left:0;height:100vh;width:280px;z-index:60;background:var(--bg);
+      transform:translateX(-100%);transition:transform .22s ease;padding-top:18px}
+    .sidebar.open{transform:none}
+    .content{padding:30px 22px 120px}
+    .content h1{font-size:29px}
+  }
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto} .sidebar{transition:none}}
+
+  .prevnext{display:flex;gap:14px;margin-top:60px;padding-top:26px;border-top:1px solid var(--border)}
+  .pn{flex:1;display:block;padding:14px 16px;border:1px solid var(--border);border-radius:12px;text-decoration:none;background:var(--bg2)}
+  .pn:hover{border-color:var(--border2)}
+  .pn .dir{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase}
+  .pn .ti{display:block;margin-top:5px;color:var(--text);font-weight:600;font-size:14.5px}
+  .pn.next{text-align:right}
+  @media(max-width:560px){.prevnext{flex-direction:column}}
+
+  .page{display:none}
+  .page.active{display:block}
+</style>
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <button class="tb-burger" id="burger" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a class="tb-logo" href="/">
+    <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#2952e3"/><path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/><circle cx="14" cy="14" r="1.1" fill="white"/></svg>
+    LENS <span class="v">docs</span>
+  </a>
+  <label class="tb-search" for="searchInput"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="searchInput" type="text" placeholder="Search the docs" autocomplete="off" spellcheck="false"><span class="k">/</span></label>
+  <div class="tb-right">
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme"><svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="sb-group"><div class="sb-title">Getting started</div>
+    <a class="sb-link" href="/lens-docs" data-slug="overview">Overview</a>
+    <a class="sb-link" href="/lens-docs/install" data-slug="install">Install the extension</a>
+    <a class="sb-link" href="/lens-docs/first-scan" data-slug="first-scan">Your first scan</a>
+  </div>
+  <div class="sb-group"><div class="sb-title">How verdicts work</div>
+    <a class="sb-link" href="/lens-docs/verdicts" data-slug="verdicts">The verdict system</a>
+    <a class="sb-link" href="/lens-docs/red-lines" data-slug="red-lines">The seven red lines</a>
+    <a class="sb-link" href="/lens-docs/trust-score" data-slug="trust-score">Trust score</a>
+  </div>
+  <div class="sb-group"><div class="sb-title">Scanning</div>
+    <a class="sb-link" href="/lens-docs/scan-profile" data-slug="scan-profile">Scan an X profile</a>
+    <a class="sb-link" href="/lens-docs/scan-contract" data-slug="scan-contract">Scan a contract</a>
+    <a class="sb-link" href="/lens-docs/scan-wallet" data-slug="scan-wallet">Scan a wallet</a>
+    <a class="sb-link" href="/lens-docs/b20" data-slug="b20">B20 tokens</a>
+  </div>
+  <div class="sb-group"><div class="sb-title">Intelligence</div>
+    <a class="sb-link" href="/lens-docs/dev-claim" data-slug="dev-claim">Dev claim &amp; fees</a>
+    <a class="sb-link" href="/lens-docs/serial" data-slug="serial">Serial deployer</a>
+    <a class="sb-link" href="/lens-docs/pleasebro" data-slug="pleasebro">PleaseBro detection</a>
+    <a class="sb-link" href="/lens-docs/ca-history" data-slug="ca-history">CA &amp; bio history</a>
+    <a class="sb-link" href="/lens-docs/bundled" data-slug="bundled">Bundled wallets</a>
+    <a class="sb-link" href="/lens-docs/ai-verdict" data-slug="ai-verdict">AI verdict</a>
+    <a class="sb-link" href="/lens-docs/token-health" data-slug="token-health">Token health</a>
+    <a class="sb-link" href="/lens-docs/linked" data-slug="linked">Linked accounts</a>
+    <a class="sb-link" href="/lens-docs/funding" data-slug="funding">Funding trail</a>
+    <a class="sb-link" href="/lens-docs/smart" data-slug="smart">Smart followers</a>
+    <a class="sb-link" href="/lens-docs/github" data-slug="github">GitHub intel</a>
+    <a class="sb-link" href="/lens-docs/tags" data-slug="tags">Community tags</a>
+  </div>
+  <div class="sb-group"><div class="sb-title">For developers</div>
+    <a class="sb-link" href="/lens-docs/api" data-slug="api">API reference</a>
+    <a class="sb-link" href="/lens-docs/mcp" data-slug="mcp">MCP &amp; agents</a>
+    <a class="sb-link" href="/lens-docs/schema" data-slug="schema">Response schema</a>
+  </div>
+  <div class="sb-group"><div class="sb-title">More</div>
+    <a class="sb-link" href="/lens-docs/architecture" data-slug="architecture">Architecture</a>
+    <a class="sb-link" href="/lens-docs/staking" data-slug="staking">Staking</a>
+    <a class="sb-link" href="/lens-docs/payments" data-slug="payments">Payments</a>
+    <a class="sb-link" href="/lens-docs/faq" data-slug="faq">FAQ</a>
+  </div>
+</nav>
+<main class="content" id="content">
+<section class="page" data-slug="overview">
+<div class="eyebrow">Getting started</div>
+  <h1>Overview</h1>
+<p class="lead">LENS turns any X profile or Base contract into a plain-language rug-risk verdict by reading the deployer wallet on-chain, instead of trusting whatever the bio says. Bios lie, chains don't.</p>
+<div class="figure">
+<svg viewBox="0 0 760 282" font-family="Inter, sans-serif">
+  <rect x="36" y="30" width="372" height="220" rx="14" fill="#0f0f11" stroke="#242424"/>
+  <circle cx="80" cy="74" r="21" fill="#1b1b1f" stroke="#2a2a2a"/>
+  <text x="113" y="69" fill="#f0f0f0" font-size="15" font-weight="700">degen builder</text>
+  <text x="113" y="89" fill="#6a6a6a" font-size="12" font-family="JetBrains Mono">@totally_legit</text>
+  <text x="58" y="126" fill="#b9b9b9" font-size="12.5">building the next 100x on Base, LP locked</text>
+  <text x="58" y="145" fill="#b9b9b9" font-size="12.5">CA in bio, trust me bro</text>
+  <rect x="58" y="162" width="300" height="28" rx="8" fill="rgba(89,120,255,.10)" stroke="rgba(89,120,255,.40)"/>
+  <text x="72" y="180" fill="#9fb0ff" font-size="11" font-family="JetBrains Mono">0x9a3c…b7e2</text>
+  <text x="208" y="180" fill="#5a78ff" font-size="10.5" font-family="JetBrains Mono">↳ LENS reads the deployer</text>
+  <text x="58" y="222" fill="#555" font-size="11" font-family="JetBrains Mono">the bio</text>
+
+  <path d="M420 140 L452 140 M446 134 L452 140 L446 146" stroke="#3a3a3a" stroke-width="2" fill="none"/>
+
+  <rect x="466" y="44" width="258" height="194" rx="14" fill="#0f0f11" stroke="#2952e3" stroke-opacity=".45"/>
+  <text x="486" y="74" fill="#5a78ff" font-size="10.5" font-family="JetBrains Mono" letter-spacing="2.5">LENS VERDICT</text>
+  <circle cx="522" cy="128" r="29" fill="none" stroke="#1f1f1f" stroke-width="6"/>
+  <circle cx="522" cy="128" r="29" fill="none" stroke="#2ecc71" stroke-width="6" stroke-linecap="round" stroke-dasharray="157 182" transform="rotate(-90 522 128)"/>
+  <text x="522" y="134" fill="#f0f0f0" font-size="19" font-weight="700" text-anchor="middle">86</text>
+  <rect x="572" y="114" width="96" height="28" rx="14" fill="rgba(46,204,113,.13)" stroke="rgba(46,204,113,.40)"/>
+  <text x="620" y="132" fill="#2ecc71" font-size="12" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">CLEAR</text>
+  <text x="486" y="186" fill="#9a9a9a" font-size="11.5">· no serial deploys</text>
+  <text x="486" y="206" fill="#9a9a9a" font-size="11.5">· dev never sold a prior token</text>
+  <text x="486" y="226" fill="#555" font-size="11" font-family="JetBrains Mono">the chain</text>
+</svg>
+<div class="figcap">a bio claims one thing, the deployer wallet tells the truth</div>
+</div>
+<h2>The problem it solves</h2>
+<p>Every day on crypto X, a profile posts a contract address, promises a locked LP and a long-term build, and asks you to ape. The bio is free to write and easy to fake. The only thing that cannot be faked is what the deployer wallet has actually done on-chain, how many tokens it has launched, whether it sold them, where it got its funding, and who it is quietly linked to.</p>
+<p>Normally, checking that means copying the address into a block explorer, clicking through transactions, cross-referencing wallets, and piecing the story together yourself, for every single token. Most people do not have the time, so they trust the bio and get rugged.</p>
+<h2>What LENS does</h2>
+<p>LENS does that investigation for you, automatically, the moment you open a profile. It reads the bio for a wallet, a contract or a GitHub link, resolves the person behind it, pulls their real on-chain history, and collapses everything into one of three calls you can act on in a second.</p>
+<p style="display:flex;gap:18px;flex-wrap:wrap;margin:18px 0">
+  <span><span class="vchip v-clear">CLEAR</span> &nbsp;nothing alarming on-chain</span>
+  <span><span class="vchip v-caution">CAUTION</span> &nbsp;mixed signals, look closer</span>
+  <span><span class="vchip v-stop">STOP</span> &nbsp;behavior that rugs people</span>
+</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>LENS reads <strong>Base chain</strong> and tokens launched through <strong>Bankrbot</strong>. Multi-chain support is on the roadmap.</p></div>
+<h2>Two ways to use it</h2>
+<p>Most people use the <strong>Chrome extension</strong>, which runs on x.com automatically and shows the verdict inline under any profile. Builders and agents use the <strong>public API</strong> and <strong>MCP server</strong> to run the exact same check from a script, a bot, or mid-conversation in an AI agent.</p>
+</section>
+
+<section class="page" data-slug="install">
+<div class="eyebrow">Getting started</div>
+  <h1>Install the extension</h1>
+<p class="lead">LENS is a Chrome MV3 extension. Install it once and it runs on x.com automatically, with nothing to configure and no account to create.</p>
+<h2>Install in three steps</h2>
+<ol class="steps">
+<li><strong>Add to Chrome.</strong> Install from the Chrome Web Store, or load the unpacked build from the repo if you want the very latest version before it ships to the store.</li>
+<li><strong>Open any X profile.</strong> LENS detects the page, reads the bio, and injects a panel directly under it within about a second. There is no button to press.</li>
+<li><strong>Read the verdict.</strong> The trust score, the verdict chip, and the dev's deploy history all appear inline, exactly where you are already looking.</li>
+</ol>
+<h2>Permissions, in plain terms</h2>
+<p>LENS asks for the minimum it needs to do its job, and nothing that could touch your funds. Here is what each permission is actually for.</p>
+<div class="tw"><table>
+<thead><tr><th>Permission</th><th>What it is actually for</th></tr></thead>
+<tbody>
+<tr><td>x.com access</td><td>Read the bio on the profile you are viewing and inject the panel under it</td></tr>
+<tr><td>storage</td><td>Remember your settings and cache recent scans so the same profile loads instantly</td></tr>
+<tr><td>network</td><td>Call the LENS API to fetch on-chain data for the address it found</td></tr>
+</tbody>
+</table></div>
+<div class="callout tip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><p>LENS is <strong>read-only</strong>. It never asks to connect a wallet, never holds private keys, and never signs a transaction. If anything ever prompts you to connect a wallet in the name of LENS, it is not LENS.</p></div>
+<h2>Staying updated</h2>
+<p>The extension updates itself through the store. New intelligence features are added on the backend, so most improvements reach you without any update at all, the panel simply starts showing more.</p>
+</section>
+
+<section class="page" data-slug="first-scan">
+<div class="eyebrow">Getting started</div>
+  <h1>Your first scan</h1>
+<p class="lead">Open the profile of any token dev on Base and the panel appears under the bio with everything LENS could read about the deployer. Here is how to read it.</p>
+<div class="figure">
+<svg viewBox="0 0 760 250" font-family="Inter, sans-serif">
+  <rect x="40" y="26" width="680" height="198" rx="14" fill="#0f0f11" stroke="#242424"/>
+  <rect x="40" y="26" width="680" height="40" rx="14" fill="#131316"/>
+  <rect x="40" y="52" width="680" height="14" fill="#131316"/>
+  <circle cx="64" cy="46" r="6" fill="#2952e3"/>
+  <text x="80" y="51" fill="#cfcfcf" font-size="12.5" font-weight="700">LENS</text>
+  <text x="124" y="51" fill="#5a5a5a" font-size="11" font-family="JetBrains Mono">deployer scan</text>
+  <rect x="636" y="36" width="68" height="22" rx="11" fill="rgba(224,132,58,.14)" stroke="rgba(224,132,58,.35)"/>
+  <text x="670" y="51" fill="#e0843a" font-size="11" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">CAUTION</text>
+
+  <circle cx="100" cy="140" r="34" fill="none" stroke="#1f1f1f" stroke-width="7"/>
+  <circle cx="100" cy="140" r="34" fill="none" stroke="#e0843a" stroke-width="7" stroke-linecap="round" stroke-dasharray="118 214" transform="rotate(-90 100 140)"/>
+  <text x="100" y="146" fill="#f0f0f0" font-size="20" font-weight="700" text-anchor="middle">55</text>
+  <text x="100" y="196" fill="#6a6a6a" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">TRUST</text>
+
+  <g font-size="12">
+  <text x="176" y="104" fill="#888">deploys</text><text x="176" y="122" fill="#e6e6e6" font-weight="600">7 tokens</text>
+  <text x="320" y="104" fill="#888">dev sold</text><text x="320" y="122" fill="#ff5a5a" font-weight="600">2 of 7</text>
+  <text x="470" y="104" fill="#888">linked X</text><text x="470" y="122" fill="#e6e6e6" font-weight="600">@alt_acct</text>
+  <text x="606" y="104" fill="#888">funded by</text><text x="606" y="122" fill="#e6e6e6" font-weight="600">fresh CEX</text>
+  </g>
+  <line x1="176" y1="150" x2="704" y2="150" stroke="#1d1d1d"/>
+  <rect x="176" y="166" width="528" height="40" rx="9" fill="rgba(255,90,90,.06)" stroke="rgba(255,90,90,.22)"/>
+  <text x="190" y="183" fill="#ff7a7a" font-size="11.5" font-weight="600">2 red lines</text>
+  <text x="190" y="199" fill="#b88" font-size="11">serial deployer · sold a previous token within 24h of launch</text>
+</svg>
+<div class="figcap">the panel LENS injects under a profile</div>
+</div>
+<h2>Anatomy of the panel</h2>
+<p>The panel is built to be scanned in a glance, with the headline call on the left and the supporting evidence to its right.</p>
+<ul>
+<li><strong>Trust score</strong> — a 0 to 100 read on the deployer. Higher is safer. It starts high and drops for each red flag in the wallet's history.</li>
+<li><strong>Verdict chip</strong> — the headline CLEAR, CAUTION or STOP. This is the one thing to read if you only read one thing.</li>
+<li><strong>Stat row</strong> — the key numbers: how many tokens the dev has deployed, how many they sold, any linked accounts, and where the wallet was funded from.</li>
+<li><strong>Red lines</strong> — the specific behaviors that pulled the verdict down, named in plain language so you know exactly why.</li>
+</ul>
+<h2>When a profile is empty</h2>
+<p>If a bio has no wallet, no contract and no GitHub, there is nothing on-chain to read, and LENS says so plainly rather than inventing a score. An empty profile is information too: a token dev with zero on-chain footprint is unproven, not safe.</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>Treat "not found" as "not yet proven", and weigh it like any other CAUTION signal.</p></div>
+</section>
+
+<section class="page" data-slug="verdicts">
+<div class="eyebrow">How verdicts work</div>
+  <h1>The verdict system</h1>
+<p class="lead">Every scan collapses to one of three calls. The logic is deliberately simple so it cannot be gamed, and so you can trust it at a glance.</p>
+<div class="figure">
+<svg viewBox="0 0 760 200" font-family="Inter, sans-serif">
+  <g>
+  <rect x="40" y="34" width="216" height="132" rx="13" fill="#0f0f11" stroke="rgba(46,204,113,.4)"/>
+  <circle cx="68" cy="64" r="5" fill="#2ecc71"/>
+  <text x="84" y="69" fill="#2ecc71" font-size="14" font-weight="700" font-family="JetBrains Mono">CLEAR</text>
+  <text x="62" y="104" fill="#cfcfcf" font-size="12.5">no red lines tripped</text>
+  <text x="62" y="124" fill="#888" font-size="11.5">clean deploy history,</text>
+  <text x="62" y="140" fill="#888" font-size="11.5">dev holds, supply sane</text>
+  </g>
+  <g>
+  <rect x="272" y="34" width="216" height="132" rx="13" fill="#0f0f11" stroke="rgba(224,132,58,.4)"/>
+  <circle cx="300" cy="64" r="5" fill="#e0843a"/>
+  <text x="316" y="69" fill="#e0843a" font-size="14" font-weight="700" font-family="JetBrains Mono">CAUTION</text>
+  <text x="294" y="104" fill="#cfcfcf" font-size="12.5">soft signals present</text>
+  <text x="294" y="124" fill="#888" font-size="11.5">uncapped supply, alt</text>
+  <text x="294" y="140" fill="#888" font-size="11.5">accounts, thin history</text>
+  </g>
+  <g>
+  <rect x="504" y="34" width="216" height="132" rx="13" fill="#0f0f11" stroke="rgba(255,90,90,.4)"/>
+  <circle cx="532" cy="64" r="5" fill="#ff5a5a"/>
+  <text x="548" y="69" fill="#ff5a5a" font-size="14" font-weight="700" font-family="JetBrains Mono">STOP</text>
+  <text x="526" y="104" fill="#cfcfcf" font-size="12.5">rug behavior on-chain</text>
+  <text x="526" y="124" fill="#888" font-size="11.5">serial seller, freeze</text>
+  <text x="526" y="140" fill="#888" font-size="11.5">power, drained LP</text>
+  </g>
+</svg>
+<div class="figcap">the worst signal sets the call</div>
+</div>
+<h2>Worst signal wins</h2>
+<p>LENS does not average its signals. A single STOP-level red line is enough to mark the whole token STOP, even if nine other checks are green. This is on purpose: a token where the dev can freeze your balance is dangerous no matter how clean the rest of the picture looks, and an averaged score would hide that one fatal flaw behind a comfortable-looking number.</p>
+<h2>The three calls</h2>
+<div class="tw"><table>
+<thead><tr><th>Verdict</th><th>Meaning</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td><span class="vchip v-clear">CLEAR</span></td><td>No red lines tripped on-chain</td><td>Still your call, but nothing here screams rug</td></tr>
+<tr><td><span class="vchip v-caution">CAUTION</span></td><td>Soft signals worth a closer look</td><td>Read the red lines before you size in</td></tr>
+<tr><td><span class="vchip v-stop">STOP</span></td><td>Behavior that has rugged holders</td><td>Walk away, or treat it as a pure gamble</td></tr>
+</tbody>
+</table></div>
+<h2>Why three and not a number</h2>
+<p>A raw score of 63 out of 100 tells you very little in the heat of a launch. CLEAR, CAUTION and STOP map to a decision you can actually make in the two seconds you have before a token moves. The numeric trust score is still there underneath for when you want the detail, but the verdict is what you act on.</p>
+</section>
+
+<section class="page" data-slug="red-lines">
+<div class="eyebrow">How verdicts work</div>
+  <h1>The seven red lines</h1>
+<p class="lead">For a token, LENS runs a transparent rule set called <code>tokenRedLines()</code>. Each rule maps to a flag, and the highest flag becomes the verdict. Nothing is a hidden black-box score, you can always see exactly which line tripped.</p>
+<h2>The seven lines</h2>
+<div class="tw"><table>
+<thead><tr><th>Red line</th><th>Flag</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td>Dev sold a prior token</td><td><span class="vchip v-stop">STOP</span></td><td>A deployer who dumped on holders before will very likely do it again</td></tr>
+<tr><td>Serial deployer</td><td><span class="vchip v-stop">STOP</span></td><td>Dozens of launches in a short window is a rug-factory pattern, not a builder</td></tr>
+<tr><td>Dev claimed fees and left</td><td><span class="vchip v-stop">STOP</span></td><td>Took the creator fees with no follow-through, the soft rug</td></tr>
+<tr><td>Bundled supply</td><td><span class="vchip v-caution">CAUTION</span></td><td>Launch wallets quietly hold a large share, so a coordinated dump can hit any time</td></tr>
+<tr><td>Fresh funding trail</td><td><span class="vchip v-caution">CAUTION</span></td><td>Wallet was funded minutes before launch from a fresh CEX withdrawal, a throwaway</td></tr>
+<tr><td>Hidden linked accounts</td><td><span class="vchip v-caution">CAUTION</span></td><td>Alt identities tied to past failed launches that the dev is not advertising</td></tr>
+<tr><td>Thin or no history</td><td><span class="vchip v-caution">CAUTION</span></td><td>Nothing on-chain to verify, so the dev is unproven and should be treated as such</td></tr>
+</tbody>
+</table></div>
+<h2>How a verdict is built</h2>
+<p>LENS evaluates all seven lines on every token, collects the flags, and takes the worst one. If any STOP line trips, the token is STOP. If no STOP trips but at least one CAUTION does, it is CAUTION. If nothing trips, it is CLEAR. Because the rules are explicit, you are never asked to trust a mystery number, you can read the exact line and decide whether you agree.</p>
+<div class="callout warn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>A CLEAR verdict means no red line tripped, not a guarantee of safety. New scams invent new patterns. Always do your own research before aping.</p></div>
+</section>
+
+<section class="page" data-slug="trust-score">
+<div class="eyebrow">How verdicts work</div>
+  <h1>Trust score</h1>
+<p class="lead">For a dev or a wallet, LENS also returns a 0 to 100 trust score, a quick numeric read on the person behind the token, built from the same on-chain signals as the red lines.</p>
+<h2>How it is built</h2>
+<p>The score starts high and is pulled down by each flag in the wallet's history. A long record of honest launches where the dev held through keeps the score up. A pattern of dumps, claimed fees, fresh funding and dead tokens drags it down fast. It is a summary of behavior over time, not a snapshot of one launch.</p>
+<h2>Reading the bands</h2>
+<div class="tw"><table>
+<thead><tr><th>Range</th><th>Band</th><th>Read</th></tr></thead>
+<tbody>
+<tr><td>80 – 100</td><td><span class="vchip v-clear">solid</span></td><td>Clean, consistent history, holds through launches</td></tr>
+<tr><td>45 – 79</td><td><span class="vchip v-caution">mixed</span></td><td>Some flags present, read the detail before trusting</td></tr>
+<tr><td>0 – 44</td><td><span class="vchip v-stop">risky</span></td><td>Strong rug-pattern history, treat with extreme care</td></tr>
+</tbody>
+</table></div>
+<h2>Score versus verdict</h2>
+<p>The verdict is the call to act on; the score is the nuance behind it. A dev can sit at a respectable 70 and still earn a STOP if one specific fatal line trips, because worst-signal-wins applies to the verdict regardless of the average. Use the score to compare two devs who both come back CAUTION, and use the verdict to decide whether to touch either of them at all.</p>
+</section>
+
+<section class="page" data-slug="scan-profile">
+<div class="eyebrow">Scanning</div>
+  <h1>Scan an X profile</h1>
+<p class="lead">This is the default mode and the reason most people install LENS. Open a profile and the verdict appears, you do nothing.</p>
+<h2>How it works</h2>
+<p>When you land on an x.com profile, LENS reads the bio for the things that map to an identity on-chain: a wallet address, a token contract, or a GitHub handle. It resolves whichever it finds to the deployer behind it, runs the full set of checks, and injects the verdict panel under the bio, all in about a second.</p>
+<p>Because the read is automatic, you get the same scrutiny on every profile without ever deciding to investigate. The check you would normally skip happens by default.</p>
+<h2>Case-insensitive matching</h2>
+<p>Addresses get written into bios in all sorts of formats, fully checksummed, all lowercase, or somewhere in between. LENS matches them case-insensitively, so a checksummed address and its lowercase form resolve to the exact same dev. This sounds small, but a single mismatched character used to be the difference between a correct verdict and a false "not found".</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>You can also scan a handle directly through the API with <code>?username=</code>, which resolves the bio to a wallet first, then runs the same checks the extension does.</p></div>
+</section>
+
+<section class="page" data-slug="scan-contract">
+<div class="eyebrow">Scanning</div>
+  <h1>Scan a contract</h1>
+<p class="lead">You can point LENS straight at a token contract, in the extension or through the public API, and get the same verdict and red lines for whoever deployed it.</p>
+<h2>From the command line</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+<pre><span class="t-c"># scan a Base token contract</span>
+curl <span class="t-s">"https://lens-liard.vercel.app/api/lookup?contract=0x9a3c…b7e2"</span></pre></div>
+<h2>From JavaScript</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">javascript</span><button class="code-copy">Copy</button></div>
+<pre><span class="t-k">const</span> res <span class="t-p">=</span> <span class="t-k">await</span> <span class="t-f">fetch</span>(
+  <span class="t-s">`https://lens-liard.vercel.app/api/lookup?contract=${ca}`</span>
+)
+<span class="t-k">const</span> { data } <span class="t-p">=</span> <span class="t-k">await</span> res.<span class="t-f">json</span>()
+
+<span class="t-k">if</span> (data.found) <span class="t-f">console</span>.<span class="t-f">log</span>(data.verdict, data.red_lines)
+<span class="t-k">else</span> <span class="t-f">console</span>.<span class="t-f">log</span>(<span class="t-s">'no on-chain record yet'</span>)</pre></div>
+<h2>What comes back</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">json</span><button class="code-copy">Copy</button></div>
+<pre>{
+  <span class="t-f">"success"</span><span class="t-p">:</span> <span class="t-k">true</span>,
+  <span class="t-f">"data"</span><span class="t-p">:</span> {
+    <span class="t-f">"found"</span><span class="t-p">:</span> <span class="t-k">true</span>,
+    <span class="t-f">"token_symbol"</span><span class="t-p">:</span> <span class="t-s">"NOOK"</span>,
+    <span class="t-f">"verdict"</span><span class="t-p">:</span> <span class="t-s">"STOP"</span>,
+    <span class="t-f">"trust_score"</span><span class="t-p">:</span> <span class="t-n">22</span>,
+    <span class="t-f">"red_lines"</span><span class="t-p">:</span> [
+      { <span class="t-f">"flag"</span><span class="t-p">:</span> <span class="t-s">"STOP"</span>, <span class="t-f">"label"</span><span class="t-p">:</span> <span class="t-s">"dev sold a prior token"</span> },
+      { <span class="t-f">"flag"</span><span class="t-p">:</span> <span class="t-s">"CAUTION"</span>, <span class="t-f">"label"</span><span class="t-p">:</span> <span class="t-s">"bundled supply"</span> }
+    ],
+    <span class="t-f">"deployer_wallet"</span><span class="t-p">:</span> <span class="t-s">"0x9a3c…b7e2"</span>
+  }
+}</pre></div>
+<p>Every field is documented on the <a class="ln" href="/lens-docs/schema">response schema</a> page.</p>
+</section>
+
+<section class="page" data-slug="scan-wallet">
+<div class="eyebrow">Scanning</div>
+  <h1>Scan a wallet</h1>
+<p class="lead">Skip the token and read the dev directly. Pass a wallet address to get its full deploy history, sell behavior, funding trail and trust score, the whole picture behind the person.</p>
+<h2>Reading a wallet</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+<pre><span class="t-c"># read a deployer wallet directly</span>
+curl <span class="t-s">"https://lens-liard.vercel.app/api/lookup?wallet=0x8618…C2BE"</span></pre></div>
+<h2>When to use it</h2>
+<p>Scanning a wallet is the move when you already have an address and want the dev's track record rather than one token's verdict. It answers the questions that matter most before a launch: how many tokens has this wallet shipped, how did each one end, did the dev sell, and where did the gas come from.</p>
+<p>It is also how you connect the dots between identities. Two different X profiles that resolve to the same wallet are the same operator, no matter how the bios are written.</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>All three inputs, <code>?username=</code>, <code>?contract=</code> and <code>?wallet=</code>, return the same response shape, so you can build one handler for all of them.</p></div>
+</section>
+
+<section class="page" data-slug="b20">
+<div class="eyebrow">Scanning</div>
+  <h1>B20 tokens</h1>
+<p class="lead">B20 is Base's native token standard. Unlike a normal ERC-20, it bakes issuer powers straight into the token, so LENS reads a different and more dangerous set of signals.</p>
+<div class="figure">
+<svg viewBox="0 0 760 234" font-family="Inter, sans-serif">
+  <rect x="220" y="22" width="320" height="190" rx="14" fill="#0f0f11" stroke="rgba(255,90,90,.4)"/>
+  <text x="244" y="52" fill="#5a78ff" font-size="10.5" font-family="JetBrains Mono" letter-spacing="2">B20 SCAN</text>
+  <text x="516" y="52" fill="#5a5a5a" font-size="10.5" font-family="JetBrains Mono" text-anchor="end">base · precompile</text>
+  <text x="244" y="84" fill="#cfcfcf" font-size="12.5" font-family="JetBrains Mono">0xB20f…1c4a · $ASSET</text>
+  <rect x="436" y="68" width="84" height="24" rx="12" fill="rgba(255,90,90,.13)" stroke="rgba(255,90,90,.4)"/>
+  <text x="478" y="84" fill="#ff5a5a" font-size="11" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">STOP</text>
+  <g font-size="11.5">
+  <circle cx="250" cy="116" r="3" fill="#ff5a5a"/><text x="262" y="120" fill="#d9b3b3">freeze and seize — issuer can block your balance</text>
+  <circle cx="250" cy="140" r="3" fill="#ff5a5a"/><text x="262" y="144" fill="#d9b3b3">transfers paused — selling is halted right now</text>
+  <circle cx="250" cy="164" r="3" fill="#e0843a"/><text x="262" y="168" fill="#d9c3aa">no supply cap — mint role can print freely</text>
+  <circle cx="250" cy="188" r="3" fill="#5a78ff"/><text x="262" y="192" fill="#aab4d9">mint restricted to allowlisted wallets</text>
+  </g>
+</svg>
+<div class="figcap">a B20 scan reads issuer powers, not just balances</div>
+</div>
+<h2>Why B20 needs its own scanner</h2>
+<p>A normal ERC-20 is just a deployed contract, and the risk lives in the dev's behavior. A B20 is a precompile with built-in issuer powers: the issuer can freeze and seize balances, mint without limit, pause transfers, and gate who is allowed to send or receive. These powers are part of the token itself, so a token can look perfectly fine on the surface and still let its issuer freeze your bag at will.</p>
+<p>A deployer-history scan does not see any of this. LENS reads the powers directly off the precompile and turns them into the same CLEAR, CAUTION, STOP language.</p>
+<h2>What LENS reads</h2>
+<p>The scanner asks the B20 factory whether a contract is a B20, then reads its state directly, read-only, no key, no signature. Transfer-gating plus a seizable asset is a STOP. A paused transfer is a STOP. An uncapped supply is a CAUTION. Restricted minting is informational.</p>
+<div class="tw"><table>
+<thead><tr><th>Precompile</th><th>Address</th></tr></thead>
+<tbody>
+<tr><td>B20 factory</td><td><code>0xB20f…0000</code></td></tr>
+<tr><td>Policy registry</td><td><code>0x8453…0002</code></td></tr>
+<tr><td>Activation registry</td><td><code>0x8453…0001</code></td></tr>
+</tbody>
+</table></div>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">json</span><button class="code-copy">Copy</button></div>
+<pre><span class="t-c">// a B20 verdict comes back on the same /lookup endpoint</span>
+{
+  <span class="t-f">"found"</span><span class="t-p">:</span> <span class="t-k">true</span>,
+  <span class="t-f">"source"</span><span class="t-p">:</span> <span class="t-s">"b20"</span>,
+  <span class="t-f">"symbol"</span><span class="t-p">:</span> <span class="t-s">"ASSET"</span>,
+  <span class="t-f">"verdict"</span><span class="t-p">:</span> <span class="t-s">"STOP"</span>,
+  <span class="t-f">"transfer_gated"</span><span class="t-p">:</span> <span class="t-k">true</span>,
+  <span class="t-f">"paused_transfer"</span><span class="t-p">:</span> <span class="t-k">true</span>,
+  <span class="t-f">"supply_capped"</span><span class="t-p">:</span> <span class="t-k">false</span>
+}</pre></div>
+<div class="callout warn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>B20 is not active on Base mainnet yet. LENS is already built to read it, so the day Base switches it on, scanning works through the same endpoint. See the <a class="ln" href="/b20">B20 page</a> for live status.</p></div>
+</section>
+
+<section class="page" data-slug="dev-claim">
+<div class="eyebrow">Intelligence</div>
+  <h1>Dev claim &amp; fees</h1>
+<p class="lead">On Bankrbot launches the creator can claim the trading fees a token accrues. Whether and how a dev claims is one of the clearest tells of intent.</p>
+<h2>How it works</h2>
+<p>As a token trades, fees build up that the deployer is entitled to claim. LENS reads whether the dev has claimed, roughly how much, and crucially what they did afterward. A dev who claims a healthy fee balance and keeps shipping is behaving like a builder. A dev who claims and immediately goes silent has taken their money and left.</p>
+<h2>Why it is a STOP</h2>
+<p>Claiming fees and disappearing is the textbook soft rug: there is no dramatic liquidity pull to point at, the token just quietly dies while the dev moves on to the next one. Because it is so reliable a signal, that pattern alone trips a <span class="vchip v-stop">STOP</span> red line, and it usually shows up next to a serial-deployer flag, because the same wallet tends to do it again and again.</p>
+</section>
+
+<section class="page" data-slug="serial">
+<div class="eyebrow">Intelligence</div>
+  <h1>Serial deployer</h1>
+<p class="lead">LENS counts every token a wallet has ever deployed and how each one ended. The shape of that history separates a real builder from a rug factory.</p>
+<h2>What counts as serial</h2>
+<p>Shipping a few tokens over time is normal, plenty of honest devs iterate. The signal is volume plus outcome: dozens of tokens launched in a short window, most of them dead or dumped, is not iteration, it is a production line for exit liquidity. LENS looks at both the raw deploy count and the fate of each token, not just the number.</p>
+<h2>How it feeds the verdict</h2>
+<p>A serial-deployer pattern trips a <span class="vchip v-stop">STOP</span> and weighs heavily on the trust score. It is one of the strongest predictors LENS has, because past behavior across many launches is far harder to fake than any single token's chart.</p>
+</section>
+
+<section class="page" data-slug="pleasebro">
+<div class="eyebrow">Intelligence</div>
+  <h1>PleaseBro detection</h1>
+<p class="lead">"PleaseBro" tokens come from a known farm pattern that mass-produces near-identical copy tokens to bait buyers. LENS flags wallets and contracts that match the fingerprint.</p>
+<h2>The pattern</h2>
+<p>These launches share a recognizable signature in how they are deployed and funded, designed to look like a fresh organic token while being one of hundreds churned out by the same operation. The whole point is volume: spin up enough lookalikes and some will catch a bid before anyone notices the dev has done this five hundred times.</p>
+<h2>What LENS does with it</h2>
+<p>When a deployer or contract shows the PleaseBro signature, the verdict reflects it before you have read a single reply in the thread. It is the kind of pattern that is invisible if you are only looking at one token, and obvious once you can see the wallet's full footprint, which is exactly what LENS gives you.</p>
+</section>
+
+<section class="page" data-slug="ca-history">
+<div class="eyebrow">Intelligence</div>
+  <h1>CA &amp; bio history</h1>
+<p class="lead">Devs swap the contract address in their bio between launches. LENS keeps a history of which CAs a profile has promoted over time, so a "first ever token" claim is easy to disprove.</p>
+<h2>Why bios are not enough</h2>
+<p>A bio shows you the current contract, never the last five. A profile can promote a token, let it die, edit the bio, and promote the next one as if it were the first, and to anyone seeing it fresh, it is. LENS tracks the addresses a profile has carried over time, so the pattern of serial relaunches becomes visible instead of being quietly erased with each bio edit.</p>
+<h2>Reading the history</h2>
+<p>A profile that has cycled through several contracts in a month is its own warning, regardless of what any single token's chart looks like. The history turns a "new project" into "the same person's sixth attempt", which is usually all you need to know.</p>
+</section>
+
+<section class="page" data-slug="bundled">
+<div class="eyebrow">Intelligence</div>
+  <h1>Bundled wallets</h1>
+<p class="lead">At launch, insiders often spread supply across many wallets in a single block to hide how much they really control. LENS detects bundled buys and estimates the true insider share.</p>
+<h2>The trick</h2>
+<p>If one wallet bought 30% of supply at launch it would be obvious. So instead, supply is split across a bundle of wallets that all buy in the same block, each holding a slice small enough to look like an ordinary buyer. Together they still control a huge share, and they can dump it in a coordinated move whenever they choose.</p>
+<h2>What LENS shows</h2>
+<p>LENS detects the bundle and estimates how much of the supply the launch wallets actually hold between them. A high bundled share is a <span class="vchip v-caution">CAUTION</span> line, because the float you think is in public hands may be sitting in wallets ready to exit all at once.</p>
+</section>
+
+<section class="page" data-slug="ai-verdict">
+<div class="eyebrow">Intelligence</div>
+  <h1>AI verdict</h1>
+<p class="lead">On top of the rule-based red lines, LENS can run an AI pass that reads the full on-chain picture and writes a short, plain-language summary of why a dev looks safe or sketchy.</p>
+<h2>Rules decide, AI explains</h2>
+<p>The verdict itself always comes from the transparent rule set, so it stays predictable and cannot be talked around. The AI layer sits on top to do something the rules cannot: read the whole context at once and explain it in a sentence or two you can paste straight into a group chat, "deployed seven tokens, sold two within hours, funded from a fresh wallet, treat with care".</p>
+<h2>Why keep them separate</h2>
+<p>Keeping the decision in the rules and the explanation in the AI means you never get a verdict you cannot trace back to a concrete on-chain fact. The AI makes the result readable; it does not get a vote on whether something is a STOP.</p>
+</section>
+
+<section class="page" data-slug="token-health">
+<div class="eyebrow">Intelligence</div>
+  <h1>Token health</h1>
+<p class="lead">Beyond the dev, LENS reads the token itself, its liquidity, holder spread, and whether the LP is locked or sitting somewhere it can be pulled.</p>
+<h2>The dev and the token are two questions</h2>
+<p>A trustworthy dev can still launch a token with unlocked liquidity, and a sketchy dev can launch one that is technically fine. LENS keeps the two readings separate so you see both: the deployer's history on one side, the token's own health on the other.</p>
+<h2>What it checks</h2>
+<p>Liquidity depth tells you how easily the token can be sold without collapsing the price. Holder spread shows whether the supply is genuinely distributed or concentrated in a few hands. LP lock status answers the most basic rug question of all, can the liquidity simply be removed. A great dev on a token with unlocked LP is still a risk, and LENS will not let one hide the other.</p>
+</section>
+
+<section class="page" data-slug="linked">
+<div class="eyebrow">Intelligence</div>
+  <h1>Linked accounts</h1>
+<p class="lead">Devs run alt accounts to recycle a reputation after a failed launch. LENS surfaces the X accounts tied to the same wallet or funding source, so a "new" builder with a buried history is exposed.</p>
+<h2>How identities get linked</h2>
+<p>People are easy to rebrand; wallets and funding trails are not. When a dev abandons a burned account and starts fresh, the new profile still tends to touch the same wallets, or get funded from the same source. LENS follows those on-chain threads to connect a clean-looking new account back to the launches it would rather you did not see.</p>
+<h2>Why it matters</h2>
+<p>The whole value of a reputation is that it cannot be reset on a whim. Linked-account detection restores that: a builder with a real track record keeps it, and a serial rugger cannot simply open a new handle and start the con over with a blank slate.</p>
+</section>
+
+<section class="page" data-slug="funding">
+<div class="eyebrow">Intelligence</div>
+  <h1>Funding trail</h1>
+<p class="lead">LENS traces where the deployer wallet got its gas. A wallet funded minutes before launch from a fresh exchange withdrawal is a throwaway, very different from one with months of real history.</p>
+<h2>Following the money in</h2>
+<p>Every wallet had to be funded by something. LENS looks at where the deployer's first funds came from and when. A wallet that received a single CEX withdrawal moments before deploying a token has no history to stand on, it was created for this launch and will likely be discarded after it.</p>
+<h2>The signal</h2>
+<p>A fresh funding trail is a <span class="vchip v-caution">CAUTION</span> line on its own, and a strong one when it lines up with bundled supply or a serial-deployer pattern. A wallet with a long, varied funding history is the opposite signal: someone who has been operating on-chain for a while and has more to lose than one rugged launch.</p>
+</section>
+
+<section class="page" data-slug="smart">
+<div class="eyebrow">Intelligence</div>
+  <h1>Smart followers</h1>
+<p class="lead">LENS labels the on-chain-relevant accounts that follow a profile, so you can tell organic traction from a padded follower count.</p>
+<h2>Followers are not all equal</h2>
+<p>A follower count is trivially inflated and tells you almost nothing. What matters is who is actually paying attention: real traders, known deployers, and recognizable names. LENS reads the meaningful followers and gives each a short role label generated from its own on-chain footprint, so a profile's real standing in the ecosystem becomes visible underneath the raw number.</p>
+<h2>What it tells you</h2>
+<p>A new token followed by a handful of serious traders is a very different signal from one followed by ten thousand empty accounts. Smart followers let you read the quality of the audience, not just its size.</p>
+</section>
+
+<section class="page" data-slug="github">
+<div class="eyebrow">Intelligence</div>
+  <h1>GitHub intel</h1>
+<p class="lead">If a bio links a GitHub, LENS reads the public profile, the repos, the account age and the activity, and shows whether the "open source" claim holds up.</p>
+<h2>Checking the code claim</h2>
+<p>"Fully open source, audited, doxxed dev" is one of the most common lines in a bio, and one of the easiest to fake with an empty account created last week. LENS reads the linked GitHub the same way it reads a wallet: how old is the account, what is actually in the repos, and is there real, sustained activity, or one empty placeholder pushed the day before launch.</p>
+<h2>Why it belongs next to the on-chain read</h2>
+<p>Code credibility and on-chain behavior together give a fuller picture of a builder than either alone. A dev with a real, active GitHub and a clean deploy history is a genuinely different prospect from an anonymous wallet with a freshly minted repo.</p>
+</section>
+
+<section class="page" data-slug="tags">
+<div class="eyebrow">Intelligence</div>
+  <h1>Community tags</h1>
+<p class="lead">Holders can tag wallets and profiles, for example scammer, builder, or known team. Tags are community-voted, so a single bad actor cannot brigade a label.</p>
+<h2>Crowd memory</h2>
+<p>On-chain data tells you what a wallet did; community tags tell you what people learned the hard way. A wallet that rugged a community last month can be tagged so the next person sees the warning before they engage, and a genuine team can be tagged as known so they are not mistaken for an impersonator.</p>
+<h2>Why voting matters</h2>
+<p>Tags are weighted by community votes rather than set by any single person, which makes them hard to abuse in either direction, you cannot smear an honest builder with one malicious tag, and you cannot whitewash a scammer with one fake endorsement. The tags appear alongside the on-chain verdict, so social knowledge and chain data sit side by side.</p>
+</section>
+
+<section class="page" data-slug="api">
+<div class="eyebrow">For developers</div>
+  <h1>API reference</h1>
+<p class="lead">The same data behind the extension is available over a public HTTP endpoint. One route, three ways to ask, no API key.</p>
+<h2>The endpoint</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">endpoint</span><button class="code-copy">Copy</button></div>
+<pre><span class="t-k">GET</span> https://lens-liard.vercel.app<span class="t-f">/api/lookup</span></pre></div>
+<h2>Parameters</h2>
+<div class="tw"><table>
+<thead><tr><th>Param</th><th>Example</th><th>Resolves</th></tr></thead>
+<tbody>
+<tr><td><code>username</code></td><td><code>?username=lnsx_io</code></td><td>Bio → deployer wallet → verdict</td></tr>
+<tr><td><code>contract</code></td><td><code>?contract=0x9a3c…</code></td><td>Token → deployer → verdict</td></tr>
+<tr><td><code>wallet</code></td><td><code>?wallet=0x8618…</code></td><td>Wallet history → trust score</td></tr>
+</tbody>
+</table></div>
+<p>All three return the same response shape, so a single handler covers every input. Reads are case-insensitive, so address casing never matters.</p>
+<div class="callout tip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><p>No key is required. Be reasonable with request volume, heavier usage is what the <a class="ln" href="/payments">paid tiers</a> are for.</p></div>
+<h2>See also</h2>
+<p>Worked examples live on the <a class="ln" href="/lens-docs/scan-contract">scan a contract</a> and <a class="ln" href="/lens-docs/scan-wallet">scan a wallet</a> pages, and every field is documented in the <a class="ln" href="/lens-docs/schema">response schema</a>.</p>
+</section>
+
+<section class="page" data-slug="mcp">
+<div class="eyebrow">For developers</div>
+  <h1>MCP &amp; agents</h1>
+<p class="lead">LENS ships an MCP server so any agent can run a rug check mid-conversation, the same verdict you see, available as a tool call.</p>
+<h2>Connect it</h2>
+<div class="code"><div class="code-head"><span class="code-dot"></span><span class="code-lang">bash</span><button class="code-copy">Copy</button></div>
+<pre>claude mcp add <span class="t-p">--transport</span> http lens <span class="t-s">https://lens-liard.vercel.app/api/mcp</span></pre></div>
+<div class="figure">
+<svg viewBox="0 0 760 178" font-family="Inter, sans-serif">
+  <rect x="40" y="58" width="150" height="62" rx="12" fill="#0f0f11" stroke="#242424"/>
+  <text x="115" y="86" fill="#cfcfcf" font-size="13" font-weight="600" text-anchor="middle">your agent</text>
+  <text x="115" y="104" fill="#5a5a5a" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">in a chat</text>
+
+  <path d="M196 89 L262 89 M256 83 L262 89 L256 95" stroke="#3a3a3a" stroke-width="2" fill="none"/>
+
+  <rect x="268" y="40" width="200" height="98" rx="12" fill="#0f0f11" stroke="#2952e3" stroke-opacity=".5"/>
+  <text x="368" y="66" fill="#5a78ff" font-size="11" font-family="JetBrains Mono" letter-spacing="2" text-anchor="middle">LENS MCP</text>
+  <g font-size="11" font-family="JetBrains Mono" fill="#9a9a9a" text-anchor="middle">
+  <text x="368" y="92">scan username</text>
+  <text x="368" y="110">scan contract</text>
+  <text x="368" y="128">scan wallet</text>
+  </g>
+
+  <path d="M474 89 L540 89 M534 83 L540 89 L534 95" stroke="#3a3a3a" stroke-width="2" fill="none"/>
+
+  <rect x="546" y="58" width="174" height="62" rx="12" fill="#0f0f11" stroke="rgba(46,204,113,.4)"/>
+  <text x="633" y="84" fill="#2ecc71" font-size="13" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">VERDICT</text>
+  <text x="633" y="104" fill="#888" font-size="10.5" text-anchor="middle">CLEAR / CAUTION / STOP</text>
+</svg>
+<div class="figcap">an agent calls LENS like any other tool</div>
+</div>
+<h2>The three tools</h2>
+<p>The server exposes three tools, scan an X username, scan a contract, and scan a wallet. Each returns the verdict and red lines as structured data, so an agent can read the result and reason about it rather than just printing a string.</p>
+<p>This is what lets an agent vet a token in the middle of a task: it sees a contract address, calls the scan tool, gets back a STOP with the reasons, and can refuse to ape on your behalf, all without you switching tabs.</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><p>The full agent guide lives on the <a class="ln" href="/mcp">Agents page</a>.</p></div>
+</section>
+
+<section class="page" data-slug="schema">
+<div class="eyebrow">For developers</div>
+  <h1>Response schema</h1>
+<p class="lead">Every lookup returns the same shape, whether you asked by username, contract or wallet. Fields that do not apply are omitted rather than returned as null.</p>
+<h2>Fields</h2>
+<div class="tw"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>success</code></td><td>bool</td><td>The request resolved</td></tr>
+<tr><td><code>data.found</code></td><td>bool</td><td>An on-chain footprint exists</td></tr>
+<tr><td><code>data.verdict</code></td><td>string</td><td>CLEAR · CAUTION · STOP</td></tr>
+<tr><td><code>data.trust_score</code></td><td>number</td><td>0–100 (wallet and dev reads)</td></tr>
+<tr><td><code>data.red_lines</code></td><td>array</td><td>Each is <code>{ flag, label, detail }</code></td></tr>
+<tr><td><code>data.deployer_wallet</code></td><td>string</td><td>The resolved deployer address</td></tr>
+<tr><td><code>data.token_symbol</code></td><td>string</td><td>Token ticker, when scanning a contract</td></tr>
+<tr><td><code>data.source</code></td><td>string</td><td><code>"b20"</code> on B20 reads</td></tr>
+</tbody>
+</table></div>
+<h2>Handling the response</h2>
+<p>Check <code>success</code> first, then <code>data.found</code>. If found is false, there is simply no record yet, treat it as unproven rather than safe. If found is true, <code>verdict</code> is the headline and <code>red_lines</code> is the evidence. Because the shape never changes across input types, you can write one parser and reuse it everywhere.</p>
+</section>
+
+<section class="page" data-slug="architecture">
+<div class="eyebrow">More</div>
+  <h1>Architecture</h1>
+<p class="lead">LENS is a thin client over a small, honest backend. The extension and agents call one API; the API reads the chain and a launch index, with an optional AI pass.</p>
+<div class="figure">
+<svg viewBox="0 0 760 296" font-family="Inter, sans-serif">
+  <rect x="34" y="64" width="138" height="50" rx="11" fill="#0f0f11" stroke="#242424"/>
+  <text x="103" y="93" fill="#cfcfcf" font-size="12.5" font-weight="600" text-anchor="middle">extension</text>
+  <rect x="34" y="132" width="138" height="50" rx="11" fill="#0f0f11" stroke="#242424"/>
+  <text x="103" y="161" fill="#cfcfcf" font-size="12.5" font-weight="600" text-anchor="middle">agents · MCP</text>
+
+  <path d="M178 89 L232 123 M178 157 L232 123" stroke="#2a2a2a" stroke-width="1.6" fill="none"/>
+  <path d="M226 117 L232 123 L224 125" stroke="#3a3a3a" stroke-width="1.6" fill="none"/>
+
+  <rect x="236" y="96" width="168" height="56" rx="13" fill="#0f0f11" stroke="#2952e3" stroke-opacity=".55"/>
+  <text x="320" y="120" fill="#5a78ff" font-size="12.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">LENS API</text>
+  <text x="320" y="138" fill="#6a6a6a" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">/lookup</text>
+
+  <g>
+  <path d="M410 110 L498 70 M410 124 L498 124 M410 138 L498 178" stroke="#2a2a2a" stroke-width="1.6" fill="none"/>
+  <rect x="502" y="48" width="222" height="44" rx="10" fill="#0f0f11" stroke="#242424"/>
+  <text x="520" y="68" fill="#cfcfcf" font-size="12" font-weight="600">Alchemy</text><text x="520" y="84" fill="#6a6a6a" font-size="10.5" font-family="JetBrains Mono">Base RPC · on-chain reads</text>
+  <rect x="502" y="102" width="222" height="44" rx="10" fill="#0f0f11" stroke="#242424"/>
+  <text x="520" y="122" fill="#cfcfcf" font-size="12" font-weight="600">Supabase</text><text x="520" y="138" fill="#6a6a6a" font-size="10.5" font-family="JetBrains Mono">bankr_launches index</text>
+  <rect x="502" y="156" width="222" height="44" rx="10" fill="#0f0f11" stroke="#242424"/>
+  <text x="520" y="176" fill="#cfcfcf" font-size="12" font-weight="600">Venice</text><text x="520" y="192" fill="#6a6a6a" font-size="10.5" font-family="JetBrains Mono">AI verdict (optional)</text>
+  </g>
+
+  <rect x="236" y="220" width="168" height="46" rx="11" fill="#0f0f11" stroke="#242424" stroke-dasharray="4 4"/>
+  <text x="320" y="241" fill="#9a9a9a" font-size="12" font-weight="600" text-anchor="middle">lens-listener</text>
+  <text x="320" y="257" fill="#6a6a6a" font-size="10" text-anchor="middle" font-family="JetBrains Mono">polls new launches →</text>
+  <path d="M408 232 L502 150" stroke="#2a2a2a" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+</svg>
+<div class="figcap">one API, reading the chain and a launch index</div>
+</div>
+<h2>How a scan flows</h2>
+<p>The extension or an agent sends an address to the LENS API. The API reads on-chain history through Alchemy on Base, checks a launch index in Supabase for tokens shipped through Bankrbot, and optionally runs the picture through Venice for a plain-language AI summary. The red-line rules run over all of it, and the verdict comes back.</p>
+<h2>The pieces</h2>
+<ul>
+<li><strong>Alchemy</strong> provides the Base RPC, the raw on-chain reads, deploys, transfers, funding.</li>
+<li><strong>Supabase</strong> holds the <code>bankr_launches</code> index, so a token can be matched to its launch without crawling the whole chain.</li>
+<li><strong>Venice</strong> powers the optional AI verdict that explains the result in a sentence.</li>
+<li><strong>lens-listener</strong> is a background worker that polls for new launches and keeps the index current, so fresh tokens are scannable quickly.</li>
+</ul>
+<p>Everything the API touches is public data. There is no wallet connection anywhere in the flow, and nothing LENS reads requires a signature.</p>
+</section>
+
+<section class="page" data-slug="staking">
+<div class="eyebrow">More</div>
+  <h1>Staking</h1>
+<p class="lead">Staking $LENS will unlock higher scan limits, priority API access, and a share of protocol fees. It activates when $LENS launches on Bankrbot.</p>
+<h2>What staking will do</h2>
+<p>The token aligns the people who rely on LENS with the protocol itself. Stakers will get more headroom on scans and API calls, priority when the system is busy, and a cut of the fees the protocol earns, so the heaviest users are also the ones with a stake in keeping it accurate and alive.</p>
+<div class="callout note"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><p>Staking is not live yet. It switches on with the $LENS launch on Bankrbot, follow the <a class="ln" href="/staking">staking page</a> for live status.</p></div>
+</section>
+
+<section class="page" data-slug="payments">
+<div class="eyebrow">More</div>
+  <h1>Payments</h1>
+<p class="lead">Paid tiers cover heavier API and MCP usage for teams and bots. The free extension and basic lookups stay free, you only pay when you scale past casual use.</p>
+<h2>Free where it counts</h2>
+<p>The browser extension and everyday lookups are free, because the core mission is to put a rug check in front of as many people as possible. Nothing about reading a profile before you ape should sit behind a paywall.</p>
+<h2>Paid where it scales</h2>
+<p>If you are running LENS at volume, a bot scanning thousands of tokens, an agent fleet, a product built on the API, the paid tiers give you the throughput and priority that level of use needs. Details and current pricing live on the <a class="ln" href="/payments">payments page</a>.</p>
+</section>
+
+<section class="page" data-slug="faq">
+<div class="eyebrow">More</div>
+  <h1>FAQ</h1>
+<p class="lead">Short answers to the questions people ask most.</p>
+<h2>Does LENS touch my wallet?</h2>
+<p>No. LENS is strictly read-only. It never connects a wallet, never holds keys, and never signs a transaction. If anything ever asks you to connect a wallet in the name of LENS, it is an impersonator.</p>
+<h2>Which chain does it cover?</h2>
+<p>Base, focused on tokens launched through Bankrbot, plus B20 reads once that standard activates. More chains are on the roadmap.</p>
+<h2>A token shows "not found", is that bad?</h2>
+<p>It means LENS has no on-chain record for it yet, which is common for brand-new or non-indexed tokens. Treat unknown as unproven, not as safe.</p>
+<h2>Is a CLEAR verdict a guarantee?</h2>
+<p>No. CLEAR means no red line tripped, not that the token is safe. New scams invent new patterns, so always do your own research before aping.</p>
+<h2>How fresh is the data?</h2>
+<p>On-chain reads are live. The launch index is kept current by a background listener, so new tokens become scannable shortly after they launch.</p>
+<div class="docfoot" style="margin-top:48px"><span>LENS reads public data on Base and X · information, not financial advice</span><span><a href="/">back to lnsx.io</a> · <a href="https://x.com/lnsx_io" target="_blank" rel="noopener">@lnsx_io</a></span></div>
+</section>
+<div class="prevnext" id="prevnext"></div>
+</main>
+<aside class="toc" id="toc"><div class="toc-title">On this page</div><div id="tocList"></div></aside>
+</div>
+<script>
+(function(){
+  var root=document.documentElement;
+
+  /* theme */
+  var themeIcon=document.getElementById('themeIcon');
+  var moonIcon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  var sunIcon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  function syncIcon(){ if(themeIcon) themeIcon.innerHTML=root.classList.contains('light')?moonIcon:sunIcon; }
+  try{ if(localStorage.getItem('lens-theme')==='light') root.classList.add('light'); }catch(e){}
+  syncIcon();
+  var tt=document.getElementById('themeToggle');
+  if(tt) tt.addEventListener('click',function(){ root.classList.toggle('light'); try{localStorage.setItem('lens-theme',root.classList.contains('light')?'light':'dark');}catch(e){} syncIcon(); });
+
+  /* drawer */
+  var sidebar=document.getElementById('sidebar'),burger=document.getElementById('burger'),overlay=document.getElementById('overlay');
+  function closeNav(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  if(burger) burger.addEventListener('click',function(){ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+  if(overlay) overlay.addEventListener('click',closeNav);
+
+  /* routing */
+  var pages=[].slice.call(document.querySelectorAll('.page'));
+  var sbLinks=[].slice.call(document.querySelectorAll('.sb-link'));
+  var ORDER=sbLinks.map(function(l){ return {slug:l.dataset.slug, title:l.textContent, el:l}; });
+  var bySlug={}; ORDER.forEach(function(o){ bySlug[o.slug]=o; });
+  var tocList=document.getElementById('tocList');
+  var pnWrap=document.getElementById('prevnext');
+  var headTitle=document.title;
+
+  function pathFor(slug){ return slug==='overview' ? '/lens-docs' : '/lens-docs/'+slug; }
+  function slugFromPath(p){
+    p=(p||'').replace(/\/+$/,'').replace(/\.html$/,'');
+    if(p===''||p==='/lens-docs') return 'overview';
+    var m=p.match(/^\/lens-docs\/([^\/]+)$/);
+    return (m && bySlug[m[1]]) ? m[1] : 'overview';
+  }
+  function slugify(txt){ return txt.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+
+  var heads=[];
+  function buildToc(sec, slug){
+    tocList.innerHTML='';
+    heads=[].slice.call(sec.querySelectorAll('h2,h3'));
+    heads.forEach(function(h){ if(!h.id) h.id=slug+'--'+slugify(h.textContent);
+      var a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; a.dataset.id=h.id;
+      if(h.tagName==='H3') a.className='sub'; tocList.appendChild(a);
+    });
+    var toc=document.querySelector('.toc');
+    if(toc) toc.style.visibility = heads.length ? 'visible' : 'hidden';
+  }
+  function buildPrevNext(slug){
+    var i=ORDER.map(function(o){return o.slug;}).indexOf(slug); var html='';
+    if(i>0){ var p=ORDER[i-1]; html+='<a class="pn prev" href="'+pathFor(p.slug)+'" data-slug="'+p.slug+'"><span class="dir">← Previous</span><span class="ti">'+p.title+'</span></a>'; }
+    if(i<ORDER.length-1){ var n=ORDER[i+1]; html+='<a class="pn next" href="'+pathFor(n.slug)+'" data-slug="'+n.slug+'"><span class="dir">Next →</span><span class="ti">'+n.title+'</span></a>'; }
+    pnWrap.innerHTML=html;
+  }
+  function spy(){
+    if(!heads.length) return;
+    var pos=window.scrollY+130,cur=null;
+    heads.forEach(function(h){ if(h.offsetTop<=pos) cur=h.id; });
+    if(!cur&&heads[0]) cur=heads[0].id;
+    [].forEach.call(tocList.children,function(a){ a.classList.toggle('active',a.dataset.id===cur); });
+  }
+
+  function show(slug, push){
+    if(!bySlug[slug]) slug='overview';
+    var active=null;
+    pages.forEach(function(p){ var on=p.dataset.slug===slug; p.classList.toggle('active',on); if(on) active=p; });
+    sbLinks.forEach(function(l){ l.classList.toggle('active', l.dataset.slug===slug); });
+    if(active){ buildToc(active, slug); buildPrevNext(slug); }
+    var o=bySlug[slug]; document.title = (slug==='overview') ? headTitle : o.title+' · LENS Docs';
+    if(push){ try{ history.pushState({slug:slug}, '', pathFor(slug)); }catch(e){} }
+    window.scrollTo(0,0); spy();
+  }
+
+  /* intercept docs links */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a'); if(!a) return;
+    var href=a.getAttribute('href'); if(!href) return;
+    if(href.charAt(0)==='#') return;                 /* let in-page anchors work */
+    if(href==='/lens-docs' || href.indexOf('/lens-docs/')===0){
+      e.preventDefault(); var slug=slugFromPath(href); show(slug,true); closeNav();
+    }
+  });
+  window.addEventListener('popstate',function(){ show(slugFromPath(location.pathname), false); });
+  window.addEventListener('scroll', spy, {passive:true});
+  window.addEventListener('resize', spy);
+
+  /* copy buttons */
+  document.querySelectorAll('.code-copy').forEach(function(btn){ btn.addEventListener('click',function(){ var pre=btn.closest('.code').querySelector('pre'); var txt=pre.innerText; function done(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1300);} if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done).catch(done);}else{done();} }); });
+
+  /* search filter (sidebar) */
+  var input=document.getElementById('searchInput');
+  if(input){ function filter(){ var q=input.value.trim().toLowerCase(); document.querySelectorAll('.sb-group').forEach(function(g){ var any=false; g.querySelectorAll('.sb-link').forEach(function(l){ var hit=!q||l.textContent.toLowerCase().indexOf(q)>-1; l.style.display=hit?'':'none'; if(hit)any=true; }); g.querySelector('.sb-title').style.display=any?'':'none'; g.style.display=any?'':'none'; }); }
+    input.addEventListener('input',filter);
+    document.addEventListener('keydown',function(e){ if(e.key==='/'&&document.activeElement!==input){e.preventDefault();input.focus();} if(e.key==='Escape'){input.value='';filter();input.blur();} }); }
+
+  /* boot */
+  show(slugFromPath(location.pathname), false);
+})();
+</script>
+</body>
+</html>
