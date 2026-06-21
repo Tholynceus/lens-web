@@ -671,7 +671,7 @@
       <span>price impact · <span id="swapImpact">0.4%</span></span>
     </div>
     <button class="swap-cta" id="swapCta">Sign in to trade</button>
-    <div class="swap-note" id="swapNote">trading goes live in Fase 2 with the LENS terminal · your wallet is being set up safely · scanner is live now</div>
+    <div class="swap-note" id="swapNote">selling lands soon · for now you can buy and quick-buy from your LENS wallet</div>
   </div>
 </div>
 
@@ -1229,6 +1229,22 @@ function flashToast(title, sub){
   toasts.appendChild(t);
   setTimeout(()=>{ t.classList.add('leave'); setTimeout(()=>t.remove(),300); }, 4200);
 }
+async function buyToken(toAddr, amountEth, sym){
+  const s = tgSession();
+  if (!s || !s.token){ openWallet(); return; }
+  if (!toAddr || !/^0x[a-fA-F0-9]{40}$/.test(toAddr)){ flashToast('not tradable yet', '$'+(sym||'token')+' has no address on file'); return; }
+  flashToast('buying '+amountEth+' ETH', '$'+(sym||'token')+' · routing on Base');
+  try {
+    const r = await fetch(`${CONFIG.WALLET_API}?action=buy&tg_id=${encodeURIComponent(s.id)}&token=${encodeURIComponent(s.token)}&to=${encodeURIComponent(toAddr)}&amount=${encodeURIComponent(amountEth)}`);
+    const d = await r.json().catch(()=>({}));
+    if (d && d.ok){
+      flashToast('bought $'+(sym||'token'), d.transactionHash ? ('tx '+d.transactionHash.slice(0,12)+'…') : 'tx sent');
+      loadWallet();
+    } else {
+      flashToast('buy failed', d.error || 'try again');
+    }
+  } catch(e){ flashToast('buy failed', 'network error'); }
+}
 function quickBuy(sym){
   const c = COINS.find(x=>x.sym===sym); if(!c) return;
   if (!tgUser){ openWallet(); return; }
@@ -1236,7 +1252,7 @@ function quickBuy(sym){
     flashToast('stop · LENS blocked this buy', '$'+c.sym+' matches known rug patterns');
     return;
   }
-  flashToast('quick-buy queued · 0.01 ETH', '$'+c.sym+' · execution goes live in Fase 2 with your LENS wallet');
+  buyToken(c.address, 0.01, c.sym);
 }
 function calcSwap(){
   if (!activeCoin) return;
@@ -1254,7 +1270,11 @@ document.getElementById('payAmt').addEventListener('input', function(){
 document.getElementById('payTok').addEventListener('change', calcSwap);
 document.getElementById('swapCta').addEventListener('click', function(){
   if (!tgUser){ openWallet(); return; }
-  document.getElementById('swapNote').classList.add('show');
+  if (swapSide === 'sell'){ document.getElementById('swapNote').classList.add('show'); return; }
+  const amt = parseFloat(document.getElementById('payAmt').value) || 0;
+  if (!activeCoin || !amt){ document.getElementById('swapNote').classList.add('show'); return; }
+  buyToken(activeCoin.address, amt, activeCoin.sym);
+  closeSwap();
 });
 document.getElementById('presets').addEventListener('click', function(e){
   const b = e.target.closest('.preset'); if(!b) return;
