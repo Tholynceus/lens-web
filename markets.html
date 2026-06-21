@@ -352,6 +352,35 @@
   .pf-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
   .pf-empty { text-align: center; padding: 34px 20px; color: var(--text3); font-size: 13.5px; line-height: 1.55; }
 
+  /* wallet tracker */
+  .tr-add input { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 11px; padding: 12px 14px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; margin-bottom: 8px; }
+  .tr-add input:focus { border-color: var(--accent); }
+  .tr-add button { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 11px; padding: 13px; font-family: inherit; font-weight: 700; font-size: 14px; cursor: pointer; margin-bottom: 16px; }
+  .tr-add button:hover { background: var(--accent2); }
+  .tr-row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1px solid var(--border); border-radius: 13px; background: var(--bg3); margin-bottom: 8px; }
+  .tr-ava { width: 36px; height: 36px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; background: linear-gradient(135deg, #3a7bff, #9b5cff); font-size: 14px; }
+  .tr-meta { min-width: 0; flex: 1; }
+  .tr-meta .l { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .tr-meta .a { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tr-acts { display: flex; gap: 6px; flex: none; }
+  .tr-acts button { background: none; border: 1px solid var(--border2); color: var(--text2); border-radius: 8px; padding: 7px 9px; font-size: 11px; cursor: pointer; font-family: inherit; }
+  .tr-acts button:hover { color: var(--text); border-color: var(--text3); }
+  .tr-acts button.del:hover { color: var(--red); border-color: var(--red); }
+
+  /* referral */
+  .rf-sub { color: var(--text2); font-size: 14px; line-height: 1.5; margin-bottom: 18px; }
+  .rf-sub b { color: var(--green); }
+  .rf-stat { display: flex; gap: 28px; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+  .rf-stat .n { font-size: 22px; font-weight: 800; }
+  .rf-stat .k { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: .1em; margin-top: 3px; }
+  .rf-link { background: var(--bg3); border: 1px solid var(--border); border-radius: 11px; padding: 13px 14px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text2); word-break: break-all; margin-bottom: 10px; }
+  .rf-copy { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .rf-copy:hover { background: var(--accent2); }
+  .rf-tier { display: flex; align-items: center; gap: 13px; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 16px; }
+  .rf-tier .ico { width: 42px; height: 42px; border-radius: 11px; background: rgba(224,132,58,.14); display: flex; align-items: center; justify-content: center; color: var(--amber); flex: none; }
+  .rf-tier .t { font-weight: 800; }
+  .rf-tier .s { font-size: 12.5px; color: var(--text3); margin-top: 2px; }
+
   /* SHARED MODAL (wallet + deploy) */
   .sheet {
     width: 100%; max-width: 440px; background: var(--bg2); border: 1px solid var(--border2);
@@ -525,7 +554,6 @@
     <button class="theme-toggle" id="themeToggle" title="Toggle theme">
       <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
     </button>
-    <button class="nav-btn launch" id="launchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5L3 21l4.5-1.5"/><path d="M14 6s4 0 6 2 2 6 2 6-2.5 4-6 5-7 1-7 1-1.5-3.5 0-7 5-7 5-7z"/><circle cx="14.5" cy="9.5" r="1.6"/></svg>Launch</button>
     <button class="nav-btn connect" id="connectBtnNav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>Sign in</button>
   </div>
 </nav>
@@ -677,41 +705,6 @@
   </div>
 </div>
 
-<!-- DEPLOY COIN MODAL -->
-<div class="overlay" id="deployOverlay">
-  <div class="sheet" id="deploySheet">
-    <div class="sheet-head">
-      <span></span>
-      <button class="sheet-x" id="deployClose">✕</button>
-    </div>
-    <div class="sheet-logo">
-      <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#2952e3"/><path d="M5 14C5 14 8.5 9 14 9C19.5 9 23 14 23 14C23 14 19.5 19 14 19C8.5 19 5 14 5 14Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><circle cx="14" cy="14" r="3.2" fill="none" stroke="white" stroke-width="1.8"/><circle cx="14" cy="14" r="1.1" fill="white"/></svg>
-      <div>
-        <div class="st">Launch a coin</div>
-        <div class="ss">deploy on Base, auto-scanned by LENS the moment it lands</div>
-      </div>
-    </div>
-
-    <div class="dfield">
-      <label>launchpad</label>
-      <div class="launchpad" id="launchpad">
-        <div class="lp-opt on" data-lp="bankr"><span class="src-dot bankr"></span><div><div class="lpn">Bankr</div><div class="lpd">bankrbot launch</div></div></div>
-        <div class="lp-opt" data-lp="clanker"><span class="src-dot clanker"></span><div><div class="lpn">Clanker</div><div class="lpd">clanker launch</div></div></div>
-      </div>
-    </div>
-    <div class="dfield row2">
-      <div><label>coin name</label><input id="dName" placeholder="Lumen Labs"></div>
-      <div><label>ticker</label><input id="dTk" placeholder="LUMEN" maxlength="10"></div>
-    </div>
-    <div class="dfield"><label>image url</label><input id="dImg" placeholder="https://"></div>
-    <div class="dfield"><label>description</label><textarea id="dDesc" placeholder="what is this coin"></textarea></div>
-    <div class="dfield"><label>your first buy (optional)</label><input id="dBuy" inputmode="decimal" placeholder="0.0 ETH"></div>
-
-    <button class="deploy-cta" id="deployCta">Deploy on Base</button>
-    <div class="deploy-pre" id="deployPre">deploys go live with the LENS terminal, the scanner is live now</div>
-  </div>
-</div>
-
 <div class="toasts" id="toasts"></div>
 
 <!-- MOBILE BOTTOM BAR -->
@@ -724,9 +717,9 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <span>Search</span>
   </button>
-  <button class="mb-item" id="mbDeploy">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg>
-    <span>Deploy</span>
+  <button class="mb-item" id="mbTrackers">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+    <span>Trackers</span>
   </button>
   <button class="mb-connect" id="mbConnect">Sign in</button>
 </div>
@@ -837,7 +830,8 @@ const CONFIG = {
 
   // Telegram sign-in (kupo-style). set TG_BOT to your bot username (no @) after BotFather
   TG_BOT: 'lens_market_bot',                                    // bot username (no @)
-  TG_VERIFY_API: 'https://lens-liard.vercel.app/api/tg-verify'
+  TG_VERIFY_API: 'https://lens-liard.vercel.app/api/tg-verify',
+  WALLET_API: 'https://lens-liard.vercel.app/api/wallet'
 };
 let DEMO = true;
 
@@ -1376,6 +1370,8 @@ function openAccount(){
         <div><div class="st" id="acctName">@you</div><div class="ss">signed in with Telegram</div></div>
       </div>
       <button class="acct-row" id="acctPortfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M16 13h2"/><path d="M2 10h16a2 2 0 0 1 2 2"/></svg>Portfolio<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="acct-row" id="acctTrackers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Wallet Tracker<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="acct-row" id="acctRef"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.6 20a6.4 6.4 0 0 1 12.8 0"/><circle cx="18" cy="7" r="2.4"/><path d="M16.6 20a6.4 6.4 0 0 0-2-4.7"/></svg>Refer &amp; earn<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       <button class="acct-row" id="acctWatch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.1 8.6 22 9.3 17 14.1 18.2 21 12 17.6 5.8 21 7 14.1 2 9.3 8.9 8.6"/></svg>Watchlist<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       <a class="acct-row" href="/lens-docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"/><path d="M19 16H7"/></svg>Docs<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
       <div class="acct-sec">ACCOUNT</div>
@@ -1388,13 +1384,76 @@ function openAccount(){
     ov.querySelector('#acctLogout').addEventListener('click', logout);
     ov.querySelector('#acctPortfolio').addEventListener('click', ()=>{ ov.classList.remove('open'); openPortfolio(); });
     ov.querySelector('#acctWatch').addEventListener('click', ()=> flashToast('watchlist soon', 'landing in a later drop'));
-    ov.querySelector('#acctWallet').addEventListener('click', ()=> flashToast('wallet · Fase 2', 'your Base wallet is being set up safely via Coinbase CDP'));
+    ov.querySelector('#acctTrackers').addEventListener('click', ()=>{ ov.classList.remove('open'); openTrackers(); });
+    ov.querySelector('#acctRef').addEventListener('click', ()=>{ ov.classList.remove('open'); openReferral(); });
+    ov.querySelector('#acctWallet').addEventListener('click', ()=>{ ov.classList.remove('open'); openPortfolio(); });
   }
   ov.querySelector('#acctName').textContent = '@' + (tgUser || 'you');
   ov.querySelector('#acctAva').textContent = (tgUser || 'y').charAt(0).toUpperCase();
   ov.classList.add('open');
 }
 
+let lensWallet = null;        // { address, balanceEth, network }
+const ETH_USD = 3400;         // rough display rate
+function tgSession(){ try { return JSON.parse(localStorage.getItem('lens_tg')||'null'); } catch(e){ return null; } }
+async function loadWallet(){
+  const s = tgSession();
+  if (!s || !s.token || !s.id || !CONFIG.WALLET_API) return null;
+  try {
+    const r = await fetch(`${CONFIG.WALLET_API}?tg_id=${encodeURIComponent(s.id)}&token=${encodeURIComponent(s.token)}`);
+    const d = await r.json().catch(()=>({}));
+    if (d && d.ok){ lensWallet = { address: d.address, balanceEth: d.balanceEth||0, network: d.network }; updatePortfolioWallet(); return lensWallet; }
+  } catch(e){}
+  return null;
+}
+function updatePortfolioWallet(){
+  const ov = document.getElementById('pfOverlay'); if (!ov) return;
+  const eth = lensWallet ? Number(lensWallet.balanceEth||0) : null;
+  ov.querySelector('#pfBalEth').textContent = eth==null ? '\u2014' : eth.toFixed(4);
+  ov.querySelector('#pfBalUsd').textContent = eth==null ? '' : ('$'+(eth*ETH_USD).toLocaleString(undefined,{maximumFractionDigits:2}));
+  const net = ov.querySelector('#pfNet'); if (net) net.textContent = lensWallet ? ('network \u00b7 '+lensWallet.network) : '';
+  const w = ov.querySelector('#pfWallet'); if (!w) return;
+  if (!tgSession()){ w.innerHTML = '<div class="pf-empty" style="padding:14px 0">sign in to get your Base wallet</div>'; return; }
+  if (!lensWallet){ w.innerHTML = '<div class="pf-empty" style="padding:14px 0">setting up your wallet\u2026<br>give it a sec</div>'; return; }
+  w.innerHTML = `<div class="tr-row" style="margin-bottom:10px">
+    <div class="tr-ava">\u039e</div>
+    <div class="tr-meta"><div class="l">my Base wallet</div><div class="a">${shortA(lensWallet.address)}</div></div>
+    <div class="tr-acts"><button id="pfCopy">Copy</button><button id="pfScan">Scan</button></div>
+  </div>
+  <button class="acct-row danger" id="pfExport" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Export private key<span></span></button>`;
+  w.querySelector('#pfCopy').addEventListener('click', ()=>{ if(navigator.clipboard) navigator.clipboard.writeText(lensWallet.address); flashToast('copied', shortA(lensWallet.address)); });
+  w.querySelector('#pfScan').addEventListener('click', ()=> window.open('https://basescan.org/address/'+lensWallet.address,'_blank'));
+  w.querySelector('#pfExport').addEventListener('click', exportKey);
+}
+async function exportKey(){
+  const s = tgSession(); if (!s) return;
+  if (!window.confirm('Export your private key?\n\nAnyone with this key has full control of your wallet and funds. Never share it, never paste it into any site or bot.')) return;
+  flashToast('exporting\u2026','hold on');
+  try {
+    const r = await fetch(`${CONFIG.WALLET_API}?action=export&tg_id=${encodeURIComponent(s.id)}&token=${encodeURIComponent(s.token)}`);
+    const d = await r.json().catch(()=>({}));
+    if (d && d.ok && d.privateKey){ showExportSheet(d.privateKey); }
+    else { flashToast('export failed', d.error || 'try again'); }
+  } catch(e){ flashToast('export failed','network error'); }
+}
+function showExportSheet(pk){
+  let ov = document.getElementById('exOverlay');
+  if (!ov){
+    ov = document.createElement('div'); ov.className = 'overlay'; ov.id = 'exOverlay';
+    ov.innerHTML = `<div class="sheet">
+      <div class="sheet-head"><span style="font-weight:800;font-size:18px">Private key</span><button class="sheet-x" id="exClose">\u2715</button></div>
+      <div class="swap-verdict stop" style="margin-bottom:14px">never share this. anyone with this key owns your wallet and funds. store it offline, never paste it into any site or bot</div>
+      <div class="rf-link" id="exKey" style="user-select:all"></div>
+      <button class="rf-copy" id="exCopy">Copy private key</button>
+    </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('open'); });
+    ov.querySelector('#exClose').addEventListener('click', ()=> ov.classList.remove('open'));
+    ov.querySelector('#exCopy').addEventListener('click', ()=>{ if(navigator.clipboard) navigator.clipboard.writeText(ov.querySelector('#exKey').textContent); flashToast('copied','keep it secret'); });
+  }
+  ov.querySelector('#exKey').textContent = pk;
+  ov.classList.add('open');
+}
 function openPortfolio(){
   let ov = document.getElementById('pfOverlay');
   if (!ov){
@@ -1405,21 +1464,112 @@ function openPortfolio(){
       <div class="sheet-head"><span></span><button class="sheet-x" id="pfClose">\u2715</button></div>
       <div class="pf-head"><span class="t">Portfolio</span><span class="pill">SPOT</span></div>
       <div class="pf-bal-lbl">TOTAL BALANCE</div>
-      <div class="pf-bal">0.000<span class="u">ETH</span> <span class="u" style="font-size:15px">$0.00</span></div>
-      <div class="pf-chg">+0.000 ETH (+0.0%)</div>
-      <div class="pf-hold"><div class="l">HOLDINGS</div><div class="v">0</div></div>
-      <div class="pf-tabs">
-        <button class="on">Active Positions</button>
-        <button>History</button>
-      </div>
-      <div class="pf-empty">no positions yet<br>your LENS wallet activates in Fase 2, lagi disiapin aman lewat Coinbase CDP</div>
+      <div class="pf-bal"><span id="pfBalEth">\u2014</span><span class="u">ETH</span> <span class="u" id="pfBalUsd" style="font-size:15px"></span></div>
+      <div class="pf-chg" id="pfNet"></div>
+      <div class="pf-hold"><div class="l">YOUR WALLET</div><div id="pfWallet" style="margin-top:10px"></div></div>
     </div>`;
     document.body.appendChild(ov);
     ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('open'); });
     ov.querySelector('#pfClose').addEventListener('click', ()=> ov.classList.remove('open'));
-    ov.querySelectorAll('.pf-tabs button').forEach(b=>{
-      b.addEventListener('click', ()=>{ ov.querySelectorAll('.pf-tabs button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); });
-    });
+  }
+  updatePortfolioWallet();
+  if (tgSession() && !lensWallet) loadWallet();
+  ov.classList.add('open');
+}
+
+/* ---------- wallet tracker ---------- */
+function getTracked(){ try { return JSON.parse(localStorage.getItem('lens_tracked')||'[]'); } catch(e){ return []; } }
+function setTracked(a){ try { localStorage.setItem('lens_tracked', JSON.stringify(a)); } catch(e){} }
+function shortA(a){ return a.slice(0,6)+'\u2026'+a.slice(-4); }
+function renderTracked(){
+  const wrap = document.getElementById('trList'); if (!wrap) return;
+  const list = getTracked();
+  if (!list.length){ wrap.innerHTML = '<div class="pf-empty">no wallets tracked yet<br>paste a Base address above to scan and watch it</div>'; return; }
+  wrap.innerHTML = list.map((w,i)=>{
+    const vp = w.verdict ? `<span class="badge ${w.verdict}">${w.verdict.toUpperCase()}</span>` : '<span style="font-size:11px;color:var(--text3)">scanning\u2026</span>';
+    const label = w.label || 'wallet';
+    return `<div class="tr-row">
+      <div class="tr-ava">${label.charAt(0).toUpperCase()}</div>
+      <div class="tr-meta">
+        <div class="l">${label} ${vp}</div>
+        <div class="a">${shortA(w.addr)}</div>
+      </div>
+      <div class="tr-acts">
+        <button data-copy="${w.addr}">Copy</button>
+        <button data-exp="${w.addr}">Scan</button>
+        <button class="del" data-del="${i}">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('[data-copy]').forEach(b=> b.addEventListener('click', ()=>{ if(navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy); flashToast('copied', shortA(b.dataset.copy)); }));
+  wrap.querySelectorAll('[data-exp]').forEach(b=> b.addEventListener('click', ()=> window.open('https://basescan.org/address/'+b.dataset.exp, '_blank')));
+  wrap.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=>{ const arr=getTracked(); arr.splice(parseInt(b.dataset.del),1); setTracked(arr); renderTracked(); }));
+}
+async function scanTracked(addr){
+  const v = await fetchVerdict(addr); if (!v) return;
+  const arr = getTracked(); const w = arr.find(x=>x.addr.toLowerCase()===addr.toLowerCase());
+  if (w){ w.verdict = v.verdict; w.trust = v.trust; setTracked(arr); renderTracked(); }
+}
+function addTracked(){
+  const ai = document.getElementById('trAddr'); const li = document.getElementById('trLabel');
+  const addr = (ai.value||'').trim(); const label = (li.value||'').trim();
+  if (!/^0x[a-fA-F0-9]{40}$/.test(addr)){ flashToast('invalid address', 'paste a full 0x Base address'); return; }
+  const arr = getTracked();
+  if (arr.some(x=>x.addr.toLowerCase()===addr.toLowerCase())){ flashToast('already tracking', shortA(addr)); return; }
+  arr.unshift({ addr, label: label || ('wallet '+(arr.length+1)), verdict: null });
+  setTracked(arr); ai.value=''; li.value=''; renderTracked(); scanTracked(addr);
+}
+function openTrackers(){
+  let ov = document.getElementById('trOverlay');
+  if (!ov){
+    ov = document.createElement('div');
+    ov.className = 'overlay'; ov.id = 'trOverlay';
+    ov.innerHTML = `<div class="sheet">
+      <div class="sheet-head"><span style="font-weight:800;font-size:18px">Wallet Tracker</span><button class="sheet-x" id="trClose">\u2715</button></div>
+      <div class="tr-add">
+        <input id="trAddr" placeholder="Wallet address (0x\u2026)" inputmode="text" autocomplete="off" spellcheck="false">
+        <input id="trLabel" placeholder="Label (optional)">
+        <button id="trAdd">Track wallet</button>
+      </div>
+      <div id="trList"></div>
+    </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('open'); });
+    ov.querySelector('#trClose').addEventListener('click', ()=> ov.classList.remove('open'));
+    ov.querySelector('#trAdd').addEventListener('click', addTracked);
+  }
+  renderTracked();
+  ov.classList.add('open');
+}
+
+/* ---------- refer & earn ---------- */
+function openReferral(){
+  let ov = document.getElementById('rfOverlay');
+  const code = tgUser || 'you';
+  const link = 'https://lnsx.io/?ref=' + code;
+  if (!ov){
+    ov = document.createElement('div');
+    ov.className = 'overlay'; ov.id = 'rfOverlay';
+    ov.innerHTML = `<div class="sheet">
+      <div class="sheet-head"><span style="font-weight:800;font-size:18px">Refer &amp; earn</span><button class="sheet-x" id="rfClose">\u2715</button></div>
+      <div class="rf-sub">earn a <b>share of trading fees</b> from everyone who joins through your link. activates in Fase 2 with trading</div>
+      <div class="rf-stat">
+        <div><div class="n">0</div><div class="k">REFERRALS</div></div>
+        <div><div class="n" style="color:var(--green)">0.0000</div><div class="k">ETH EARNED</div></div>
+      </div>
+      <div class="rf-link" id="rfLink">${link}</div>
+      <button class="rf-copy" id="rfCopy">Copy referral link</button>
+      <div class="rf-tier">
+        <div class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.2 17 13.9 18.3 21 12 17.5 5.7 21 7 13.9 2 9.2 9 8.5"/></svg></div>
+        <div><div class="t">Bronze</div><div class="s">your starting tier \u00b7 cashback on every fee once live</div></div>
+      </div>
+    </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('open'); });
+    ov.querySelector('#rfClose').addEventListener('click', ()=> ov.classList.remove('open'));
+    ov.querySelector('#rfCopy').addEventListener('click', ()=>{ const l = 'https://lnsx.io/?ref=' + (tgUser||'you'); if(navigator.clipboard) navigator.clipboard.writeText(l); flashToast('copied', 'referral link copied'); });
+  } else {
+    ov.querySelector('#rfLink').textContent = link;
   }
   ov.classList.add('open');
 }
@@ -1446,6 +1596,7 @@ async function tgLogin(code, opts){
     const u = (d.telegram && d.telegram.username) || null;
     try { localStorage.setItem('lens_tg', JSON.stringify({ token: d.token, username: u, id: d.telegram && d.telegram.id, exp: Date.now() + 24*60*60*1000 })); } catch(e){}
     setTgUI(u);
+    loadWallet();
     closeWallet();
     if (!opts || !opts.silent) tgToast(u);
   } catch(e){
@@ -1476,118 +1627,14 @@ async function tgLogin(code, opts){
   } else {
     try {
       const saved = JSON.parse(localStorage.getItem('lens_tg') || 'null');
-      if (saved && saved.token && (!saved.exp || saved.exp > Date.now())){ setTgUI(saved.username); }
+      if (saved && saved.token && (!saved.exp || saved.exp > Date.now())){ setTgUI(saved.username); loadWallet(); }
       else if (saved){ localStorage.removeItem('lens_tg'); }
     } catch(e){}
   }
 })();
 
-/* ---------- deploy coin modal ---------- */
-const deployOverlay = document.getElementById('deployOverlay');
-function openDeploy(){ document.getElementById('deployPre').classList.remove('show'); deployOverlay.classList.add('open'); }
-function closeDeploy(){ deployOverlay.classList.remove('open'); }
-document.getElementById('launchBtn').addEventListener('click', openDeploy);
-document.getElementById('deployClose').addEventListener('click', closeDeploy);
-deployOverlay.addEventListener('click', e=>{ if(e.target===deployOverlay) closeDeploy(); });
-document.getElementById('launchpad').addEventListener('click', e=>{
-  const opt = e.target.closest('.lp-opt'); if(!opt) return;
-  document.querySelectorAll('#launchpad .lp-opt').forEach(x=>x.classList.remove('on'));
-  opt.classList.add('on');
-});
-document.getElementById('dTk').addEventListener('input', function(){ this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,''); });
-document.getElementById('deployCta').addEventListener('click', doDeploy);
-
-async function doDeploy(){
-  if (!account){ closeDeploy(); openWallet(); return; }
-  const name = document.getElementById('dName').value.trim();
-  const symbol = document.getElementById('dTk').value.trim();
-  const image = document.getElementById('dImg').value.trim();
-  const description = document.getElementById('dDesc').value.trim();
-  const lp = (document.querySelector('#launchpad .lp-opt.on')||{}).dataset?.lp || 'bankr';
-  const pre = document.getElementById('deployPre');
-  const cta = document.getElementById('deployCta');
-
-  if (!name || !symbol){ pre.textContent = 'coin name and ticker are required'; pre.classList.add('show'); return; }
-
-  pre.classList.remove('show');
-  cta.disabled = true; const orig = cta.textContent; cta.textContent = 'deploying on '+lp+' ...';
-  try {
-    let address = null;
-
-    if (lp === 'clanker' && !CONFIG.DEPLOY_API){
-      // no API key needed: deploy on-chain with the connected wallet via clanker-sdk
-      if (typeof window.__clankerDeploy !== 'function') throw new Error('clanker SDK still loading, try again in a moment');
-      cta.textContent = 'confirm in your wallet ...';
-      const out = await window.__clankerDeploy({ name, symbol, image, description, tokenAdmin: account });
-      address = out.address;
-    } else {
-      // bankr (or clanker with a hosted API key) routes through your backend
-      if (!CONFIG.DEPLOY_API) throw new Error('NEEDS_BACKEND');
-      const r = await fetch(CONFIG.DEPLOY_API, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ launchpad: lp, name, symbol, image, description, creator: account })
-      });
-      const data = await r.json();
-      if (!r.ok || data.error) throw new Error(data.error || 'deploy failed');
-      address = data.address;
-    }
-
-    onDeployed({ name, symbol, src: lp, address, img: image });
-    cta.textContent = 'deployed ✓';
-    setTimeout(()=>{ closeDeploy(); cta.disabled = false; cta.textContent = orig; }, 1300);
-  } catch(e){
-    const msg = (e && e.message) || String(e);
-    if (msg === 'NEEDS_BACKEND') pre.textContent = 'Bankr needs api/deploy.js + BANKR_PARTNER_KEY. Clanker deploys on-chain with no key';
-    else if (/user rejected|denied|4001/i.test(msg)) pre.textContent = 'transaction cancelled';
-    else pre.textContent = 'deploy failed: '+msg;
-    pre.classList.add('show');
-    cta.disabled = false; cta.textContent = orig;
-  }
-}
-
-// drop a freshly launched coin into the board, then enrich with real price + verdict
-function onDeployed(info){
-  const addr = (info.address || '').toLowerCase();
-  const c = {
-    address: addr, sym: info.symbol, name: info.name, src: info.src,
-    verdict: 'clear', trust: null,
-    price: 0, mcap: 0, vol24: 0, ch24: 0,
-    img: info.img || null, spark: Array(24).fill(0.0000001),
-    born: Date.now(), live: !DEMO, mine: true, url: info.src==='clanker' ? 'https://clanker.world' : 'https://bankr.bot'
-  };
-  COINS.unshift(c);
-  // surface it: newest first, clear filters, scroll to the board
-  state.sort = 'new'; state.src = 'all'; state.verdict = 'all'; state.q = '';
-  document.querySelectorAll('#sortSeg button').forEach(x=>x.classList.toggle('on', x.dataset.sort==='new'));
-  document.querySelectorAll('#srcSeg button').forEach(x=>x.classList.toggle('on', x.dataset.src==='all'));
-  document.querySelectorAll('#verdictSeg button').forEach(x=>x.classList.toggle('on', x.dataset.v==='all'));
-  document.getElementById('searchInput').value = '';
-  render();
-  const first = body.querySelector('.crow'); if (first) first.classList.add('fresh');
-  document.querySelector('.board').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  const t = document.createElement('div'); t.className = 'toast';
-  t.innerHTML = `<img class="coin-ico" src="${ico(7,'#2952e3','#4a72ff',info.symbol)}" alt="">
-    <div class="tx"><div class="tt">you launched on ${info.src}${addr?' · onchain':''}</div>
-    <div class="tn">$${info.symbol}<span class="badge clear">LIVE</span></div></div>`;
-  toasts.appendChild(t);
-  setTimeout(()=>{ t.classList.add('leave'); setTimeout(()=>t.remove(),300); }, 6500);
-
-  // give the launchpad a moment to index, then pull real dex + lens verdict
-  if (addr){
-    setTimeout(async ()=>{
-      try {
-        const dex = await fetchDex([addr]); const d = dex[addr];
-        if (d){ c.price=d.price; c.mcap=d.mcap; c.vol24=d.vol24; c.ch24=d.ch24; if(d.name)c.name=d.name; if(d.img)c.img=d.img; }
-        const v = await fetchVerdict(addr); if (v){ c.verdict=v.verdict; c.trust=v.trust; }
-        render(); refreshStats(); refreshTopVol();
-      } catch(e){}
-    }, 9000);
-  }
-}
-
 /* ---------- mobile bottom bar ---------- */
-document.getElementById('mbDeploy').addEventListener('click', openDeploy);
+document.getElementById('mbTrackers').addEventListener('click', openTrackers);
 document.getElementById('mbConnect').addEventListener('click', onConnectClick);
 document.getElementById('mbSearch').addEventListener('click', function(){
   const s = document.getElementById('searchInput');
@@ -1651,33 +1698,5 @@ loadLive().then(ok=>{
 })();
 </script>
 
-<!-- Clanker on-chain deploy (no API key). loads only in the browser, signs with the connected wallet -->
-<script type="module">
-  window.__clankerDeploy = async function ({ name, symbol, image, description, tokenAdmin }) {
-    if (!window.ethereum) throw new Error('no browser wallet found');
-    const [{ createWalletClient, createPublicClient, custom, http }, { base }, mod] = await Promise.all([
-      import('https://esm.sh/viem@2'),
-      import('https://esm.sh/viem@2/chains'),
-      import('https://esm.sh/clanker-sdk/v4')
-    ]);
-    const Clanker = mod.Clanker || (mod.default && mod.default.Clanker) || mod.default;
-    const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const publicClient = createPublicClient({ chain: base, transport: http() });
-    const wallet = createWalletClient({ account, chain: base, transport: custom(window.ethereum) });
-    const clanker = new Clanker({ publicClient, wallet });
-    const res = await clanker.deploy({
-      name, symbol,
-      image: image || undefined,
-      metadata: description ? { description } : undefined,
-      tokenAdmin: tokenAdmin || account
-    });
-    if (res && res.error) throw res.error;
-    let address = res.address || res.tokenAddress || null;
-    if (res && typeof res.waitForTransaction === 'function') {
-      try { const done = await res.waitForTransaction(); address = (done && (done.address || done.tokenAddress)) || address; } catch (e) {}
-    }
-    return { address, txHash: res && res.txHash };
-  };
-</script>
 </body>
 </html>
