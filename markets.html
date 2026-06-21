@@ -1816,16 +1816,16 @@ async function doExport(){
     let pk = d && d.privateKey;
     if (pk && typeof pk === 'object') pk = pk.privateKey || pk.private_key || pk.key || '';
     if (d && d.ok && pk){ showExportSheet(String(pk)); }
-    else { flashToast('export failed', (d && d.error) || 'try again'); }
-  } catch(e){ flashToast('export failed','network error'); }
+    else { showExportSheet(null, (d && d.error) || ('http '+r.status)); }
+  } catch(e){ showExportSheet(null, 'network error'); }
 }
-function showExportSheet(pk){
+function showExportSheet(pk, err){
   let ov = document.getElementById('exOverlay');
   if (!ov){
     ov = document.createElement('div'); ov.className = 'overlay'; ov.id = 'exOverlay';
     ov.innerHTML = `<div class="sheet">
-      <div class="sheet-head"><span style="font-weight:800;font-size:18px">Private key</span><button class="sheet-x" id="exClose">\u2715</button></div>
-      <div class="swap-verdict stop" style="margin-bottom:14px">never share this. anyone with this key owns your wallet and funds. store it offline, never paste it into any site or bot</div>
+      <div class="sheet-head"><span style="font-weight:800;font-size:18px" id="exTitle">Private key</span><button class="sheet-x" id="exClose">\u2715</button></div>
+      <div class="swap-verdict stop" id="exWarn" style="margin-bottom:14px"></div>
       <div class="rf-link" id="exKey" style="user-select:all;word-break:break-all;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5"></div>
       <button class="rf-copy" id="exCopy">Copy private key</button>
     </div>`;
@@ -1834,7 +1834,23 @@ function showExportSheet(pk){
     ov.querySelector('#exClose').addEventListener('click', ()=> ov.classList.remove('open'));
     ov.querySelector('#exCopy').addEventListener('click', ()=>{ if(navigator.clipboard) navigator.clipboard.writeText(ov.querySelector('#exKey').textContent); flashToast('copied','keep it secret'); });
   }
-  ov.querySelector('#exKey').textContent = pk;
+  const keyEl = ov.querySelector('#exKey');
+  const copyBtn = ov.querySelector('#exCopy');
+  const warn = ov.querySelector('#exWarn');
+  const title = ov.querySelector('#exTitle');
+  if (err){
+    title.textContent = 'Export failed';
+    let hint = '';
+    if (/scope|permission|forbidden|unauthor|export/i.test(String(err))) hint = ' \u2014 enable "Export (export private key)" on your CDP API key, then redeploy';
+    warn.textContent = 'could not export: ' + err + hint;
+    keyEl.textContent = ''; keyEl.style.display = 'none';
+    copyBtn.style.display = 'none';
+  } else {
+    title.textContent = 'Private key';
+    warn.textContent = 'never share this. anyone with this key owns your wallet and funds. store it offline, never paste it into any site or bot';
+    keyEl.style.display = ''; copyBtn.style.display = '';
+    keyEl.textContent = pk;
+  }
   ov.classList.add('open');
 }
 function openPortfolio(){
