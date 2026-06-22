@@ -524,6 +524,89 @@
     .stat-row { grid-template-columns: 1fr; }
     .mk-head { padding-top: 30px; }
   }
+
+  /* ============ premium button system (global, refined) ============ */
+  :root{ --ease: cubic-bezier(.22,.61,.36,1); }
+  .nav-btn, .swap-cta, .deploy-cta, .mb-connect, .qbuy, .bs-toggle button, .preset, .seg button { -webkit-tap-highlight-color: transparent; }
+
+  /* primary action: refined gradient, hairline edge, focused (not neon) depth */
+  .nav-btn.connect, .swap-cta, .deploy-cta, .mb-connect{
+    background: linear-gradient(180deg, #3a63ec 0%, var(--accent) 58%, var(--accent2) 100%) !important;
+    border: 1px solid rgba(120,150,255,.34) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 1px 2px rgba(0,0,0,.5), 0 10px 24px -10px rgba(41,82,227,.6) !important;
+    letter-spacing: .2px;
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s var(--ease) !important;
+  }
+  .nav-btn.connect:hover, .swap-cta:hover, .deploy-cta:hover, .mb-connect:hover{
+    transform: translateY(-1px); filter: brightness(1.04);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.26), 0 2px 4px rgba(0,0,0,.5), 0 16px 32px -12px rgba(41,82,227,.72) !important;
+  }
+  .nav-btn.connect:active, .swap-cta:active, .deploy-cta:active, .mb-connect:active{
+    transform: translateY(0) scale(.99);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.32), 0 2px 8px rgba(41,82,227,.28) !important;
+  }
+  .swap-cta, .deploy-cta{ position: relative; overflow: hidden; }
+  .swap-cta::after, .deploy-cta::after{
+    content:''; position:absolute; top:0; bottom:0; left:-130%; width:55%; pointer-events:none;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,.20), transparent);
+    transform: skewX(-18deg); transition: left .65s var(--ease);
+  }
+  .swap-cta:hover::after, .deploy-cta:hover::after{ left: 150%; }
+
+  /* secondary tinted nav (Deploy) */
+  .nav-btn.launch{ transition: transform .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease) !important; }
+  .nav-btn.launch:hover{ transform: translateY(-1px); box-shadow: 0 8px 18px -8px rgba(41,82,227,.5); }
+  .nav-btn.launch:active{ transform: scale(.98); }
+
+  /* Buy / Sell: clean segmented toggle, ONLY the active side is colored */
+  .bs-toggle{ box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
+  .bs-toggle button{ transition: color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease) !important; letter-spacing:.2px; }
+  .bs-toggle button:not(.on){ background: transparent !important; color: var(--text2) !important; box-shadow: none !important; }
+  .bs-toggle button:not(.on):hover{ background: rgba(255,255,255,.05) !important; color: var(--text) !important; }
+  .bs-toggle button.on.buy{
+    background: linear-gradient(180deg, #34cf76, #20a259) !important; color:#042012 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.30), 0 6px 16px -9px rgba(46,204,113,.75) !important;
+  }
+  .bs-toggle button.on.sell{
+    background: linear-gradient(180deg, #ff6161, #e03a3a) !important; color:#2a0606 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 6px 16px -9px rgba(255,90,90,.75) !important;
+  }
+
+  /* quick-buy chip */
+  .qbuy{ transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease) !important; }
+  .qbuy:hover{ transform: translateY(-1px); box-shadow: 0 8px 16px -8px rgba(46,204,113,.55); }
+  .qbuy:active{ transform: scale(.95); }
+
+  /* segmented filters */
+  .seg button{ transition: color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease) !important; border-radius: 9px; }
+  .seg button.on{ background: linear-gradient(180deg, #3a63ec, var(--accent)) !important;
+                  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 6px 14px -8px rgba(41,82,227,.8); }
+  .seg button:not(.on):hover{ background: var(--bg3); }
+
+  /* presets */
+  .preset{ transition: transform .15s var(--ease), background .15s var(--ease), box-shadow .15s var(--ease) !important; }
+  .preset:hover{ transform: translateY(-1px); }
+
+  /* a11y focus */
+  .nav-btn:focus-visible, .swap-cta:focus-visible, .deploy-cta:focus-visible, .mb-connect:focus-visible,
+  .qbuy:focus-visible, .bs-toggle button:focus-visible, .seg button:focus-visible, .preset:focus-visible{
+    outline: 2px solid var(--accent-light); outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .nav-btn, .swap-cta, .deploy-cta, .mb-connect, .qbuy, .bs-toggle button, .preset, .seg button{ transition: none !important; transform: none !important; }
+    .swap-cta::after, .deploy-cta::after{ display: none; }
+  }
+
+  /* ---- swap sheet: never traps you, close always reachable on mobile ---- */
+  .swap{ max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(20px + env(safe-area-inset-bottom,0px)); }
+  .swap-grab{ display: none; }
+  @media (max-width: 820px){
+    .swap{ max-height: 90vh; border-radius: 22px 22px 0 0; padding-top: 0; }
+    .swap-grab{ display: block; width: 40px; height: 4px; border-radius: 99px; background: var(--border2); margin: 12px auto 10px; }
+    .swap-head{ position: sticky; top: 0; z-index: 6; background: var(--bg2); padding: 4px 0 12px; margin-bottom: 8px; }
+    .swap-x{ width: 38px; height: 38px; font-size: 18px; }
+  }
+
 </style>
 </head>
 <body>
@@ -635,6 +718,7 @@
 <!-- TRADE MODAL -->
 <div class="overlay" id="overlay">
   <div class="swap" id="swap">
+    <div class="swap-grab"></div>
     <div class="swap-head">
       <div class="swap-title">
         <img class="coin-ico" id="swapIco" alt="">
@@ -690,7 +774,7 @@
       <span>price impact · <span id="swapImpact">0.4%</span></span>
     </div>
     <button class="swap-cta" id="swapCta">Sign in to trade</button>
-    <div class="swap-note" id="swapNote">selling lands soon · for now you can buy and quick-buy from your LENS wallet</div>
+    <div class="swap-note" id="swapNote">enter an amount to continue</div>
   </div>
 </div>
 
@@ -791,25 +875,28 @@ function fmtPrice(p){
   return '$'+p.toFixed(6);
 }
 function ico(seed, c1, c2, label){
-  // gradient orb + ticker letter + a varied motif, deterministic by seed
+  // distinctive LENS placeholder: dark chip + per-coin geometric "scan" glyph (no generic letter)
   const s = 'g'+Math.abs(seed)%99999;
-  const L = ((label||'').toString().replace(/[^A-Za-z0-9]/g,'').charAt(0)||'?').toUpperCase();
-  const motifs = [
-    "<circle cx='40' cy='40' r='25' fill='none' stroke='rgba(255,255,255,.20)' stroke-width='2'/>",
-    "<path d='M14 50 L28 32 L40 44 L52 24 L66 40' fill='none' stroke='rgba(255,255,255,.22)' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>",
-    "<g fill='rgba(255,255,255,.16)'><circle cx='24' cy='24' r='3'/><circle cx='40' cy='24' r='3'/><circle cx='56' cy='24' r='3'/><circle cx='24' cy='40' r='3'/><circle cx='56' cy='40' r='3'/><circle cx='24' cy='56' r='3'/><circle cx='40' cy='56' r='3'/><circle cx='56' cy='56' r='3'/></g>",
-    "<path d='M40 13 L64 54 L16 54 Z' fill='none' stroke='rgba(255,255,255,.20)' stroke-width='2.4' stroke-linejoin='round'/>",
-    "<path d='M45 11 L23 43 H39 L35 69 L59 33 H43 Z' fill='rgba(255,255,255,.20)'/>",
-    "<path d='M40 14 L62 27 V53 L40 66 L18 53 V27 Z' fill='none' stroke='rgba(255,255,255,.20)' stroke-width='2.4' stroke-linejoin='round'/>",
-    "<path d='M12 46 Q26 28 40 46 T68 46' fill='none' stroke='rgba(255,255,255,.22)' stroke-width='3' stroke-linecap='round'/>",
-    "<g stroke='rgba(255,255,255,.18)' stroke-width='2.6' fill='none'><circle cx='40' cy='40' r='11'/><circle cx='40' cy='40' r='22'/></g>",
-    "<path d='M40 12 L48 32 L68 40 L48 48 L40 68 L32 48 L12 40 L32 32 Z' fill='rgba(255,255,255,.16)'/>",
-    "<g stroke='rgba(255,255,255,.20)' stroke-width='2.6' stroke-linecap='round'><path d='M22 28 H58'/><path d='M22 40 H58'/><path d='M22 52 H46'/></g>"
+  const glyphs = [
+    "<g fill='none' stroke='"+c1+"' stroke-width='3'><circle cx='40' cy='40' r='20'/><circle cx='40' cy='40' r='11' stroke='"+c2+"'/></g><circle cx='40' cy='40' r='3.6' fill='"+c2+"'/>",
+    "<path d='M40 18 L59 29 V51 L40 62 L21 51 V29 Z' fill='none' stroke='"+c1+"' stroke-width='3' stroke-linejoin='round'/><g stroke='"+c2+"' stroke-width='3' stroke-linecap='round'><path d='M40 41 v-9'/><path d='M40 41 l8 5'/><path d='M40 41 l-8 5'/></g>",
+    "<circle cx='40' cy='40' r='19' fill='none' stroke='"+c1+"' stroke-width='3'/><g stroke='"+c2+"' stroke-width='3' stroke-linecap='round'><path d='M40 13 v9'/><path d='M40 58 v9'/><path d='M13 40 h9'/><path d='M58 40 h9'/></g><circle cx='40' cy='40' r='3' fill='"+c2+"'/>",
+    "<circle cx='40' cy='40' r='18' fill='none' stroke='"+c1+"' stroke-width='3'/><circle cx='40' cy='40' r='7' fill='"+c1+"' opacity='.30'/><circle cx='58' cy='40' r='4.6' fill='"+c2+"'/>",
+    "<g fill='"+c1+"'><rect x='22' y='42' width='8' height='18' rx='2'/><rect x='36' y='30' width='8' height='30' rx='2'/></g><rect x='50' y='22' width='8' height='38' rx='2' fill='"+c2+"'/>",
+    "<g fill='none' stroke='"+c1+"' stroke-width='3' stroke-linejoin='round'><path d='M40 15 L61 40 L40 65 L19 40 Z'/></g><path d='M40 29 L51 40 L40 51 L29 40 Z' fill='"+c2+"'/>",
+    "<g stroke='"+c1+"' stroke-width='3' fill='none'><path d='M40 16 a24 24 0 1 1 -17 7' stroke-linecap='round'/></g><circle cx='23' cy='23' r='4.5' fill='"+c2+"'/>",
+    "<g stroke='"+c1+"' stroke-width='3' stroke-linecap='round'><path d='M20 48 L32 34 L42 44 L60 24' fill='none'/></g><circle cx='60' cy='24' r='4.5' fill='"+c2+"'/>"
   ];
-  const m = motifs[Math.abs(seed)%motifs.length];
-  const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><defs><linearGradient id='"+s+"' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='"+c1+"'/><stop offset='1' stop-color='"+c2+"'/></linearGradient></defs><rect width='80' height='80' rx='40' fill='url(#"+s+")'/>"+m+"<text x='40' y='41' text-anchor='middle' dominant-baseline='central' font-family='Inter,Segoe UI,Arial,sans-serif' font-weight='800' font-size='33' fill='rgba(255,255,255,.97)'>"+L+"</text></svg>";
+  const g = glyphs[Math.abs(seed)%glyphs.length];
+  const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'>"
+    + "<defs><radialGradient id='"+s+"' cx='50%' cy='40%' r='62%'><stop offset='0' stop-color='"+c1+"' stop-opacity='.30'/><stop offset='1' stop-color='"+c1+"' stop-opacity='0'/></radialGradient></defs>"
+    + "<rect width='80' height='80' rx='40' fill='#0d0f16'/>"
+    + "<rect width='80' height='80' rx='40' fill='url(#"+s+")'/>"
+    + "<circle cx='40' cy='40' r='39' fill='none' stroke='"+c1+"' stroke-opacity='.24' stroke-width='1.5'/>"
+    + g + "</svg>";
   return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
 }
+
 const palettes = [['#2952e3','#4a72ff'],['#e0843a','#ffb066'],['#2ecc71','#1f9d57'],['#9b59ff','#5e3ac4'],['#ff5a8a','#c43a6a'],['#22b8cf','#1a7d8c'],['#f0f0f0','#888'],['#ff7b3a','#e0432a']];
 
 /* ====================================================================
