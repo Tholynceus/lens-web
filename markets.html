@@ -607,6 +607,15 @@
     .swap-x{ width: 38px; height: 38px; font-size: 18px; }
   }
 
+
+  /* ---- per-coin actions: copy CA + DexScreener ---- */
+  .coin-sub{ flex-wrap: wrap; row-gap: 6px; }
+  .ca-act{ display:inline-flex; align-items:center; gap:3px; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:10.5px; font-weight:600; line-height:1; color:var(--text2); background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:4px 7px; cursor:pointer; text-decoration:none; transition:.15s; -webkit-tap-highlight-color:transparent; }
+  .ca-act:hover{ color:var(--text); border-color:var(--border2); background:var(--bg2); }
+  .ca-act:active{ transform: scale(.96); }
+  .ca-act.ok{ color:var(--green); border-color:rgba(46,204,113,.45); }
+  @media (max-width:820px){ .ca-act{ font-size:11.5px; padding:6px 11px; } }
+  .toast{ pointer-events: auto; }
 </style>
 </head>
 <body>
@@ -819,10 +828,6 @@
   <button class="mb-item active" id="mbSearch">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <span>Search</span>
-  </button>
-  <button class="mb-item" id="mbTrackers">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
-    <span>Trackers</span>
   </button>
   <button class="mb-connect" id="mbConnect">Sign in</button>
 </div>
@@ -1171,12 +1176,13 @@ function rowHtml(c, i){
   const p = predict(c);
   const ch = c.ch24;
   const pal = palettes[i % palettes.length];
+  const dexUrl = c.url || ('https://dexscreener.com/base/' + (c.address||''));
   return `<div class="crow" data-sym="${c.sym}" data-trade="${c.sym}">
     <div class="coin">
       <img class="coin-ico" src="${c.img || ico(i, pal[0], pal[1], c.sym)}" onerror="this.onerror=null;this.src='${ico(i, pal[0], pal[1], c.sym)}'" alt="">
       <div class="coin-meta">
         <div class="coin-name">${c.name}</div>
-        <div class="coin-sub"><span class="coin-tk">$${c.sym}</span> · <span>${c.src}</span></div>
+        <div class="coin-sub"><span class="coin-tk">$${c.sym}</span> · <span>${c.src}</span>${c.address ? `<button class="ca-act" onclick="event.stopPropagation();copyCA('${c.address}',this)" title="copy contract address">copy CA</button><a class="ca-act" href="${dexUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="open on DexScreener">dex ↗</a>` : ''}</div>
       </div>
     </div>
     <div><span class="srcpill"><span class="src-dot ${c.src}"></span>${c.src}</span></div>
@@ -1277,6 +1283,9 @@ function liveToast(c){
   t.innerHTML = `<img class="coin-ico" src="${c.img||fallback}" alt="" onerror="this.onerror=null;this.src='${fallback}'">
     <div class="tx"><div class="tt">new on ${c.src} \u00b7 scanned by LENS</div>
     <div class="tn">$${c.sym}<span class="badge ${c.verdict}">${c.verdict.toUpperCase()}</span></div></div>`;
+  t.style.cursor = 'pointer';
+  t.addEventListener('click', ()=>{ openSwap(c.sym, c.address); t.classList.add('leave'); setTimeout(()=>t.remove(),300); });
+  while (toasts.children.length >= 3) toasts.firstChild.remove();
   toasts.appendChild(t);
   setTimeout(()=>{ t.classList.add('leave'); setTimeout(()=>t.remove(),300); }, 5600);
   if (state.q==='' && (state.src==='all'||state.src===c.src) && (state.verdict==='all'||state.verdict===c.verdict)){
@@ -1322,6 +1331,9 @@ function newCoin(){
   t.innerHTML = `<img class="coin-ico" src="${ico(COINS.length,pal[0],pal[1],c.sym)}" alt="">
     <div class="tx"><div class="tt">new on ${c.src} · scanned</div>
     <div class="tn">$${c.sym}<span class="badge ${c.verdict}">${c.verdict.toUpperCase()}</span></div></div>`;
+  t.style.cursor = 'pointer';
+  t.addEventListener('click', ()=>{ openSwap(c.sym, c.address); t.classList.add('leave'); setTimeout(()=>t.remove(),300); });
+  while (toasts.children.length >= 3) toasts.firstChild.remove();
   toasts.appendChild(t);
   setTimeout(()=>{ t.classList.add('leave'); setTimeout(()=>t.remove(),300); }, 5200);
   // if board shows new/trending and no filter excludes it, prepend with fresh anim
@@ -1390,8 +1402,8 @@ const verdictCopy = {
   caution:'CAUTION · some red lines tripped, size small and watch the deployer',
   stop:'STOP · deployer pattern matches known rugs, LENS recommends staying out'
 };
-function openSwap(sym){
-  const c = COINS.find(x=>x.sym===sym); if(!c) return;
+function openSwap(sym, addr){
+  const c = (addr && COINS.find(x=>x.address===addr)) || COINS.find(x=>x.sym===sym); if(!c) return;
   activeCoin = c;
   const i = COINS.indexOf(c); const pal = palettes[i%palettes.length];
   const fallback = ico(i,pal[0],pal[1],c.sym);
@@ -1507,6 +1519,17 @@ function flashToast(title, sub){
   t.innerHTML = `<div class="tx"><div class="tt">${title}</div><div class="tn">${sub}</div></div>`;
   toasts.appendChild(t);
   setTimeout(()=>{ t.classList.add('leave'); setTimeout(()=>t.remove(),300); }, 4200);
+}
+function copyCA(addr, el){
+  if(!addr) return;
+  const done = ()=>{ if(el){ const t=el.textContent; el.textContent='copied'; el.classList.add('ok'); setTimeout(()=>{ el.textContent=t; el.classList.remove('ok'); }, 1100); } flashToast('Address copied', addr.slice(0,6)+'\u2026'+addr.slice(-4)); };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(addr).then(done).catch(()=>fallbackCopy(addr,done)); }
+    else fallbackCopy(addr, done);
+  }catch(e){ fallbackCopy(addr, done); }
+}
+function fallbackCopy(text, cb){
+  try{ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); ta.remove(); cb&&cb(); }catch(e){}
 }
 async function buyToken(toAddr, amountEth, sym){
   const s = tgSession();
@@ -2169,7 +2192,6 @@ async function tgPollOnce(){
 })();
 
 /* ---------- mobile bottom bar ---------- */
-document.getElementById('mbTrackers').addEventListener('click', openTrackers);
 document.getElementById('mbConnect').addEventListener('click', onConnectClick);
 document.getElementById('mbSearch').addEventListener('click', function(){
   const s = document.getElementById('searchInput');
