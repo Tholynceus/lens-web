@@ -77,7 +77,7 @@
 
   /* NAV */
   nav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 28px; backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 72%, transparent);
+    padding: 14px 28px; backdrop-filter: blur(14px); background: rgba(10,10,10,0.92);
     border-bottom: 1px solid var(--border); }
   .nav-logo { display: flex; align-items: center; gap: 9px; }
   .nav-logo svg { width: 28px; height: 28px; }
@@ -95,9 +95,9 @@
   .nav-mobile-btn { display: none; }
 
   /* MOBILE MENU */
-  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0;
-    background: color-mix(in srgb, var(--bg) 96%, transparent); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border); flex-direction: column; padding: 12px 24px 20px; gap: 4px; z-index: 90; }
+  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border); flex-direction: column; padding: 12px 24px 20px; gap: 4px; z-index: 90; overflow-y: auto; }
   .mobile-menu.open { display: flex; }
   .mobile-menu a { color: var(--text2); text-decoration: none; font-size: 15px; font-weight: 500;
     padding: 12px 4px; border-bottom: 1px solid var(--border); }
@@ -572,9 +572,12 @@ read = requests.get(
   const navMobileBtn = document.getElementById('navMobileBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   if (navMobileBtn && mobileMenu) {
-    navMobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    navMobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
     mobileMenu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+      a.addEventListener('click', () => { mobileMenu.classList.remove('open'); document.body.style.overflow = ''; });
     });
   }
 

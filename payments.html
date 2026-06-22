@@ -29,7 +29,7 @@
   .orb-3{width:480px;height:480px;bottom:-180px;left:30%;background:radial-gradient(circle,rgba(41,82,227,.12),transparent 70%);}
   .dots{position:absolute;top:-30px;right:-30px;width:340px;height:280px;background-image:radial-gradient(rgba(41,82,227,.5) 1px,transparent 1.4px);background-size:18px 18px;-webkit-mask-image:radial-gradient(ellipse at top right,#000,transparent 72%);mask-image:radial-gradient(ellipse at top right,#000,transparent 72%);opacity:.4;}
 
-  nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--border);}
+  nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;backdrop-filter:blur(14px);background:rgba(10,10,10,0.92);border-bottom:1px solid var(--border);}
   .nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
   .nav-logo svg{width:28px;height:28px;}
   .nav-logo-text{font-weight:800;letter-spacing:.14em;font-size:15px;color:var(--text);}
@@ -38,7 +38,7 @@
   .nav-links a:hover,.nav-links a.active{color:var(--text);}
   .nav-links a.active{color:var(--accent-light);}
   .nav-mobile-btn{display:none;background:transparent;border:1px solid var(--border2);color:var(--text2);width:34px;height:34px;border-radius:8px;cursor:pointer;align-items:center;justify-content:center;}
-  .mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;background:color-mix(in srgb,var(--bg) 96%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-direction:column;padding:12px 24px 20px;z-index:90;}
+  .mobile-menu{display:none;position:fixed;top:57px;left:0;right:0;bottom:0;background:var(--bg);border-bottom:1px solid var(--border);flex-direction:column;padding:12px 24px 20px;z-index:90;overflow-y:auto;}
   .mobile-menu.open{display:flex;}
   .mobile-menu a{color:var(--text2);text-decoration:none;font-size:15px;font-weight:500;padding:12px 4px;border-bottom:1px solid var(--border);}
   .mobile-menu a:last-child{border:none;}
