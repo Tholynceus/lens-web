@@ -1583,6 +1583,32 @@
   </div>
   <p class="lvf-tag">bios lie <b>chains don't</b></p>
   <p class="lvf-sub">LENS reads the wallet behind any X profile while you scroll</p>
+  <style>
+    .lens-ca-wrap{display:flex;justify-content:center;margin-top:20px;padding:0 16px;}
+    .lens-ca-chip{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;
+      background:var(--bg2);border:1px solid var(--border2);color:var(--text2);padding:11px 15px;border-radius:11px;cursor:pointer;transition:.15s;max-width:100%;}
+    .lens-ca-chip:hover{border-color:var(--accent);color:var(--text);box-shadow:0 0 0 4px rgba(41,82,227,.08);}
+    .lens-ca-chip .lcc-tok{color:var(--accent-light);font-weight:700;}
+    .lens-ca-chip .lcc-addr{letter-spacing:.5px;}
+    .lens-ca-chip .lcc-copy{color:var(--text3);font-size:11px;text-transform:uppercase;letter-spacing:1px;}
+  </style>
+  <div class="lens-ca-wrap">
+    <button class="lens-ca-chip" id="lensCaChip" type="button" title="copy $LENS contract address" data-ca="0x8a2A38fd3f7f2B13Ee79eE7c332D21973f15dBa3">
+      <span class="lcc-tok">$LENS</span>
+      <span class="lcc-addr">0x8a2A&hellip;5dBa3</span>
+      <span class="lcc-copy">copy</span>
+    </button>
+  </div>
+  <script>
+    (function(){
+      var c=document.getElementById('lensCaChip'); if(!c) return;
+      c.addEventListener('click',function(){
+        var ca=c.getAttribute('data-ca');
+        var done=function(){var s=c.querySelector('.lcc-copy');if(!s)return;var o=s.textContent;s.textContent='copied';setTimeout(function(){s.textContent=o;},1200);};
+        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ca).then(done).catch(done);}else{done();}
+      });
+    })();
+  </script>
 </section>
 
 
