@@ -1381,7 +1381,7 @@
       </div>
     </div>
     <div class="ask-chips" id="askChips">
-      <button class="ask-chip" data-q="0xb233BDFFD437E60fA451F62c6c09D3804d285Ba3">$NOOK</button>
+      <button class="ask-chip" data-q="0x8a2A38fd3f7f2B13Ee79eE7c332D21973f15dBa3">$LENS</button>
       <button class="ask-chip" data-q="0xBf8E8f0e8866a7052F948C16508644347c57aba3">$AEON</button>
       <button class="ask-chip" data-q="0x5F980Dcfc4c0fa3911554cf5ab288ed0eb13DBa3">$GITLAWB</button>
       <button class="ask-chip" data-q="@toly">@toly</button>
@@ -1417,6 +1417,7 @@
   .ask-bubble { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.6; color: var(--text); max-width: 80%; }
   .ask-msg.user .ask-bubble { background: rgba(41,82,227,0.12); border-color: rgba(41,82,227,0.35); font-family: 'JetBrains Mono', monospace; font-size: 13px; word-break: break-all; }
   .ask-bubble b, .ask-bubble strong { color: var(--text); font-weight: 700; }
+  .ask-bubble a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
   .ask-bubble ul { margin: 8px 0 4px 2px; list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; }
   .ask-bubble li { padding-left: 16px; position: relative; }
   .ask-bubble li:before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
@@ -1487,6 +1488,14 @@
       return '<div class="ask-risk ' + c + '">RISK ' + lvl + (rest ? ' \u00b7 ' + rest : '') + '</div>';
     });
     t = t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    // markdown links [label](url) -> clickable <a>, url hidden
+    t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, function (m, label, url) {
+      return '<a href="' + url + '" target="_blank" rel="noopener nofollow">' + label + '</a>';
+    });
+    // bare @handles -> link to X (skip ones already inside a link, e.g. after > or /)
+    t = t.replace(/(^|[^\/\w>"])@([A-Za-z0-9_]{2,15})\b/g, function (m, pre, h) {
+      return pre + '<a href="https://x.com/' + h + '" target="_blank" rel="noopener nofollow">@' + h + '</a>';
+    });
     var lines = t.split('\n'), out = [], inUl = false;
     for (var i = 0; i < lines.length; i++) {
       var ln = lines[i];
