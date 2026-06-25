@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='2' y='2' width='96' height='96' rx='27' fill='%23fc3605'/%3E%3Cpath d='M68 35 A24 24 0 1 0 68 65' fill='none' stroke='%23fff' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='50' r='8.4' fill='%23fff'/%3E%3Cpath d='M75 14 L77.4 22.6 L86 25 L77.4 27.4 L75 36 L72.6 27.4 L64 25 L72.6 22.6 Z' fill='%23fff'/%3E%3C/svg%3E" />
+<title>CoreEX · $COREX terminal — B20 on Base</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#050506;--win:#0a0a0c;--bar:#101014;--line:rgba(255,255,255,.09);
+    --or:#fc3605;--or-l:#ff8a3d;--g:#34d17f;--c:#56b6ff;--y:#ffcf5a;--m:#7e848d;--w:#eef0f2;--r:#ff5a5a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{background:var(--bg);color:var(--w);font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(120% 80% at 50% -10%,rgba(252,54,5,.10),transparent 60%)}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.35;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+  a{color:var(--or-l);text-decoration:none}
+
+  .term{position:fixed;inset:10px;z-index:10;display:flex;flex-direction:column;background:linear-gradient(180deg,#0b0b0e,#070708);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 30px 90px -30px rgba(252,54,5,.35),inset 0 1px 0 rgba(255,255,255,.04)}
+  .bar{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bar);border-bottom:1px solid var(--line);flex:none}
+  .dots{display:flex;gap:7px}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+  .bar .ttl{flex:1;text-align:center;color:var(--m);font-size:12.5px;letter-spacing:.02em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .bar .ttl b{color:#fff;font-weight:700}.bar .ttl b i{font-style:normal;color:var(--m);font-weight:500}
+  .bar .home{flex:none;color:var(--m);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:11.5px}
+  .bar .home:hover{color:#fff;border-color:var(--line)}
+
+  .scr{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 8px;-webkit-overflow-scrolling:touch}
+  .scr::-webkit-scrollbar{width:8px}.scr::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+  .ln{white-space:pre-wrap;word-break:break-word}
+  .pre{white-space:pre;overflow-x:auto;display:block}
+  .g{color:var(--g)}.o{color:var(--or)}.ol{color:var(--or-l)}.c{color:var(--c)}.y{color:var(--y)}.m{color:var(--m)}.w{color:#fff}.r{color:var(--r)}
+  .b{font-weight:700}
+  .prompt{color:var(--g);font-weight:600}.prompt .at{color:var(--or)}.prompt .pa{color:var(--c)}
+
+  .inwrap{display:flex;align-items:center;gap:0;padding:10px 16px 14px;border-top:1px solid var(--line);background:rgba(255,255,255,.015);flex:none}
+  .inwrap .ps{color:var(--g);font-weight:600;white-space:nowrap}.inwrap .ps .at{color:var(--or)}.inwrap .ps .pa{color:var(--c)}
+  #cmd{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font-family:inherit;font-size:13.5px;caret-color:var(--or);padding-left:8px}
+  .cur{display:inline-block;width:8px;height:15px;background:var(--or);margin-left:1px;vertical-align:-2px;animation:bl 1s steps(1) infinite}
+  @keyframes bl{50%{opacity:0}}
+  .hintbar{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 12px;flex:none}
+  .chip{font-size:11.5px;color:var(--m);border:1px solid var(--line);border-radius:30px;padding:5px 11px;cursor:pointer;background:rgba(255,255,255,.02)}
+  .chip:hover{color:#fff;border-color:rgba(252,54,5,.5)}
+  .chip b{color:var(--or-l);font-weight:600}
+</style>
+</head>
+<body>
+<div class="term" id="term">
+  <div class="bar">
+    <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+    <div class="ttl"><b>Cor <i>Ex</i></b> — corex@base: ~/$COREX</div>
+    <a class="home" href="/">exit ↗</a>
+  </div>
+  <div class="scr" id="scr"></div>
+  <div class="hintbar" id="hints"></div>
+  <div class="inwrap" id="inwrap" style="display:none">
+    <span class="ps"><span class="g">corex</span><span class="at">@</span><span class="pa">base</span>:~$</span>
+    <input id="cmd" autocomplete="off" autocapitalize="off" spellcheck="false" />
+  </div>
+</div>
+
+<script>
+(function(){
+  var TICKER='$COREX', CHAIN='Base', STANDARD='B20';
+  var CONTRACT='TBA';            // <-- paste contract address here at launch
+  var SUPPLY='100,000,000,000';              // <-- set total supply at launch
+  var X='https://x.com/corexfyi', DISCORD='https://discord.gg/corex', SITE='corex.fyi';
+
+  var scr=document.getElementById('scr'),inwrap=document.getElementById('inwrap'),cmd=document.getElementById('cmd'),hints=document.getElementById('hints');
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function atBottom(){return scr.scrollTop+scr.clientHeight>=scr.scrollHeight-40;}
+  function down(){scr.scrollTop=scr.scrollHeight;}
+  function rawLine(html,cls){var d=document.createElement('div');d.className='ln '+(cls||'');d.innerHTML=html;scr.appendChild(d);down();return d;}
+
+  // typewriter: types one line's text (may contain inline markup via tokens)
+  function typeLine(text,cls,speed){return new Promise(function(res){
+    var d=document.createElement('div');d.className='ln '+(cls||'');scr.appendChild(d);
+    var i=0;speed=speed||10;
+    (function tick(){ if(i<=text.length){ d.textContent=text.slice(0,i); if(atBottom())down(); i++; setTimeout(tick,speed);} else {res(d);} })();
+  });}
+  function out(html,cls){return new Promise(function(res){rawLine(html,cls);setTimeout(res,38);});}
+  function gap(){return out('&nbsp;');}
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+
+  // animated "scanning ..." that resolves into a value
+  function scan(label,result,rcls){return new Promise(function(res){
+    var d=rawLine('<span class="m">'+label+'</span> <span class="y">scanning</span><span class="dotz"></span>');
+    var dz=d.querySelector('.dotz'),n=0,t=setInterval(function(){n=(n+1)%4;dz.textContent='.'.repeat(n)+'   '.slice(0,3-n);},170);
+    setTimeout(function(){clearInterval(t);d.innerHTML='<span class="m">'+label+'</span> <span class="'+(rcls||'g')+' b">'+result+'</span>';down();res();},1500);
+  });}
+
+  function bar(pct){var n=Math.round(pct/100*12);return '['+'█'.repeat(n)+'░'.repeat(12-n)+']';}
+  var ALLOC=[['Liquidity',35],['Community',25],['Ecosystem',20],['Treasury',12],['Team',8]];
+
+  // ---------- command outputs ----------
+  function pad(s,n){s=String(s);return s+' '.repeat(Math.max(0,n-s.length));}
+  var CMDS={
+    help:function(){return [
+      ['<span class="o b">Available commands</span>'],
+      ['  <span class="g">info</span>        token manifest'],
+      ['  <span class="g">b20</span>         what a B20 token is'],
+      ['  <span class="g">utility</span>     what $COREX unlocks'],
+      ['  <span class="g">tokenomics</span>  supply & allocation'],
+      ['  <span class="g">buy</span>         how to buy on Base'],
+      ['  <span class="g">swap</span>        swap for $COREX'],
+      ['  <span class="g">ca</span>          contract address'],
+      ['  <span class="g">bankr</span>       how $COREX deploys'],
+      ['  <span class="g">install</span>     re-run the B20 skill install'],
+      ['  <span class="g">social</span>      links'],
+      ['  <span class="g">waitlist</span>    get early access'],
+      ['  <span class="g">clear</span>       wipe the screen'],
+    ];},
+    info:function(){return [
+      ['<span class="o b">'+TICKER+' // manifest</span>'],
+      ['  token      <span class="w">'+TICKER+'</span>'],
+      ['  standard   <span class="ol">'+STANDARD+'</span>  <span class="m">(Base native standard · Beryl upgrade)</span>'],
+      ['  chain      <span class="c">'+CHAIN+'</span>'],
+      ['  supply     <span class="w">'+SUPPLY+'</span>  <span class="m">(fixed \u00b7 not mintable)</span>'],
+      ['  tax        <span class="g">0% / 0%</span>  <span class="m">(buy / sell)</span>'],
+      ['  contract   <span class="'+(CONTRACT==='TBA'?'y':'g')+'">'+CONTRACT+'</span>'],
+      ['  powers     <span class="m">the CoreEX prediction-markets terminal</span>'],
+    ];},
+    b20:function(){return [
+      ['<span class="o b">// what is a B20 token?</span>'],
+      ['<span class="m">B20 is Base\u2019s native token standard, introduced in the</span>'],
+      ['<span class="m">Beryl upgrade. Tokens live closer to the protocol layer \u2014</span>'],
+      ['<span class="m">so they\u2019re lean, fast, and Base-native by default.</span>'],
+      ['&nbsp;'],
+      ['  <span class="g">+</span> native to Base \u2014 no wrappers, no detours'],
+      ['  <span class="g">+</span> cheap & fast \u2014 low fees, quick finality'],
+      ['  <span class="g">+</span> composable \u2014 works with Base wallets, DEXs & tools'],
+    ];},
+    utility:function(){return [
+      ['<span class="o b">// what '+TICKER+' unlocks</span>'],
+      ['  <span class="c">[access]</span>      pro tiers of the terminal \u2014 deeper data, more venues'],
+      ['  <span class="c">[fees]</span>        discounts on execution & best-route trades'],
+      ['  <span class="c">[stake]</span>       stake '+TICKER+', earn from protocol fees  <span class="y">(planned)</span>'],
+      ['  <span class="c">[govern]</span>      vote on which venues & features ship next  <span class="y">(planned)</span>'],
+    ];},
+    tokenomics:function(){
+      var rows=[
+        ['<span class="o b">// supply & allocation</span>'],
+        ['  supply  <span class="w">'+SUPPLY+'</span>  <span class="m">(fixed \u00b7 not mintable)</span>'],
+        ['  launch  <span class="m">fair launch \u00b7</span> <span class="c">Uniswap v4</span> <span class="m">\u00b7</span> <span class="g">1.2%</span> <span class="m">swap fee</span>'],
+        ['&nbsp;'],
+        ['<span class="m">  planned allocation</span>'],
+      ];
+      ALLOC.forEach(function(a){rows.push(['  <span class="w">'+pad(a[0],11)+'</span><span class="o">'+bar(a[1])+'</span> <span class="g">'+a[1]+'%</span>']);});
+      return rows;
+    },
+    buy:function(){return [
+      ['<span class="o b">// how to buy '+TICKER+' on Base</span>'],
+      ['  <span class="o">1</span>  get a Base wallet  <span class="m">(MetaMask / Rabby / Coinbase) \u2192 switch to Base</span>'],
+      ['  <span class="o">2</span>  fund with ETH on Base  <span class="m">(bridge or buy, land it on Base)</span>'],
+      ['  <span class="o">3</span>  open a Base DEX  <span class="m">(connect wallet)</span>'],
+      ['  <span class="o">4</span>  swap for '+TICKER+'  <span class="m">(paste the official CA, confirm)</span>'],
+      ['&nbsp;'],
+      ['<span class="r">  ! verify the CA only from '+SITE+' / @corexfyi before trading.</span>'],
+    ];},
+    social:function(){return [
+      ['<span class="o b">// links</span>'],
+      ['  site      <a href="https://'+SITE+'">'+SITE+'</a>'],
+      ['  x         <a href="'+X+'" target="_blank" rel="noopener">@corexfyi</a>'],
+      ['  discord   <a href="'+DISCORD+'" target="_blank" rel="noopener">discord.gg/corex</a>'],
+      ['  app       <a href="/dashboard">corex.fyi/dashboard</a>'],
+      ['  docs      <a href="/docs">corex.fyi/docs</a>'],
+    ];},
+    waitlist:function(){return [
+      ['<span class="g">\u2192 opening the waitlist\u2026</span>  <a href="/#waitlist">corex.fyi/#waitlist</a>'],
+      ['<span class="m">  be first to get the CA, launch time & early terminal access.</span>'],
+    ];},
+  };
+  CMDS.bankr=function(){return [
+    ['<span class="o b">// deploy</span>'],
+    ['  '+TICKER+' launches as a <span class="ol">'+STANDARD+'</span> token via <span class="ol">@bankrbot</span> on <span class="c">'+CHAIN+'</span>.'],
+    ['  <span class="m">bankr handles the launch \u2014 mint, liquidity & the contract.</span>'],
+    ['  <span class="m">the deploy tx + CA drop here and on</span> <a href="'+X+'" target="_blank" rel="noopener">@corexfyi</a><span class="m">.</span>'],
+  ];};
+  CMDS.about=CMDS.info; CMDS.contract=null; CMDS.token=CMDS.tokenomics; CMDS.tokens=CMDS.tokenomics;
+  CMDS.links=CMDS.social; CMDS.what=CMDS.b20; CMDS.deploy=CMDS.bankr;
+
+  function printRows(rows){ // type rows quickly with small stagger
+    return rows.reduce(function(p,row){return p.then(function(){return out(row[0],row[1]);});},Promise.resolve());
+  }
+
+  function runCa(){
+    return out('<span class="o b">// contract address</span>')
+      .then(function(){return scan('  resolving '+TICKER+' on '+CHAIN+' ...', CONTRACT==='TBA'?'TBA \u2014 deploys at launch':CONTRACT, CONTRACT==='TBA'?'y':'g');})
+      .then(function(){ if(CONTRACT==='TBA'){return out('<span class="m">  join the waitlist \u2014 the CA drops here the moment it\u2019s live.</span>');}
+        return out('<span class="m">  copy exactly. verify on '+SITE+' / @corexfyi.</span>'); });
+  }
+
+  function runSwap(){
+    if(CONTRACT==='TBA'){ return printRows([
+      ['<span class="o b">// swap</span>'],
+      ['<span class="y">  $COREX swap goes live at launch.</span>'],
+      ['<span class="m">  join the waitlist for the CA + DEX link first \u2192</span> <a href="/#waitlist">corex.fyi/#waitlist</a>'],
+    ]); }
+    out('<span class="g">\u2192 opening swap on Base\u2026</span>');
+    setTimeout(function(){window.open('https://app.uniswap.org/swap?chain=base&outputCurrency='+CONTRACT,'_blank','noopener');},450);
+    return Promise.resolve();
+  }
+
+  async function installSeq(force){
+    echo('bankr skill install @corex/b20'+(force?' --force':'')); await wait(160);
+    await out('<span class="o">\u203a</span> <span class="m">resolving</span> <span class="ol">@corex/b20</span> <span class="m">from bankr registry\u2026</span>');
+    await out('<span class="o">\u203a</span> <span class="m">fetching package metadata\u2026</span>'); await wait(130);
+    await out('<span class="g">[ ok ]</span> <span class="m">found</span> <span class="w">corex/b20@1.0.0</span> <span class="m">(B20 \u00b7 Beryl)</span>');
+    await out('<span class="o">\u203a</span> <span class="m">checking dependencies\u2026</span>');
+    await out('   <span class="m">\u251c\u2500</span> base-rpc      <span class="m">^1.0</span>   <span class="g">ok</span>');
+    await out('   <span class="m">\u251c\u2500</span> b20-standard  <span class="m">beryl</span>  <span class="g">ok</span>');
+    await out('   <span class="m">\u251c\u2500</span> corex-core    <span class="m">^1.0</span>   <span class="g">ok</span>');
+    await out('   <span class="m">\u2514\u2500</span> uniswap-v4    <span class="m">^4.0</span>   <span class="g">ok</span>');
+    await out('<span class="o">\u203a</span> <span class="m">downloading skill package\u2026</span>');
+    await progress('   ',1200);
+    await out('<span class="o">\u203a</span> <span class="m">verifying signature\u2026</span> <span class="g">ok</span>');
+    await out('<span class="g">[ ok ] installed @corex/b20@1.0.0</span> <span class="m">(1.2 MB)</span>');
+  }
+
+  function echo(c){rawLine('<span class="prompt"><span>corex</span><span class="at">@</span><span class="pa">base</span>:~$</span> <span class="w">'+esc(c)+'</span>');}
+
+  function exec(raw){
+    var c=(raw||'').trim().toLowerCase();
+    if(!c)return Promise.resolve();
+    echo(raw.trim());
+    if(c==='clear'||c==='cls'){scr.innerHTML='';return Promise.resolve();}
+    if(c==='ca'||c==='contract')return runCa();
+    if(c==='swap')return runSwap();
+    if(c==='install'||c==='reinstall')return installSeq(true).then(function(){return out('<span class="g">[ ok ] @corex/b20 ready.</span>');});
+    if(c==='ls')return out('<span class="c">info  b20  utility  tokenomics  buy  ca  social  waitlist</span>');
+    if(c==='whoami')return out('<span class="g">a future '+TICKER+' holder.</span>');
+    if(c==='home'||c==='exit'||c==='cd ~'){out('<span class="m">\u2192 returning to corex.fyi\u2026</span>');setTimeout(function(){location.href='/';},500);return Promise.resolve();}
+    if(c==='app'){out('<span class="m">\u2192 launching terminal\u2026</span>');setTimeout(function(){location.href='/dashboard';},500);return Promise.resolve();}
+    var fn=CMDS[c];
+    if(fn)return printRows(fn());
+    return out('<span class="r">command not found: '+esc(c)+'</span><span class="m">  \u2014 type </span><span class="g">help</span>');
+  }
+
+  // input handling + history
+  var hist=[],hi=-1;
+  function focusIn(){ if(inwrap.style.display!=='none') cmd.focus(); }
+  document.getElementById('term').addEventListener('click',function(e){ if(!e.target.closest('a')) focusIn(); });
+  cmd.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){var v=cmd.value;cmd.value='';if(v.trim()){hist.push(v);} hi=hist.length;exec(v).then(down);}
+    else if(e.key==='ArrowUp'){if(hist.length){hi=Math.max(0,hi-1);cmd.value=hist[hi]||'';setTimeout(function(){cmd.setSelectionRange(cmd.value.length,cmd.value.length);},0);}e.preventDefault();}
+    else if(e.key==='ArrowDown'){if(hi<hist.length-1){hi++;cmd.value=hist[hi];}else{hi=hist.length;cmd.value='';}e.preventDefault();}
+  });
+
+  // hint chips
+  ['help','info','ca','swap','tokenomics','buy','bankr'].forEach(function(k){
+    var s=document.createElement('span');s.className='chip';s.innerHTML='<b>'+k+'</b>';
+    s.addEventListener('click',function(){ if(inwrap.style.display==='none')return; cmd.value='';exec(k).then(down);focusIn();});
+    hints.appendChild(s);
+  });
+
+  // animated download progress bar
+  function progress(label,ms){return new Promise(function(res){
+    var d=rawLine('<span class="m">'+label+'</span><span class="o">[░░░░░░░░░░]</span> <span class="g">0%</span>');
+    var bn=d.querySelector('.o'),pc=d.querySelector('.g'),t0=null,N=10;
+    function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/ms),f=Math.round(p*N);
+      bn.textContent='['+'█'.repeat(f)+'░'.repeat(N-f)+']';pc.textContent=Math.round(p*100)+'%';
+      if(atBottom())down(); if(p<1)requestAnimationFrame(step); else res();}
+    requestAnimationFrame(step);
+  });}
+
+  // ---------- boot: install @corex/b20 skill ----------
+  (async function boot(){
+    await out('<span class="m">CoreEX terminal v1.0 \u2014 '+CHAIN+' edition</span>'); await wait(140);
+    echo('bankr skill install @corex/b20'); await wait(180);
+    await out('<span class="o">\u203a</span> <span class="m">resolving</span> <span class="ol">@corex/b20</span> <span class="m">from bankr registry\u2026</span>');
+    await out('<span class="o">\u203a</span> <span class="m">fetching package metadata\u2026</span>'); await wait(140);
+    await out('<span class="g">[ ok ]</span> <span class="m">found</span> <span class="w">corex/b20@1.0.0</span> <span class="m">(B20 \u00b7 Beryl)</span>');
+    await out('<span class="o">\u203a</span> <span class="m">checking dependencies\u2026</span>');
+    await out('   <span class="m">\u251c\u2500</span> base-rpc      <span class="m">^1.0</span>   <span class="g">ok</span>');
+    await out('   <span class="m">\u251c\u2500</span> b20-standard  <span class="m">beryl</span>  <span class="g">ok</span>');
+    await out('   <span class="m">\u251c\u2500</span> corex-core    <span class="m">^1.0</span>   <span class="g">ok</span>');
+    await out('   <span class="m">\u2514\u2500</span> uniswap-v4    <span class="m">^4.0</span>   <span class="g">ok</span>');
+    await out('<span class="o">\u203a</span> <span class="m">downloading skill package\u2026</span>');
+    await progress('   ',1500);
+    await out('<span class="o">\u203a</span> <span class="m">verifying signature\u2026</span> <span class="g">ok</span>');
+    await out('<span class="o">\u203a</span> <span class="m">linking</span> <span class="ol">'+TICKER+'</span> <span class="m">module\u2026</span>'); await wait(130);
+    await out('<span class="g">[ ok ] installed @corex/b20@1.0.0</span> <span class="m">(1.2 MB)</span>');
+    await gap();
+    await out('<span class="o">\u203a</span> <span class="m">running skill:</span> <span class="ol">corex/b20</span> \u2026'); await wait(220);
+    await gap();
+    await out('<span class="ol b">  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510</span>');
+    await out('<span class="ol b">  \u2502</span>   <span class="w b">'+TICKER+'</span>  <span class="m">\u00b7  '+STANDARD+' token on '+CHAIN+'</span>      <span class="ol b">\u2502</span>');
+    await out('<span class="ol b">  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518</span>');
+    await gap();
+    await typeLine('> Prediction markets are scattered across 40+ venues.','m',6);
+    await typeLine('> CoreEX pulls them into one command terminal \u2014 compare','m',6);
+    await typeLine('> odds, read rug-risk, and route trades from a single screen.','m',6);
+    await gap();
+    await typeLine('> '+TICKER+' is the B20 token that powers the terminal:','ol',12);
+    await typeLine('  access tiers \u00b7 fee discounts \u00b7 staking \u00b7 governance.','m',6);
+    await typeLine('> B20 is Base\u2019s native standard from the Beryl upgrade \u2014','m',6);
+    await typeLine('  lean, fast, and composable by default.','m',6);
+    await gap();
+    await printRows(CMDS.info());
+    await gap();
+    await runCa();
+    await gap();
+    await out('<span class="m">type</span> <span class="g b">help</span> <span class="m">to explore \u2014 try</span> <span class="g">tokenomics</span><span class="m">,</span> <span class="g">buy</span><span class="m">,</span> <span class="g">utility</span><span class="m">.</span>');
+    inwrap.style.display='flex'; down(); focusIn();
+  })();
+})();
+</script>
+</body>
+</html>
